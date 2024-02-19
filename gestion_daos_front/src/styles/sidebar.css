@@ -1,0 +1,12 @@
+@import url('./_variable.css');
+
+
+body > div.MuiDrawer-root.MuiDrawer-modal > div.MuiPaper-root.MuiDrawer-paper.MuiDrawer-paperAnchorLeft.MuiPaper-elevation16{
+    background: var(--bg-color);
+    color: white;
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    height: 90vh;
+    top: 25%;
+    border-radius: 20px;
+}
