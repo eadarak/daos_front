@@ -16,8 +16,11 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
+import WindowIcon from '@mui/icons-material/Window';
+import AssistantIcon from '@mui/icons-material/Assistant';
+
+// import styles
+import '../styles/sidebar.css'
 
 const drawerWidth = 240;
 
@@ -77,7 +80,7 @@ export default function SidebarComp() {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open}>
+      <AppBar position="fixed" open={open} className='Nav-bar'>
         <Toolbar>
           <IconButton
             color="inherit"
@@ -89,11 +92,11 @@ export default function SidebarComp() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Persistent drawer
+            Gestion des Enseignements
           </Typography>
         </Toolbar>
       </AppBar>
-      <Drawer
+      <Drawer className='Side-bar'
         sx={{
           width: drawerWidth,
           flexShrink: 0,
@@ -105,38 +108,53 @@ export default function SidebarComp() {
         variant="persistent"
         anchor="left"
         open={open}
+        
       >
-        <DrawerHeader>
+        <DrawerHeader >
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem key={text} disablePadding>
+        <List className='sidebar'>
+            <ListItem disablePadding>
               <ListItemButton>
                 <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                  <WindowIcon/>
                 </ListItemIcon>
-                <ListItemText primary={text} />
+                <ListItemText>Home</ListItemText>
               </ListItemButton>
             </ListItem>
-          ))}
+
+            <ListItem disablePadding>
+              <ListItemButton>
+                <ListItemIcon>
+                  <AssistantIcon/>
+                </ListItemIcon>
+                <ListItemText>Repartition</ListItemText>
+              </ListItemButton>
+            </ListItem>
+
+            <ListItem disablePadding>
+              <ListItemButton>
+                <ListItemIcon>
+                  <WindowIcon/>
+                </ListItemIcon>
+                <ListItemText>Maquette</ListItemText>
+              </ListItemButton>
+            </ListItem>
+
+            <ListItem disablePadding>
+              <ListItemButton>
+                <ListItemIcon>
+                  <WindowIcon/>
+                </ListItemIcon>
+                <ListItemText>Emploi</ListItemText>
+              </ListItemButton>
+            </ListItem>
+
         </List>
         <Divider />
-        <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
       </Drawer>
       <Main open={open}>
         <DrawerHeader />
