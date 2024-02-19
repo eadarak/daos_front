@@ -19,29 +19,22 @@ import ListItemText from '@mui/material/ListItemText';
 import WindowIcon from '@mui/icons-material/Window';
 import AssistantIcon from '@mui/icons-material/Assistant';
 
-// import styles
+//import de style
 import '../styles/sidebar.css'
+import { NavLink } from 'react-router-dom';
 
 const drawerWidth = 240;
 
-const Main = styled('main')(({ theme, open }) => ({
-    flexGrow: 1,
-    padding: theme.spacing(3),
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    marginLeft: `-${drawerWidth}px`,
-    ...(open && {
-      transition: theme.transitions.create('margin', {
-        easing: theme.transitions.easing.easeOut,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-      marginLeft: 0,
-    }),
-  }));
-  
-const AppBar = styled(MuiAppBar, { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
+const DrawerHeader = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  padding: theme.spacing(0, 1),
+  // necessary for content to be below app bar
+  ...theme.mixins.toolbar,
+  justifyContent: 'flex-end',
+}));
+
+const CustomAppBar = styled(MuiAppBar, { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
   transition: theme.transitions.create(['margin', 'width'], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
@@ -56,38 +49,20 @@ const AppBar = styled(MuiAppBar, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 }));
 
-const DrawerHeader = styled('div')(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
-  ...theme.mixins.toolbar,
-  justifyContent: 'flex-end',
-}));
-
-export default function SidebarComp() {
+export default function SidebarComp({ sidebarOpen, handleDrawerOpen, handleDrawerClose }) {
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
-
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
 
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open} className='Nav-bar'>
+      <CustomAppBar position="fixed" open={sidebarOpen}>
         <Toolbar>
           <IconButton
             color="inherit"
             aria-label="open drawer"
             onClick={handleDrawerOpen}
             edge="start"
-            sx={{ mr: 2, ...(open && { display: 'none' }) }}
+            sx={{ mr: 2, ...(sidebarOpen && { display: 'none' }) }}
           >
             <MenuIcon />
           </IconButton>
@@ -95,8 +70,8 @@ export default function SidebarComp() {
             Gestion des Enseignements
           </Typography>
         </Toolbar>
-      </AppBar>
-      <Drawer className='Side-bar'
+      </CustomAppBar>
+      <Drawer
         sx={{
           width: drawerWidth,
           flexShrink: 0,
@@ -107,8 +82,7 @@ export default function SidebarComp() {
         }}
         variant="persistent"
         anchor="left"
-        open={open}
-        
+        open={sidebarOpen}
       >
         <DrawerHeader >
           <IconButton onClick={handleDrawerClose}>
@@ -118,47 +92,52 @@ export default function SidebarComp() {
         <Divider />
         <List className='sidebar'>
             <ListItem disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  <WindowIcon/>
-                </ListItemIcon>
-                <ListItemText>Home</ListItemText>
-              </ListItemButton>
+              <NavLink to="/" className="sidebar-link">
+                <ListItemButton>
+                  <ListItemIcon>
+                    <WindowIcon/>
+                  </ListItemIcon>
+                  <ListItemText>Home</ListItemText>
+                </ListItemButton>
+              </NavLink>
             </ListItem>
 
             <ListItem disablePadding>
+              <NavLink  to="/repartition" className="sidebar-link">
               <ListItemButton>
                 <ListItemIcon>
                   <AssistantIcon/>
                 </ListItemIcon>
                 <ListItemText>Repartition</ListItemText>
               </ListItemButton>
+              </NavLink>
             </ListItem>
 
             <ListItem disablePadding>
+              <NavLink to="/maquette" className="sidebar-link">
               <ListItemButton>
                 <ListItemIcon>
                   <WindowIcon/>
                 </ListItemIcon>
                 <ListItemText>Maquette</ListItemText>
               </ListItemButton>
+              </NavLink>
             </ListItem>
 
             <ListItem disablePadding>
-              <ListItemButton>
+             <NavLink to="/emploi" className="sidebar-link">
+             <ListItemButton>
                 <ListItemIcon>
                   <WindowIcon/>
                 </ListItemIcon>
                 <ListItemText>Emploi</ListItemText>
               </ListItemButton>
+             </NavLink>
             </ListItem>
 
         </List>
         <Divider />
       </Drawer>
-      <Main open={open}>
-        <DrawerHeader />
-      </Main>
     </Box>
   );
 }

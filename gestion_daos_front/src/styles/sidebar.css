@@ -1,7 +1,7 @@
 @import url('./_variable.css');
 
 
-.Nav-bar > div{
+#root > div > div.MuiBox-root.css-k008qs > header > div{
     background: var(--bg-color);
     color: white;
     font-family: "Montserrat", sans-serif;
