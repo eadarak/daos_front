@@ -1,4 +1,5 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -16,12 +17,12 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import WindowIcon from '@mui/icons-material/Window';
-import AssistantIcon from '@mui/icons-material/Assistant';
+import '../styles/sidebarStyles.css'; // Importez le fichier de style
+import RepartitionIcon from '@mui/icons-material/Repartition';
+import BookIcon from '@mui/icons-material/Book';
+import InputIcon from '@mui/icons-material/Input';
+// import HomeIcon from '@mui/icons-material/Home';
 
-//import de style
-import '../styles/sidebar.css'
-import { NavLink } from 'react-router-dom';
 
 const drawerWidth = 240;
 
@@ -66,7 +67,7 @@ export default function SidebarComp({ sidebarOpen, handleDrawerOpen, handleDrawe
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
+          <Typography variant="h4" noWrap component="div" fontFamily={"Poppins"} fontWeight={"500"}>
             Gestion des Enseignements
           </Typography>
         </Toolbar>
@@ -90,51 +91,51 @@ export default function SidebarComp({ sidebarOpen, handleDrawerOpen, handleDrawe
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <List className='sidebar'>
-            <ListItem disablePadding>
+        <List className='sidebar-container'> {/* Utilisez la classe spécifique ici */}
+            {/* <ListItem disablePadding>
               <NavLink to="/" className="sidebar-link">
                 <ListItemButton>
                   <ListItemIcon>
-                    <WindowIcon/>
+                    <HomeIcon/>
                   </ListItemIcon>
                   <ListItemText>Home</ListItemText>
                 </ListItemButton>
               </NavLink>
-            </ListItem>
-
+            </ListItem> */}
+            <p>𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃</p>
             <ListItem disablePadding>
               <NavLink  to="/repartition" className="sidebar-link">
               <ListItemButton>
                 <ListItemIcon>
-                  <AssistantIcon/>
+                  <RepartitionIcon/>
                 </ListItemIcon>
                 <ListItemText>Repartition</ListItemText>
               </ListItemButton>
               </NavLink>
             </ListItem>
-
+            <p>𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃</p>
             <ListItem disablePadding>
               <NavLink to="/maquette" className="sidebar-link">
               <ListItemButton>
                 <ListItemIcon>
-                  <WindowIcon/>
+                  <BookIcon/>
                 </ListItemIcon>
                 <ListItemText>Maquette</ListItemText>
               </ListItemButton>
               </NavLink>
             </ListItem>
-
+            <p>𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃</p>
             <ListItem disablePadding>
              <NavLink to="/emploi" className="sidebar-link">
              <ListItemButton>
                 <ListItemIcon>
-                  <WindowIcon/>
+                  <InputIcon/>
                 </ListItemIcon>
                 <ListItemText>Emploi</ListItemText>
               </ListItemButton>
              </NavLink>
             </ListItem>
-
+            <p>𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃</p>
         </List>
         <Divider />
       </Drawer>

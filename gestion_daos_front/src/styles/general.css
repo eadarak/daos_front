@@ -1,0 +1,51 @@
+@import url('./_variable.css');
+
+#mybtnStyle{
+    background: var(--bg-color2);
+    border: 12px none;
+    font-weight: 600;
+}
+#card{
+    box-shadow: 0px 2px 4px rgba(0.2, 0, 0, 0.2); 
+    border: none !important;
+}
+
+/* Style pour les cartes 
+.card {
+    position: relative; 
+   
+    border: none; 
+    border-radius: 8px; 
+   
+  }
+
+  .card .card-body {
+    background: linear-gradient(to right, #ffffff, #d1d6db, #ffffff); 
+    padding: 20px;
+    color: rgb(0, 0, 0); 
+  }
+  
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: -10px; 
+    left: 0;
+    width: 100%;
+    height: 40px;
+    background: linear-gradient(to right, #6c5b7b, #355c7d, #000000); 
+    border-radius: 30%;
+  }
+  
+
+  .card::after {
+    content: '';
+    position: absolute;
+    bottom: -30px; 
+    left: 0;
+    width: 10px;
+    height: 20px;
+    background: linear-gradient(to right, #000000, #355c7d, #6c5b7b);
+    border-radius: 40%;
+  }
+*/  
