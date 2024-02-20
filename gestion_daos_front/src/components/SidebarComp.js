@@ -186,11 +186,10 @@ export default function SidebarComp({ sidebarOpen, handleDrawerOpen, handleDrawe
               </ListItemButton>
              </NavLink>
             </ListItem>
-            <ListItemText style={{  marginLeft: '19px' }}>
-              &copy; CMC&EaDarak
-            </ListItemText>
-
         </List>
+        <ListItemText style={{  marginLeft: '18px' }}>
+              &copy;  CMC & Eadarak
+            </ListItemText>
         
         <Divider />
       </Drawer>
