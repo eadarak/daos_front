@@ -1,7 +1,7 @@
 @import url('./_variable.css');
 
 #mybtnStyle{
-    background: var(--bg-color2);
+    background: var(--bg-color3);
     border: 12px none;
     font-weight: 600;
 }

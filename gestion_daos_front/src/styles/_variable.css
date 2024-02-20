@@ -9,5 +9,6 @@
     --bg-color :  #191222;
     --bg-color1: linear-gradient(to left, #2e004f, #4d269b, #040424);
     --bg-color2: linear-gradient(to bottom, #2e004f, #4d269b, #040424);
+    --bg-color3:  rgb(9, 44, 38);
     --colorPrimo  : linear-gradient(to left, #2e004f, #4d269b, #040424);
 }

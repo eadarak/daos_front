@@ -6,7 +6,7 @@ function Repartition(){
 
     return (
         <div>
-            <h2> 🌑 Page des Repartition </h2>
+            <h2> ▶ Page des Repartition </h2>
                 <Grid container padding={2}>
                     <Grid item>
                         <Card_Repartition/>

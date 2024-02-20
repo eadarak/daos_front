@@ -22,6 +22,7 @@ import RepartitionIcon from '@mui/icons-material/Repartition';
 import BookIcon from '@mui/icons-material/Book';
 import InputIcon from '@mui/icons-material/Input';
 // import HomeIcon from '@mui/icons-material/Home';
+import logo from '../assets/img/logo.png';
 
 
 const drawerWidth = 240;
@@ -68,7 +69,10 @@ export default function SidebarComp({ sidebarOpen, handleDrawerOpen, handleDrawe
             <MenuIcon />
           </IconButton>
           <Typography variant="h4" noWrap component="div" fontFamily={"Poppins"} fontWeight={"500"}>
-            Gestion des Enseignements
+          <img src={logo} width={50} height={50} alt="Logo"/>
+         
+          &nbsp; Gestion des Enseignements
+          
           </Typography>
         </Toolbar>
       </CustomAppBar>
@@ -86,6 +90,7 @@ export default function SidebarComp({ sidebarOpen, handleDrawerOpen, handleDrawe
         open={sidebarOpen}
       >
         <DrawerHeader >
+        
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
@@ -102,7 +107,7 @@ export default function SidebarComp({ sidebarOpen, handleDrawerOpen, handleDrawe
                 </ListItemButton>
               </NavLink>
             </ListItem> */}
-            <p>𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃</p>
+            {/* <p>𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃</p> */}
             <ListItem disablePadding>
               <NavLink  to="/repartition" className="sidebar-link">
               <ListItemButton>
@@ -113,7 +118,7 @@ export default function SidebarComp({ sidebarOpen, handleDrawerOpen, handleDrawe
               </ListItemButton>
               </NavLink>
             </ListItem>
-            <p>𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃</p>
+            {/* <p>𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃</p> */}
             <ListItem disablePadding>
               <NavLink to="/maquette" className="sidebar-link">
               <ListItemButton>
@@ -124,7 +129,7 @@ export default function SidebarComp({ sidebarOpen, handleDrawerOpen, handleDrawe
               </ListItemButton>
               </NavLink>
             </ListItem>
-            <p>𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃</p>
+            {/* <p>𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃</p> */}
             <ListItem disablePadding>
              <NavLink to="/emploi" className="sidebar-link">
              <ListItemButton>
@@ -135,7 +140,7 @@ export default function SidebarComp({ sidebarOpen, handleDrawerOpen, handleDrawe
               </ListItemButton>
              </NavLink>
             </ListItem>
-            <p>𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃</p>
+            {/* <p>𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃</p> */}
         </List>
         <Divider />
       </Drawer>

@@ -8,7 +8,7 @@ import Card_Emploi from '../components/Card_Emploi';
 function Emploi() {
     return (
         <div>
-            <h2> 🌑 Page des Emplois du Temps </h2>
+            <h2> ▶ Page des Emplois du Temps </h2>
                 <Grid container padding={2}>
                     <Grid item>
                         <Card_Emploi/>
