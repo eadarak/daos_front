@@ -21,9 +21,13 @@ import '../styles/sidebarStyles.css'; // Importez le fichier de style
 import RepartitionIcon from '@mui/icons-material/Repartition';
 import BookIcon from '@mui/icons-material/Book';
 import InputIcon from '@mui/icons-material/Input';
-// import HomeIcon from '@mui/icons-material/Home';
+ import HomeIcon from '@mui/icons-material/Home';
 import logo from '../assets/img/logo.png';
-
+//import MyAvatar from '../assets/img/MyAvatar.svg';
+//import { ToggleButton } from '@mui/material';
+import PasswordIcon from '@mui/icons-material/Password';
+import LinkIcon from '@mui/icons-material/Link';
+import PlagiarismIcon from '@mui/icons-material/Plagiarism';
 
 const drawerWidth = 240;
 
@@ -68,13 +72,23 @@ export default function SidebarComp({ sidebarOpen, handleDrawerOpen, handleDrawe
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h4" noWrap component="div" fontFamily={"Poppins"} fontWeight={"500"}>
-          <img src={logo} width={50} height={50} alt="Logo"/>
-         
-          &nbsp; Gestion des Enseignements
-          
+          <Typography 
+            variant="h4" 
+            noWrap component="div" 
+            fontFamily={"Poppins"} 
+            fontWeight={"500"}
+          >
+            <img src={logo} width={50} height={50} alt="Logo"/>
+            &nbsp; Gestion des Enseignements        
           </Typography>
+
+          {/* <ToggleButton  style={{  left: '50rem' }}>
+          <img src={MyAvatar} alt='MyAvatar' width={50} height={50} color='white'
+            
+          />
+          </ToggleButton> */}
         </Toolbar>
+        
       </CustomAppBar>
       <Drawer
         sx={{
@@ -97,7 +111,7 @@ export default function SidebarComp({ sidebarOpen, handleDrawerOpen, handleDrawe
         </DrawerHeader>
         <Divider />
         <List className='sidebar-container'> {/* Utilisez la classe spécifique ici */}
-            {/* <ListItem disablePadding>
+            <ListItem disablePadding>
               <NavLink to="/" className="sidebar-link">
                 <ListItemButton>
                   <ListItemIcon>
@@ -106,8 +120,8 @@ export default function SidebarComp({ sidebarOpen, handleDrawerOpen, handleDrawe
                   <ListItemText>Home</ListItemText>
                 </ListItemButton>
               </NavLink>
-            </ListItem> */}
-            {/* <p>𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃</p> */}
+            </ListItem>
+           
             <ListItem disablePadding>
               <NavLink  to="/repartition" className="sidebar-link">
               <ListItemButton>
@@ -141,7 +155,43 @@ export default function SidebarComp({ sidebarOpen, handleDrawerOpen, handleDrawe
              </NavLink>
             </ListItem>
             {/* <p>𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃</p> */}
+            <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+            <ListItem disablePadding>
+             <NavLink to="#" className="sidebar-link">
+             <ListItemButton>
+                <ListItemIcon>
+                  <PasswordIcon/>
+                </ListItemIcon>
+                <ListItemText>Authentification</ListItemText>
+              </ListItemButton>
+             </NavLink>
+            </ListItem>
+            <ListItem disablePadding>
+             <NavLink to="#" className="sidebar-link">
+             <ListItemButton>
+                <ListItemIcon>
+                  <PlagiarismIcon/>
+                </ListItemIcon>
+                <ListItemText>Documentation</ListItemText>
+              </ListItemButton>
+             </NavLink>
+            </ListItem>
+            <ListItem disablePadding>
+             <NavLink to="#" className="sidebar-link">
+             <ListItemButton>
+                <ListItemIcon>
+                  <LinkIcon/>
+                </ListItemIcon>
+                <ListItemText>Liens Utiles</ListItemText>
+              </ListItemButton>
+             </NavLink>
+            </ListItem>
+            <ListItemText style={{  marginLeft: '19px' }}>
+              &copy; CMC&EaDarak
+            </ListItemText>
+
         </List>
+        
         <Divider />
       </Drawer>
     </Box>
