@@ -2,24 +2,29 @@
 
 
 #root > div > div.MuiBox-root.css-k008qs > header > div{
-    background: var(--bg-color1);
+    background: var(--bg-color3);
     color: white;
     font-weight: 500;
      
 }
+.css-10hburv-MuiTypography-root{
+    font-family: "Poppins" !important;
+    font-weight: 600 !important;
+}
 
 #root > div > div.MuiBox-root.css-k008qs > div > div{
-    height: 80vh;
-    margin: 5.7% 0;
-    background: #eee;
-    margin-left: 5px;
-    border-radius: 15px;
+    
+    background: #ffffff;
+    border-radius: 0px  ;
     width: 15%;
+    color: rgb(9, 44, 38);
+    font-weight: 600;
+    
 }
 
 .sidebar-link{
     text-decoration: none;
     color: var(--colorPrimo);
-    font-weight:bold;
     font-size: 15px;
+
 }
