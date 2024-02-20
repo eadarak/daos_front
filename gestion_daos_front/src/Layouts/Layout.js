@@ -17,7 +17,10 @@ function Layout({ children }) {
 
   return (
     <div className="layout">
-      <SidebarComp sidebarOpen={sidebarOpen} handleDrawerOpen={handleDrawerOpen} handleDrawerClose={handleDrawerClose} />
+      <SidebarComp sidebarOpen={sidebarOpen} 
+        handleDrawerOpen={handleDrawerOpen} 
+        handleDrawerClose={handleDrawerClose} 
+      />
       <div className="content"style={{ marginLeft: sidebarOpen ? '280px' : '0' }}>{children}</div>
     </div>
   );

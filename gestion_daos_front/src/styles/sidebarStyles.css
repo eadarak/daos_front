@@ -1,0 +1,25 @@
+@import url('./_variable.css');
+
+
+#root > div > div.MuiBox-root.css-k008qs > header > div{
+    background: var(--bg-color1);
+    color: white;
+    font-weight: 500;
+     
+}
+
+#root > div > div.MuiBox-root.css-k008qs > div > div{
+    height: 80vh;
+    margin: 5.7% 0;
+    background: #eee;
+    margin-left: 5px;
+    border-radius: 15px;
+    width: 15%;
+}
+
+.sidebar-link{
+    text-decoration: none;
+    color: var(--colorPrimo);
+    font-weight:bold;
+    font-size: 15px;
+}
