@@ -1,0 +1,77 @@
+/* Login.css */
+
+/* Style pour le conteneur principal */
+.login-container {
+    max-width: 463px;
+    height: 0px;
+    margin: 0 auto;
+    padding: 20px;
+    /* background-color: #f3f4f6; */
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.0);
+  }
+  
+  /* Style pour les titres */
+  .login-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  #subText{
+    font-size: 20px;
+    font-style: italic;
+
+  }
+  
+  /* Style pour les étiquettes */
+  .login-label {
+    display: block;
+    font-size: 16px;
+    margin-bottom: 8px;
+    color: #555;
+  }
+  
+  /* Style pour les champs de saisie */
+  .login-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  /* Style pour le bouton de connexion */
+  .login-button {
+    width: 100%;
+    padding: 12px;
+    background-color: rgba(9, 44, 38); 
+    border: none;
+    border-radius: 5px;
+    font-size: 20px;
+    color: #fff;
+    cursor: pointer;
+  }
+  
+  .login-button:hover {
+    background-color: #1B9A76;
+  }
+  
+  /* Style pour les liens */
+  .login-link {
+    font-size: 14px;
+    color: #1B9A76;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  
+  
+  /* Style pour les messages d'erreur */
+  .login-error {
+    color: #ff0000;
+    margin-top: 10px;
+  }
+
+ 
