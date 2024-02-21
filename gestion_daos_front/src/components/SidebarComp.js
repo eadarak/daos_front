@@ -155,9 +155,9 @@ export default function SidebarComp({ sidebarOpen, handleDrawerOpen, handleDrawe
              </NavLink>
             </ListItem>
             {/* <p>𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃</p> */}
-            <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+            <br/><br/><br/><br/><br/><br/><br/><br/>
             <ListItem disablePadding>
-             <NavLink to="#" className="sidebar-link">
+             <NavLink to="/authentification" className="sidebar-link">
              <ListItemButton>
                 <ListItemIcon>
                   <PasswordIcon/>
@@ -186,11 +186,11 @@ export default function SidebarComp({ sidebarOpen, handleDrawerOpen, handleDrawe
               </ListItemButton>
              </NavLink>
             </ListItem>
-            <ListItemText style={{  marginLeft: '19px' }}>
-              &copy; CMC&EaDarak
-            </ListItemText>
-
         </List>
+        <br/>
+        <ListItemText style={{  marginLeft: '18px' }}>
+              &copy;  CMC & Eadarak
+            </ListItemText>
         
         <Divider />
       </Drawer>

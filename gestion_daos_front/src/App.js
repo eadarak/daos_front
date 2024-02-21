@@ -7,6 +7,7 @@ import Repartition from './pages/Repartition';
 import Maquette from './pages/Maquette';
 import Emploi from './pages/Emploi';
 import Layout from './Layouts/Layout';
+import Authentification from './pages/Authentification';
 
 const router = createBrowserRouter([
   {
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
   {
     path : '/emploi',
     element: <Layout> <Emploi /> </Layout>
+  },
+  {
+    path : '/authentification',
+    element: <Layout> <Authentification /> </Layout>
   }
 
 ]);
