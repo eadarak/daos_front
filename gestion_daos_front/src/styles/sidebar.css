@@ -4,10 +4,11 @@
 #root > div > div.MuiBox-root.css-k008qs > header > div{
     background: var(--bg-color);
     color: white;
-    font-family: "Montserrat", sans-serif;
-    font-optical-sizing: auto;
 }
+#root > div > div.MuiBox-root.css-k008qs > header > div > div{
+    font-weight: 700;   
 
+}
 #root > div > div.MuiBox-root.css-k008qs > div > div{
     height: 80vh;
     margin: 4.4% 0;
@@ -15,4 +16,15 @@
     margin-left: 10px;
     border-radius: 15px;
     width: 15%;
+}
+
+.sidebar-link{
+    font-family: 'Poppins' !important;
+    font-weight: 500;
+    text-decoration: none;
+    color: inherit;
+}
+.css-10hburv-MuiTypography-root {
+    font-family: 'Poppins' !important;
+    font-weight: 500 !important;
 }
