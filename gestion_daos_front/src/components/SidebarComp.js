@@ -117,7 +117,7 @@ export default function SidebarComp({ sidebarOpen, handleDrawerOpen, handleDrawe
                   <ListItemIcon>
                     <HomeIcon/>
                   </ListItemIcon>
-                  <ListItemText>Home</ListItemText>
+                  <ListItemText className='sidebar-link-item'>Home</ListItemText>
                 </ListItemButton>
               </NavLink>
             </ListItem>
@@ -128,7 +128,7 @@ export default function SidebarComp({ sidebarOpen, handleDrawerOpen, handleDrawe
                 <ListItemIcon>
                   <RepartitionIcon/>
                 </ListItemIcon>
-                <ListItemText>Repartition</ListItemText>
+                <ListItemText className='sidebar-link-item'>Repartition</ListItemText>
               </ListItemButton>
               </NavLink>
             </ListItem>
@@ -139,7 +139,7 @@ export default function SidebarComp({ sidebarOpen, handleDrawerOpen, handleDrawe
                 <ListItemIcon>
                   <BookIcon/>
                 </ListItemIcon>
-                <ListItemText>Maquette</ListItemText>
+                <ListItemText className='sidebar-link-item'>Maquette</ListItemText>
               </ListItemButton>
               </NavLink>
             </ListItem>
@@ -150,7 +150,7 @@ export default function SidebarComp({ sidebarOpen, handleDrawerOpen, handleDrawe
                 <ListItemIcon>
                   <InputIcon/>
                 </ListItemIcon>
-                <ListItemText>Emploi</ListItemText>
+                <ListItemText className='sidebar-link-item'>Emploi</ListItemText>
               </ListItemButton>
              </NavLink>
             </ListItem>

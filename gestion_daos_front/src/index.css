@@ -1,3 +1,6 @@
-body {
-  background-color: #eee;
+@import url('./styles/_variable.css');
+*{
+  font-family: 'Poppins';
+  box-sizing: border-box;
 }
+
