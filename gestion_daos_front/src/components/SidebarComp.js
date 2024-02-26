@@ -182,7 +182,7 @@ export default function SidebarComp({ sidebarOpen, handleDrawerOpen, handleDrawe
                 <ListItemIcon>
                   <LinkIcon/>
                 </ListItemIcon>
-                <ListItemText>Emploi</ListItemText>
+                <ListItemText>Liens Utiles</ListItemText>
               </ListItemButton>
              </NavLink>
             </ListItem>
