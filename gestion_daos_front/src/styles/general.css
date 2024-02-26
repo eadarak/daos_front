@@ -4,6 +4,7 @@
     background: var(--bg-color3);
     border: 12px none;
     font-weight: 600;
+    color: white;
 }
 #card{
     box-shadow: 0px 2px 4px rgba(0.2, 0, 0, 0.2); 
