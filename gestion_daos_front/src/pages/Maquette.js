@@ -8,16 +8,12 @@ function Maquette() {
     return (
         <div>
             <h2> ▶ Page des Maquettes </h2>
-            <Grid container padding={2}>
-            <Grid item>
-              <Card_Maquette/>
-            </Grid>
-            <br/>
-            <Grid item>
-              <Card_Maquette/>
-            </Grid>  
-          </Grid>  
-           
+             <Grid container>
+              <Grid item>
+                <Card_Maquette/>
+              </Grid>
+
+             </Grid>
         </div>
     );
 }
