@@ -2,7 +2,9 @@
   "dependencies": {
     "@coreui/coreui": "^4.3.2",
     "@coreui/react": "^4.11.1",
+    "@mui/icons-material": "^5.15.11",
     "@mui/styles": "^5.15.10",
+    "axios": "^1.6.7",
     "or": "^0.2.0",
     "react-scripts": "^5.0.1"
   }

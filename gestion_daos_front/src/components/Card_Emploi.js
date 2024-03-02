@@ -1,96 +1,34 @@
 import React ,{useState} from 'react';
-import {CButton,CCard,CCardBody,CCardText,CCardTitle,CCol,CRow} from '@coreui/react';
 import '@coreui/coreui/dist/css/coreui.min.css';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import '../styles/general.css'
+import Batiment from './_Emploi/Batiment';
+import Deroulement from './_Emploi/Deroulement';
+import Salle from './_Emploi/Salle';
+import Seance from './_Emploi/Seance';
 
-function Card_Maquette(props) {
+function Card_Emploi(props) {
     const [modalOpen, setModalOpen] = useState(false);
       
     const toggleModal = () => {
           setModalOpen(!modalOpen);
     };
     return (
-        <div>
-            <CRow>
-                <CCol sm={3} >
-                    <CCard  id="card">
-                    <CCardBody >
-                    <CButton 
-                        className="btn-icon btn-light btn-sm" 
-                        onClick={toggleModal} 
-                        style={{ position: 'absolute', top: '5px', right: '5px' }}
-                    >
-                        <MoreVertIcon />
-                    </CButton>
-                        <CCardTitle>→<b> &nbsp;Page UE</b></CCardTitle>
-                        <CCardText>
-                            Cette page vous redirige dans vers la liste des UE.
-                        </CCardText>
-                        <CButton href="#" id='mybtnStyle'>Voir liste UE </CButton>
-                    </CCardBody>
-                    </CCard>
-                </CCol>
-                <CCol sm={3} >
-                    <CCard id="card">
-                    <CCardBody>
-                        <CButton 
-                            className="btn-icon btn-light btn-sm" 
-                            onClick={toggleModal} 
-                            style={{ position: 'absolute', top: '5px', right: '5px' }}
-                        >
-                            <MoreVertIcon />
-                        </CButton>
-                        <CCardTitle>→<b> &nbsp;Page UE</b></CCardTitle>
-                        <CCardText>
-                            Cette page vous redirige dans vers la liste des UE.
-                        </CCardText>
-                        <CButton href="#" id='mybtnStyle'>Voir liste UE </CButton>
-                    </CCardBody>
-                    </CCard>
-                </CCol>
-                <CCol sm={3} >
-                 
-
-                    <CCard id="card">
-                    <CCardBody>
-                    <CButton 
-                            className="btn-icon btn-light btn-sm" 
-                            onClick={toggleModal} 
-                            style={{ position: 'absolute', top: '5px', right: '5px' }}
-                        >
-                            <MoreVertIcon />
-                        </CButton>    
-                        <CCardTitle>→<b> &nbsp;Page UE</b></CCardTitle>
-                        <CCardText>
-                            Cette page vous redirige dans vers la liste des UE.
-                        </CCardText>
-                        <CButton href="#" id='mybtnStyle'>Voir liste UE </CButton>
-                    </CCardBody>
-                    </CCard>
-                </CCol>
-                <CCol sm={3} >
-
-                    <CCard id="card">
-                    <CCardBody>
-                    <CButton 
-                            className="btn-icon btn-light btn-sm" 
-                            onClick={toggleModal} 
-                            style={{ position: 'absolute', top: '5px', right: '5px' }}
-                        >
-                            <MoreVertIcon />
-                        </CButton>
-                        <CCardTitle>→<b> &nbsp;Page UE</b></CCardTitle>
-                        <CCardText>
-                            Cette page vous redirige dans vers la liste des UE.
-                        </CCardText>
-                        <CButton href="#" id='mybtnStyle'>Voir liste UE </CButton>
-                    </CCardBody>
-                    </CCard>
-                </CCol>
-            </CRow>
+        <div className='container'>
+          <Batiment/>
+           &nbsp;
+           &nbsp;
+           <Deroulement/>
+           &nbsp;
+           &nbsp;
+           <Salle/>
+           &nbsp;
+           &nbsp;
+           <Seance/>
+          
+           
         </div>
+
     );
 }
 
-export default Card_Maquette;
+export default Card_Emploi;

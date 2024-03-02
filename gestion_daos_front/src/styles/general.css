@@ -10,7 +10,13 @@
     box-shadow: 0px 2px 4px rgba(0.2, 0, 0, 0.2); 
     border: none !important;
 }
+.container {
+  display: flex;
+  justify-content: space-between;
+}
 
+
+ 
 /* Style pour les cartes 
 .card {
     position: relative; 

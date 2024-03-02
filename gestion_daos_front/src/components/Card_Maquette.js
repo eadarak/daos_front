@@ -1,9 +1,9 @@
 import React , {useState}from 'react';
-import {CButton,CCard,CCardBody,CCardText,CCardTitle,CCol,CRow} from '@coreui/react';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import '@coreui/coreui/dist/css/coreui.min.css';
 import '../styles/general.css'
-import UE from './Maquette/UE';
+import UE from './_Maquette/UE';
+import Semestre from './_Maquette/Semestre';
+import Niveau from './_Maquette/Niveau';
 function Card_Maquette(props) {
    
     const [modalOpen, setModalOpen] = useState(false);
@@ -17,6 +17,12 @@ function Card_Maquette(props) {
     return (
         <div>
            <UE/>
+           <br/>
+           <Semestre/>
+           <br/>
+            <Niveau/>
+            
+
         </div>
     );
 }
