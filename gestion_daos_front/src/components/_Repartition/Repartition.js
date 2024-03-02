@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { Card, CardContent, CardActions, Button, Typography, IconButton, Menu, MenuItem, TextField } from '@mui/material';
+import { Card, CardContent, CardActions, Button, Typography, IconButton, Menu, MenuItem } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 
 import '../../styles/general.css'
 
-function UE() {
+function Repartition() {
     const [anchorEl, setAnchorEl] = useState(null);
-    const [newUE, setNewUE] = useState('');
+    const [newRepartition, setNewRepartition] = useState('');
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -18,7 +18,7 @@ function UE() {
     };
 
     const handleAddUE = () => {
-        setNewUE('');
+        setNewRepartition('');
         handleClose();
     };
 
@@ -34,13 +34,14 @@ function UE() {
                     >
                         <MoreVertIcon />
                     </IconButton>
-                    <Typography variant="h6">→<b> &nbsp;RADA</b></Typography>
+                    <Typography variant="h6">→<b> &nbsp;Repartition</b></Typography>
                     <Typography variant="body1">
-                        Cette page vous redirige vers la liste des UE.
+                        Cette page vous redirige vers la liste des
+                        Repartitions.
                     </Typography>
                 </CardContent>
                 <CardActions>
-                    <Button href="#" id='mybtnStyle'>Voir liste UE</Button>
+                    <Button href="/listeRepartition" id='mybtnStyle'>Voir liste des Repartitions</Button>
                 </CardActions>
             </Card>
             <Menu
@@ -58,4 +59,4 @@ function UE() {
     );
 }
 
-export default UE;
+export default Repartition;

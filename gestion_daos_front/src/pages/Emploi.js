@@ -13,10 +13,7 @@ function Emploi() {
                     <Grid item>
                         <Card_Emploi/>
                     </Grid>
-                <br/>
-                    <Grid item>
-                        <Card_Emploi/>
-                </Grid>  
+                    
             </Grid>  
         </div>
     );

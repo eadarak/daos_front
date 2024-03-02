@@ -10,7 +10,7 @@ function Maquette() {
             <h2> ▶ Page des Maquettes </h2>
              <Grid container>
               <Grid item>
-                <Card_Maquette/>
+                <Card_Maquette/>  
               </Grid>
 
              </Grid>

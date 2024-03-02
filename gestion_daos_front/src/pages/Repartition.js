@@ -11,11 +11,7 @@ function Repartition(){
                     <Grid item>
                         <Card_Repartition/>
                     </Grid>
-                <br/>
-                    <Grid item>
-                        <Card_Repartition/>
                 </Grid>  
-            </Grid>  
         </div>
     );
 }
