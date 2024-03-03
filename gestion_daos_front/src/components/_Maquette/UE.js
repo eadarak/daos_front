@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardActions, Button, Typography, IconButton, Menu, MenuItem } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
+import ListeUE from '../_Listes/Maquette/ListeUE';
 
 import '../../styles/general.css'
+import Ajouter_UE from '../_Ajouter/Maquette/Ajouter_UE';
 
 function UE() {
     const [anchorEl, setAnchorEl] = useState(null);
@@ -40,7 +42,7 @@ function UE() {
                     </Typography>
                 </CardContent>
                 <CardActions>
-                    <Button href="  listeUE" id='mybtnStyle'>Voir liste UE</Button>
+                    <Button href="ListeUE" id='mybtnStyle'>Voir liste UE</Button>
                 </CardActions>
             </Card>
             <Menu
@@ -51,7 +53,7 @@ function UE() {
                 style={{ marginTop: '3px', marginRight: '15px' }}
             >
                 <MenuItem>
-                    <LibraryAddIcon />
+                    <Ajouter_UE open={Boolean(anchorEl)} onClose={handleClose} />
                 </MenuItem>
             </Menu>
         </div>

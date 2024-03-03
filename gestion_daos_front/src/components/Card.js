@@ -6,6 +6,7 @@ import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 /* Importation CSS */
 import '../styles/general.css'
 import '../styles/card.style.css'
+import Ajouter_UE from './_Ajouter/Maquette/Ajouter_UE';
 
 function CustomCard({ title }) { // Ajout du prop "title"
     const [anchorEl, setAnchorEl] = useState(null);
