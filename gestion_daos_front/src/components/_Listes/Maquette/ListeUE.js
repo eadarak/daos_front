@@ -53,22 +53,13 @@ function stableSort(array, comparator) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-/*const headCells = [
-  { id: 'idEns', numeric: false, disablePadding: false, label: 'IdEns', width: '10%' },
-  { id: 'matriculePer', numeric: false, disablePadding: false, label: 'MatriculePer', width: '15%' },
-  { id: 'nomEns', numeric: false, disablePadding: false, label: 'NomEns', width: '20%' },
-  { id: 'prenomEns', numeric: false, disablePadding: false, label: 'PrenomEns', width: '20%' },
-  { id: 'gradeEns', numeric: false, disablePadding: false, label: 'GradeEns', width: '15%' },
-  { id: 'dateCreationEns', numeric: false, disablePadding: false, label: 'Date Creation', width: '20%' },
-];*/
-
 const headCells = [
-  { id: 'idEns', numeric: false, disablePadding: false, label: 'Identifiant'},
-  { id: 'matriculePer', numeric: false, disablePadding: false, label: 'Matricule_Per' },
-  { id: 'nomEns', numeric: false, disablePadding: false, label: 'Nom'},
-  { id: 'prenomEns', numeric: false, disablePadding: false, label: 'Prenom' },
-  { id: 'gradeEns', numeric: false, disablePadding: false, label: 'Grade' },
-  { id: 'dateCreationEns', numeric: false, disablePadding: false, label: 'Date Creation' },
+  { id: 'idUE', numeric: false, disablePadding: false, label: 'Identifiant'},
+  { id: 'libelleUE', numeric: false, disablePadding: false, label: 'Libelle' },
+  { id: 'codeUE', numeric: false, disablePadding: false, label: 'Code'},
+  { id: 'creditUE', numeric: false, disablePadding: false, label: 'Credit' },
+  { id: 'coefficientUE', numeric: false, disablePadding: false, label: 'coefficient' },
+  { id: 'dateCreationUE', numeric: false, disablePadding: false, label: 'Date Creation' },
 ];
 
 function EnhancedTableHead(props) {
@@ -157,7 +148,7 @@ function EnhancedTableToolbar(props) {
           id="tableTitle"
           component="div"
         >
-          Liste des Enseignants PER
+          Liste des Unites d'enseignements
         </Typography>
       )}
 
@@ -192,10 +183,13 @@ export default function ListeUE() {
   const [data, setData] = React.useState([]);
 
   React.useEffect(() => {
-    axios.get('http://localhost:8084/repartition/per')
-      .then(res => setData(res.data))
+    axios.get('http://localhost:8084/maquette/ue')
+      .then(res => {
+        console.log("les donnes recuperees depuis la db : \n ",res.data)
+        setData(res.data)
+      })
       .catch(err => console.log(err));
-  }, []);
+  },[]);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -252,7 +246,7 @@ export default function ListeUE() {
   return (
     <div>
       <Button 
-        href="/repartition" 
+        href="/maquette" 
         style={{ color: "white", borderRadius: "5px", background: "rgb(9, 44, 38)" }}
       > ⬅
       </Button>
@@ -307,13 +301,13 @@ export default function ListeUE() {
                           scope="row"
                           padding="normal"
                         >
-                          {row.idEns}
+                          {row.idUE}
                         </TableCell>
-                        <TableCell align="left">{row.matriculePer}</TableCell>
-                        <TableCell align="left">{row.nomEns}</TableCell>
-                        <TableCell align="left">{row.prenomEns}</TableCell>
-                        <TableCell align="left">{row.gradeEns}</TableCell>
-                        <TableCell align="left">{row.dateCreationEns}</TableCell>
+                        <TableCell align="left">{row.libelleUE}</TableCell>
+                        <TableCell align="left">{row.codeUE}</TableCell>
+                        <TableCell align="left">{row.creditUE}</TableCell>
+                        <TableCell align="left">{row.coefficientUE}</TableCell>
+                        <TableCell align="left">{row.dateCreationUE}</TableCell>
                       </TableRow>
                     );
                   })}

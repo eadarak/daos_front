@@ -1,0 +1,7 @@
+.Boite-Modal, * {
+    font-family: 'Poppins' !important;
+}
+
+#validButton:hover{
+    background-color:  #000000;
+}
