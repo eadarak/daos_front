@@ -1,12 +1,62 @@
-
 import * as React from 'react';
 import Modal from '@mui/joy/Modal';
 import Typography from '@mui/material/Typography';
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import { Box, Divider, Stack, TextField, Grid, Button} from '@mui/material';
+import { MAQUETTE_URL } from '../../../Server_URL/Urls';
+import {useNavigate } from 'react-router-dom';
+import ListeUE from '../../_Listes/Maquette/ListeUE';
 
 function Ajouter_UE () {
     const [open, setOpen] = React.useState(false);
+    const navigate = useNavigate()
+
+    const initialUE = {
+        idUE : 0,
+        libelleUE: '',
+        codeUE : '',
+        creditUE : '',
+        coefficientUE : '',
+        descriptionUE : ''
+    };
+
+    const [data, setFormData] = React.useState(initialUE);
+
+    const handleChange = (e) =>{
+        const { id, value } = e.target;
+        setFormData({...data, [id] : value })
+    }
+
+
+    const handleSubmit = (e) =>{
+        e.preventDefault();
+
+        fetch(`${MAQUETTE_URL}ue`, {
+            method : 'POST',
+            headers : {'Content-Type' : 'application/json'},
+            body : JSON.stringify(data)
+        })
+        .then(response => {
+            if(!response.ok){
+                throw new Error('Erreur lors de la requête vers l\'API');
+            }
+            return response.json()
+        })
+        .then(
+            data => {
+                console.log('Une nouvelle UE a ete ajoute avec succes' ,data);
+                setFormData(initialUE);
+                setOpen(false);
+                navigate('/listeUE');
+                window.location.reload();
+            })
+        .catch( err => {
+            throw new Error("Une erreur s'est produite lors de l'operation d'ajout")
+        })
+    }
+
+    
+
 
     return (
         <React.Fragment>
@@ -38,6 +88,8 @@ function Ajouter_UE () {
                                     label="Libelle UE"
                                     required
                                     fullWidth
+                                    value={data.libelleUE}
+                                    onChange={handleChange}
                                 />
                             </Grid>
                             <Grid item xs={6}>
@@ -46,6 +98,8 @@ function Ajouter_UE () {
                                     label="Code UE"
                                     fullWidth
                                     required
+                                    value={data.codeUE}
+                                    onChange={handleChange}
                                 />
                             </Grid>
                             <Grid item xs={6}>
@@ -54,6 +108,8 @@ function Ajouter_UE () {
                                     label="Nombre de Credit"
                                     fullWidth
                                     required
+                                    value={data.creditUE}
+                                    onChange={handleChange}
                                 />
                             </Grid>
                             <Grid item xs={6}>
@@ -62,6 +118,8 @@ function Ajouter_UE () {
                                     label="Coefficient"
                                     fullWidth
                                     required
+                                    value={data.coefficientUE}
+                                    onChange={handleChange}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -72,6 +130,8 @@ function Ajouter_UE () {
                                     fullWidth
                                     multiline
                                     rows={3}
+                                    value={data.descriptionUE}
+                                    onChange={handleChange}
                                 />
                             </Grid>
                         </Grid>
@@ -85,7 +145,10 @@ function Ajouter_UE () {
                             '&:hover': { backgroundColor: '#000',color:'white' },
                             fontWeight:"600",
                             fontFamily:"Poppins"
-                        }}>Annuler</Button>
+                        }}>
+                            Annuler
+                        </Button>
+
                         <Button
                             variant="contained"  
                             sx={{ background: ' rgb(9, 44, 38)' , 
@@ -94,7 +157,11 @@ function Ajouter_UE () {
                             fontFamily:"Poppins"
                             }} 
                             className='validButton' 
-                            id='validButton'>Enregistrer</Button>
+                            id='validButton'
+                            onClick={handleSubmit}
+                        >
+                            Enregistrer
+                        </Button>
                     </Box>
                 </Box>
             </Modal>
