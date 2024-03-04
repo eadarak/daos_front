@@ -23,7 +23,6 @@ import { visuallyHidden } from '@mui/utils';
 import { Button, TextField } from '@mui/material';
 import axios from 'axios';
 import { Dialog, DialogTitle, DialogContent, DialogActions} from '@mui/material';
-import EMPLOI_URL from '../../../Server.URL/Api-Url'
 
 
 const rows = [];
@@ -79,17 +78,7 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{
-              'aria-label': 'select all desserts',
-            }}
-          />
-        </TableCell>
+       
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
@@ -300,23 +289,10 @@ export default function ListeBatiment() {
                     return (
                       <TableRow
                         hover
-                        onClick={(event) => handleClick(event, row.id)}
-                        role="checkbox"
-                        aria-checked={isItemSelected}
-                        tabIndex={-1}
-                        key={row.id}
-                        selected={isItemSelected}
+                      
                         sx={{ cursor: 'pointer' }}
                       >
-                        <TableCell padding="checkbox">
-                          <Checkbox
-                            color="primary"
-                            checked={isItemSelected}
-                            inputProps={{
-                              'aria-labelledby': labelId,
-                            }}
-                          />
-                        </TableCell>
+                        
                         <TableCell
                           component="th"
                           id={labelId}
