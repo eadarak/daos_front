@@ -15,14 +15,12 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-import DeleteIcon from '@mui/icons-material/Delete';
 import { visuallyHidden } from '@mui/utils';
 import { Button } from '@mui/material';
 import axios from 'axios';
-import Ajouter_UE from '../../_Ajouter/Maquette/Ajouter_UE';
+import Ajouter_UE from '../../_Ajouter/Aj-Maquette/Ajouter_UE';
 
 
 const rows = [];
@@ -60,7 +58,7 @@ const headCells = [
   { id: 'libelleUE', numeric: false, disablePadding: false, label: 'Libelle' },
   { id: 'codeUE', numeric: false, disablePadding: false, label: 'Code'},
   { id: 'creditUE', numeric: false, disablePadding: false, label: 'Credit' },
-  { id: 'coefficientUE', numeric: false, disablePadding: false, label: 'coefficient' },
+  { id: 'coefficientUE', numeric: false, disablePadding: false, label: 'Coefficient' },
   { id: 'dateCreationUE', numeric: false, disablePadding: false, label: 'Date Creation' },
 ];
 
@@ -154,19 +152,13 @@ function EnhancedTableToolbar(props) {
         </Typography>
       )}
 
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
+      
+        
           <IconButton>
             <Ajouter_UE/>
           </IconButton>
-        </Tooltip>
-      )}
+        
+     
     </Toolbar>
   );
 }

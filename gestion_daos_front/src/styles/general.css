@@ -1,4 +1,86 @@
 @import url('./_variable.css');
+/* ========================================= */
+#title{
+  text-align: center;
+  padding: 0;
+  margin: 0;
+  font-family: "Poppins";
+
+  #separator{
+    display: inline-block;
+    width: 10rem; 
+    padding-top: 0.5rem;
+    background-color: var(--bg-color3); 
+    border-radius: 10rem; 
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2); 
+    margin: 0 0px; 
+    vertical-align: middle; 
+  }
+  
+}
+#separator1{
+  display: inline-block;
+  width: 1rem; 
+  padding-top: 1rem;
+  background-color: #e5e5e5; 
+  border-radius: 10rem; 
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 1); 
+  margin: 0 0px; 
+  vertical-align: middle; 
+}
+#mybtnStyle2 {
+  background: var(--bg-color4);
+  border-radius: 4px ;
+  font-weight: 600;
+  font-family: "Poppins";
+  color: rgb(0, 0, 0);
+  text-transform: capitalize;
+  letter-spacing: 0.5px;
+  padding: 10px;
+   
+}
+
+#mybtnStyle2:hover{
+  color: rgb(255, 255, 255);
+  background-color: var(--bg-color3);
+} 
+
+#Block2{
+  display: flex;
+  justify-content: space-around;
+  /* margin-right: 18rem; */
+  padding: 40px;
+  padding-top: -20px;
+}
+
+#MyCard1{
+  background-color: white;
+  color: var(--bg-color3);
+  width: 23rem;
+  height: 10rem;
+  border-radius:0px ;
+  padding: 12px ;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2); 
+}
+
+
+#MyCard2{
+  background-color: white;
+  color: var(--bg-color3);
+  width: 23rem;
+  height: 10rem;
+  border-radius:0px ;
+  padding: 12px ;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2); 
+}
+
+#BlockBtn{
+  display: flex;
+  margin: 0 2rem;
+  justify-content: space-around;
+  padding-top: -20rem;
+}
+/* ========================================= */
 
 #mybtnStyle{
     background: var(--bg-color3);

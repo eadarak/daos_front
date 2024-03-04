@@ -1,9 +1,9 @@
+/* eslint-disable react/jsx-pascal-case */
 import React, { useState } from 'react';
 import { Card, CardContent, CardActions, Button, Typography, IconButton, Menu, MenuItem } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
-
-import '../../styles/general.css'
+import '../../styles/general.css';
+import Ajouter_Batiment from '../_Ajouter/Aj-Emploi/Ajouter_Batiment';
 
 function Batiment() {
     const [anchorEl, setAnchorEl] = useState(null);
@@ -38,6 +38,7 @@ function Batiment() {
                     <Typography variant="body1">
                         Cette page vous redirige vers la liste des
                         Batiments du Campus.
+
                     </Typography>
                 </CardContent>
                 <CardActions>
@@ -52,7 +53,7 @@ function Batiment() {
                 style={{ marginTop: '3px', marginRight: '15px' }}
             >
                 <MenuItem>
-                    <LibraryAddIcon />
+                   <Ajouter_Batiment open={Boolean(anchorEl)} onClose={handleClose}/>
                 </MenuItem>
             </Menu>
         </div>
