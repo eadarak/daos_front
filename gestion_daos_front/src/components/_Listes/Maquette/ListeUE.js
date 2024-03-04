@@ -19,8 +19,11 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import { visuallyHidden } from '@mui/utils';
 import { Button } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import axios from 'axios';
 import Ajouter_UE from '../../_Ajouter/Aj-Maquette/Ajouter_UE';
+import DetailsUE from '../../_Details/Maquette/DetailsUE';
 
 
 const rows = [];
@@ -60,6 +63,8 @@ const headCells = [
   { id: 'creditUE', numeric: false, disablePadding: false, label: 'Credit' },
   { id: 'coefficientUE', numeric: false, disablePadding: false, label: 'Coefficient' },
   { id: 'dateCreationUE', numeric: false, disablePadding: false, label: 'Date Creation' },
+  { id: 'Operations', numeric: false, disablePadding: false, label: 'Operations' },
+  { id: 'Details', numeric: false, disablePadding: false, label: 'Details' },
 ];
 
 function EnhancedTableHead(props) {
@@ -175,6 +180,8 @@ export default function ListeUE() {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [data, setData] = React.useState([]);
+  const [ues, setUEs] = React.useState([]) ;
+  const [selectedUE, setSelectedUE] = React.useState(null);
 
   React.useEffect(() => {
     axios.get('http://localhost:8084/maquette/ue')
@@ -184,6 +191,15 @@ export default function ListeUE() {
       })
       .catch(err => console.log(err));
   },[]);
+
+  const handleUEClick = (ue) => {
+    setSelectedUE(ue);
+  };
+
+  if (selectedUE) {
+    return <DetailsUE ue={selectedUE} />;
+  }
+
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -302,6 +318,30 @@ export default function ListeUE() {
                         <TableCell align="left">{row.creditUE}</TableCell>
                         <TableCell align="left">{row.coefficientUE}</TableCell>
                         <TableCell align="left">{row.dateCreationUE}</TableCell>
+                        <TableCell > 
+                            <IconButton aria-label="edit" >
+                                <EditIcon color='success' />
+                            </IconButton> 
+                            &nbsp; &nbsp;
+
+                            <IconButton aria-label="delete">
+                                <DeleteIcon sx={{color:"#cd0000"}}/>
+                            </IconButton>
+                         </TableCell>
+                         <TableCell> 
+                            <Button sx={{
+                            borderRadius:"30px solid",
+                            color:"white",
+                            fontWeight:"600",
+                            background:"rgb(9, 44, 38)",
+                            textTransform:"capitalize"
+
+                            }}
+                              onClick={() => handleUEClick(row)}
+                            >
+                              Détails
+                            </Button>
+                            </TableCell>
                       </TableRow>
                     );
                   })}
