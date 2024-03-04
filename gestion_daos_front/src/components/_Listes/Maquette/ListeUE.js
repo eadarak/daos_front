@@ -20,10 +20,11 @@ import Switch from '@mui/material/Switch';
 import { visuallyHidden } from '@mui/utils';
 import { Button } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
 import axios from 'axios';
 import Ajouter_UE from '../../_Ajouter/Aj-Maquette/Ajouter_UE';
 import DetailsUE from '../../_Details/Maquette/DetailsUE';
+import { MAQUETTE_URL } from '../../../Server_URL/Urls';
+import Modifier_UE from '../../_Modifier/Maquette/Modifier_UE';
 
 
 const rows = [];
@@ -76,17 +77,6 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{
-              'aria-label': 'select all desserts',
-            }}
-          />
-        </TableCell>
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
@@ -196,6 +186,28 @@ export default function ListeUE() {
     setSelectedUE(ue);
   };
 
+  const handleUEDelete = (e, id) => { 
+    
+    e.stopPropagation();
+    const confirmation = window.confirm(`Êtes-vous sûr de vouloir supprimer cette UE ${id} ?`);
+
+    if(confirmation){
+
+      axios.delete(`${MAQUETTE_URL}ue/${id}`)
+      .then( response => {
+        console.log("UE supprimée avec succès :", id);
+        setData(data.filter(ue => ue.idUE !== id))
+      })
+      .catch( err => {
+        throw new Error("Erreur lors de la suppression de l'UE :", err)
+      });
+    }
+    else{
+      window.alert(`Suppression  de l'UE ${id} annulée`);
+    }
+
+  }
+
   if (selectedUE) {
     return <DetailsUE ue={selectedUE} />;
   }
@@ -296,15 +308,6 @@ export default function ListeUE() {
                         selected={isItemSelected}
                         sx={{ cursor: 'pointer' }}
                       >
-                        <TableCell padding="checkbox">
-                          <Checkbox
-                            color="primary"
-                            checked={isItemSelected}
-                            inputProps={{
-                              'aria-labelledby': labelId,
-                            }}
-                          />
-                        </TableCell>
                         <TableCell
                           component="th"
                           id={labelId}
@@ -319,12 +322,10 @@ export default function ListeUE() {
                         <TableCell align="left">{row.coefficientUE}</TableCell>
                         <TableCell align="left">{row.dateCreationUE}</TableCell>
                         <TableCell > 
-                            <IconButton aria-label="edit" >
-                                <EditIcon color='success' />
-                            </IconButton> 
+                          <Modifier_UE ue={row}/>
                             &nbsp; &nbsp;
 
-                            <IconButton aria-label="delete">
+                            <IconButton aria-label="delete" onClick={(event) => handleUEDelete(event, row.idUE)}>
                                 <DeleteIcon sx={{color:"#cd0000"}}/>
                             </IconButton>
                          </TableCell>
