@@ -22,6 +22,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { visuallyHidden } from '@mui/utils';
 import { Button } from '@mui/material';
 import axios from 'axios';
+import Ajouter_UE from '../../_Ajouter/Maquette/Ajouter_UE';
+
 
 const rows = [];
 
@@ -161,7 +163,7 @@ function EnhancedTableToolbar(props) {
       ) : (
         <Tooltip title="Filter list">
           <IconButton>
-            <Button id='mybtnStyle'>New PER </Button>
+            <Ajouter_UE/>
           </IconButton>
         </Tooltip>
       )}

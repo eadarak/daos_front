@@ -1,0 +1,1 @@
+export const MAQUETTE_URL = 'http://localhost:8084/maquette/'
