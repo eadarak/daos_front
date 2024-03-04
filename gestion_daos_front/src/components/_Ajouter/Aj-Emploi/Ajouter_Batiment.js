@@ -2,9 +2,9 @@ import * as React from 'react';
 import Modal from '@mui/joy/Modal';
 import Typography from '@mui/material/Typography';
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
-import { Box, DialogContent, DialogTitle, Divider, Stack, TextField, Grid, Button} from '@mui/material';
+import { Box, Divider, Stack, TextField, Grid, Button} from '@mui/material';
 
-function Ajouter_UE () {
+function Ajouter_Batiment () {
     const [open, setOpen] = React.useState(false);
 
     return (
@@ -23,50 +23,43 @@ function Ajouter_UE () {
                  }}
                 className='Modal'
             >
-                <Box sx={{ backgroundColor: 'white', p: 2, width: 800 }}>
+                <Box sx={{ backgroundColor: 'white', p: 2, width: 800 , borderRadius:"10px"}}>
                     <Typography variant="h5" align="center" fontWeight='bold' fontSize='2rem' >
-                        Unité d'Enseignement
+                        Ajouter Batiment
                     </Typography>
-                    <Typography variant='body1' align='center' fontSize='1.2rem'> remplir le Contenu de l'unité d'enseignement...</Typography>
+                    <Typography variant='body1' align='center' fontSize='1.2rem'> Veuillez remplir les champs ci-dessous...</Typography>
                     <Divider />
                     <Stack spacing={2} direction="column" sx={{ width: '95%' }}>
                         <Grid container spacing={2}>
+                            
                             <Grid item xs={6}>
                                 <TextField
-                                    id="libelleUE"
-                                    label="Libelle UE"
-                                    required
-                                    fullWidth
-                                />
-                            </Grid>
-                            <Grid item xs={6}>
-                                <TextField
-                                    id="codeUE"
-                                    label="Code UE"
+                                    id="codeBatiment"
+                                    label="Code Batiment"
                                     fullWidth
                                     required
                                 />
                             </Grid>
                             <Grid item xs={6}>
                                 <TextField
-                                    id="creditUE"
-                                    label="Nombre de Credit"
-                                    fullWidth
+                                    id="libelleBatiment"
+                                    label="Libelle Batiment"
                                     required
+                                    fullWidth
                                 />
                             </Grid>
                             <Grid item xs={6}>
                                 <TextField
-                                    id="coefficientUE"
-                                    label="Coefficient"
+                                    id="positionBatiment"
+                                    label="Position Batiment"
                                     fullWidth
                                     required
                                 />
-                            </Grid>
+                            </Grid>                        
                             <Grid item xs={12}>
                                 <TextField
-                                    id="descriptionUE"
-                                    label="description UE"
+                                    id="descriptionBatiment"
+                                    label="Description Batiment"
                                     variant="filled"
                                     fullWidth
                                     multiline
@@ -76,13 +69,24 @@ function Ajouter_UE () {
                         </Grid>
                     </Stack>
                     <Box sx={{ mt: 2, display: 'flex', justifyContent: 'space-around' }}>
-                        <Button onClick={() => setOpen(false)} sx={{
+                        <Button 
+                            onClick={() => setOpen(false)} 
+                            sx={{
                             background: '#7d7d7d',
-                            color:'white',
-                            '&:hover': { backgroundColor: '#000',
-                                        color:'white' }
+                            color:'white', 
+                            '&:hover': { backgroundColor: '#000',color:'white' },
+                            fontWeight:"600",
+                            fontFamily:"Poppins"
                         }}>Annuler</Button>
-                        <Button variant="contained"  sx={{ background: ' rgb(9, 44, 38)' , '&:hover': { backgroundColor: 'rgb(17, 77, 67)' }}} className='validButton' id='validButton'>Enregistrer</Button>
+                        <Button
+                            variant="contained"  
+                            sx={{ background: ' rgb(9, 44, 38)' , 
+                            '&:hover': { backgroundColor: 'rgb(17, 77, 67)' },
+                            fontWeight:"600",
+                            fontFamily:"Poppins"
+                            }} 
+                            className='validButton' 
+                            id='validButton'>Enregistrer</Button>
                     </Box>
                 </Box>
             </Modal>
@@ -90,4 +94,4 @@ function Ajouter_UE () {
     );
 }
 
-export default Ajouter_UE;
+export default Ajouter_Batiment;

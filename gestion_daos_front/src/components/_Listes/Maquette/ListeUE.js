@@ -58,7 +58,7 @@ const headCells = [
   { id: 'libelleUE', numeric: false, disablePadding: false, label: 'Libelle' },
   { id: 'codeUE', numeric: false, disablePadding: false, label: 'Code'},
   { id: 'creditUE', numeric: false, disablePadding: false, label: 'Credit' },
-  { id: 'coefficientUE', numeric: false, disablePadding: false, label: 'coefficient' },
+  { id: 'coefficientUE', numeric: false, disablePadding: false, label: 'Coefficient' },
   { id: 'dateCreationUE', numeric: false, disablePadding: false, label: 'Date Creation' },
 ];
 
@@ -161,7 +161,7 @@ function EnhancedTableToolbar(props) {
       ) : (
         <Tooltip title="Filter list">
           <IconButton>
-            <Button id='mybtnStyle'>New PER </Button>
+            <Button id='mybtnStyle'>+ </Button>
           </IconButton>
         </Tooltip>
       )}

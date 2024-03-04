@@ -1,11 +1,9 @@
+/* eslint-disable react/jsx-pascal-case */
 import React, { useState } from 'react';
 import { Card, CardContent, CardActions, Button, Typography, IconButton, Menu, MenuItem } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
-import ListeUE from '../_Listes/Maquette/ListeUE';
-
 import '../../styles/general.css'
-import Ajouter_UE from '../_Ajouter/Maquette/Ajouter_UE';
+import Ajouter_UE from '../_Ajouter/Aj-Maquette/Ajouter_UE';
 
 function UE() {
     const [anchorEl, setAnchorEl] = useState(null);

@@ -34,13 +34,13 @@ function Semestre() {
                     >
                         <MoreVertIcon />
                     </IconButton>
-                    <Typography variant="h6">→<b> &nbsp;RADA</b></Typography>
+                    <Typography variant="h6">→<b> &nbsp;Semestre</b></Typography>
                     <Typography variant="body1">
-                        Cette page vous redirige vers la liste des UE.
+                        Cette page vous redirige vers la liste de Semestre.
                     </Typography>
                 </CardContent>
                 <CardActions>
-                    <Button href="listeUE" id='mybtnStyle'>Voir liste UE</Button>
+                    <Button href="listeUE" id='mybtnStyle'>Voir liste Semestre</Button>
                 </CardActions>
             </Card>
             <Menu

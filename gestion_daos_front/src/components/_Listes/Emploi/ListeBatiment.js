@@ -1,6 +1,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { alpha } from '@mui/material/styles';
+import { alpha} from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -15,14 +15,16 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { visuallyHidden } from '@mui/utils';
-import { Button, colors } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 import axios from 'axios';
+import { Dialog, DialogTitle, DialogContent, DialogActions} from '@mui/material';
+import EMPLOI_URL from '../../../Server.URL/Api-Url'
+
 
 const rows = [];
 
@@ -54,14 +56,7 @@ function stableSort(array, comparator) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-/*const headCells = [
-  { id: 'idEns', numeric: false, disablePadding: false, label: 'IdEns', width: '10%' },
-  { id: 'matriculePer', numeric: false, disablePadding: false, label: 'MatriculePer', width: '15%' },
-  { id: 'nomEns', numeric: false, disablePadding: false, label: 'NomEns', width: '20%' },
-  { id: 'prenomEns', numeric: false, disablePadding: false, label: 'PrenomEns', width: '20%' },
-  { id: 'gradeEns', numeric: false, disablePadding: false, label: 'GradeEns', width: '15%' },
-  { id: 'dateCreationEns', numeric: false, disablePadding: false, label: 'Date Creation', width: '20%' },
-];*/
+
 
 const headCells = [
   { id: 'idBatiment', numeric: false, disablePadding: false, label: 'Identifiant'},
@@ -130,6 +125,16 @@ EnhancedTableHead.propTypes = {
   orderBy: PropTypes.string.isRequired,
   rowCount: PropTypes.number.isRequired,
 };
+// eslint-disable-next-line react-hooks/rules-of-hooks
+// //const [openModal, setOpenModal] = React.useState(false);
+
+// const handleOpenModal = () => {
+//   setOpenModal(true);
+// };
+
+// const handleCloseModal = () => {
+//   setOpenModal(false);
+// };
 
 function EnhancedTableToolbar(props) {
   const { numSelected } = props;
@@ -165,19 +170,26 @@ function EnhancedTableToolbar(props) {
         </Typography>
       )}
 
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Ajouter Batiment">
-          <IconButton>
-            <Button id='mybtnStyle'> + </Button>
-          </IconButton>
-        </Tooltip>
-      )}
+        
+          
+              <Button id='mybtnStyle'> + </Button>
+            
+        
+
+          <Dialog >
+        <DialogTitle>Ajouter un Batiment</DialogTitle>
+        <DialogContent>
+
+          <TextField label="Nom du Batiment" fullWidth /> 
+          <TextField label="Description du Batiment" fullWidth multiline />
+        </DialogContent>
+        <DialogActions>
+          <Button >Annuler</Button>
+          <Button variant="contained" color="primary" >Ajouter</Button>
+        </DialogActions>
+      </Dialog>
+
+      
     </Toolbar>
   );
 }
@@ -196,7 +208,7 @@ export default function ListeBatiment() {
   const [data, setData] = React.useState([]);
 
   React.useEffect(() => {
-    axios.get('http://localhost:8084/emploi/batiment')
+    axios.get(`http://localhost:8084/emploi/batiment`)
       .then(res => setData(res.data))
       .catch(err => console.log(err));
   }, []);
@@ -328,19 +340,20 @@ export default function ListeBatiment() {
                                 <DeleteIcon sx={{color:"#cd0000"}}/>
                             </IconButton>
                          </TableCell>
-                         <TableCell> 
-                            <Button sx={{
-                            borderRadius:"30px solid",
-                            color:"white",
-                            fontWeight:"600",
-                            background:"rgb(9, 44, 38)",
-                            textTransform:"capitalize"}}
-                            href='/detailsBatiments'
-                            >
-                              Détails
-                            </Button>
-                            </TableCell>
-                            
+                                                
+                          <TableCell> 
+                              <Button sx={{
+                              borderRadius:"30px solid",
+                              color:"white",
+                              fontWeight:"600",
+                              background:"rgb(9, 44, 38)",
+                              textTransform:"capitalize"}}
+                              href='/detailsBatiments'
+                              >
+                                Détails
+                              </Button>
+                              </TableCell>
+                           
                       </TableRow>
                     );
                   })}
@@ -374,3 +387,5 @@ export default function ListeBatiment() {
     </div>
   );
 }
+
+
