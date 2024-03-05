@@ -18,6 +18,7 @@ import ListeSalle from './components/_Listes/Emploi/ListeSalle';
 import ListeSeance from './components/_Listes/Emploi/ListeSeance';
 import ListeRepartition from './components/_Listes/Repartition/ListeRepartition';
 import DetailsBatiment from './components/_Emploi/_Pages Details/DetailsBatiment';
+import DetailsUE from './components/_Details/Maquette/DetailsUE';
 
 const router = createBrowserRouter([
   {
@@ -83,7 +84,11 @@ const router = createBrowserRouter([
   {
     path : '/detailsBatiments',
     element : <Layout> <DetailsBatiment/> </Layout>
-  }  
+  },
+  {
+    path : '/detailsUE/:id', // Mettez à jour le chemin ici en incluant un paramètre d'ID
+    element : <Layout> <DetailsUE /> </Layout> // Utilisez le composant DetailsUE ici
+  }
 
 ]);
 

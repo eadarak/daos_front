@@ -25,6 +25,7 @@ import DetailsUE from '../../_Details/Maquette/DetailsUE';
 import { MAQUETTE_URL } from '../../../Server_URL/Urls';
 import Modifier_UE from '../../_Modifier/Maquette/Modifier_UE';
 import EditIcon from '@mui/icons-material/Edit';
+import { Link } from 'react-router-dom';
 
 
 
@@ -343,19 +344,20 @@ export default function ListeUE() {
                             </IconButton>
                          </TableCell>
                          <TableCell> 
-                            <Button sx={{
-                            borderRadius:"30px solid",
-                            color:"white",
-                            fontWeight:"600",
-                            background:"rgb(9, 44, 38)",
-                            textTransform:"capitalize"
-
-                            }}
+                          
+                            <Button 
+                              sx={{
+                                borderRadius: "30px solid",
+                                color: "white",
+                                fontWeight: "600",
+                                background: "rgb(9, 44, 38)",
+                                textTransform: "capitalize"
+                              }}
                               onClick={() => handleUEClickDelete(row)}
                             >
                               Détails
-                            </Button>
-                            </TableCell>
+                            </Button> 
+                        </TableCell>
                       </TableRow>
                     );
                   })}

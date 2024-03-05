@@ -10,6 +10,8 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import axios from 'axios';
 import '../../../styles/general.css';
+import { MAQUETTE_URL } from '../../../Server_URL/Urls';
+import Ajouter_EC_UE from './_Ajouter/Ajouter_EC_UE';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -31,21 +33,29 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
+const HeadersEC = ['Identifiant', 'Libelle', 'Code', 'CM', 'TD', 'TP', 'CM + TD/TP', 'TPE', 'VHT', 'coefficient' ]
+
 function DetailsUE ({ ue }) {
-    const [data, setData] = useState([]);
-    const [dataSalle, setDataSalle] = useState([]);
-    const [batimentLibelle, setBatimentLibelle] = useState('');
-    const [codeBatiment, setCodeBatiment] = useState();
-    const [positionBatiment, setPositionBatiment] = useState('');
-    const [descriptionBatiment, setDescriptionBatiment] = useState('');
+    const [ecs, setEcs] = useState([]);
+
+    useEffect(() => {
+        axios.get(`${MAQUETTE_URL}ue/${ue.idUE}/ecs`)
+          .then(res => {
+            console.log("les donnes recuperees depuis la db : \n ",res.data)
+            setEcs(res.data)
+          })
+          .catch(err => console.log(err));
+      },[]);
+    
     return (
         <div>
         <h2 id='title'>  {ue.libelleUE} <br/>                
             <span id='separator'></span>
         </h2>
         <div id='BlockBtn'>
-            <Button id='mybtnStyle2'>Ajouter EC</Button>
+            <Ajouter_EC_UE ue={ue}/>   
         </div>
+        
         <div id='Block2'>
             <Card id='MyCard1'>
                 <p><b>Description :</b> <br/>
@@ -69,25 +79,26 @@ function DetailsUE ({ ue }) {
                 <Table aria-label="customized table">
                     <TableHead>
                         <TableRow>
-                            <StyledTableCell>Id</StyledTableCell>
-                            <StyledTableCell align="center">Code Salle</StyledTableCell>
-                            <StyledTableCell align="center">Libelle Salle</StyledTableCell>
-                            <StyledTableCell align="center">Capacite Salle</StyledTableCell>
-                            <StyledTableCell align="center">Description Salle</StyledTableCell>
-                            <StyledTableCell align="center">Date de Creation</StyledTableCell>
+                        {HeadersEC.map((th, index) => (
+                            <StyledTableCell key={index}>{th}</StyledTableCell>
+                        ))}
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {dataSalle.length > 0 && dataSalle.map(row => (
-                            <StyledTableRow key={row.idSalle}>
+                        {ecs.length > 0 && ecs.map(ec => (
+                            <StyledTableRow key={ec.id}>
                                 <StyledTableCell component="th" scope="row">
-                                    {row.idSalle}
+                                    {ec.idEC}
                                 </StyledTableCell>
-                                <StyledTableCell align="center">{row.codeSalle}</StyledTableCell>
-                                <StyledTableCell align="center">{row.libelleSalle}</StyledTableCell>
-                                <StyledTableCell align="center">{row.capaciteSalle}</StyledTableCell>
-                                <StyledTableCell align="center">{row.descriptionSalle}</StyledTableCell>
-                                <StyledTableCell align="center">{row.dateCreationSalle}</StyledTableCell>
+                                <StyledTableCell align="center">{ec.libelleEC}</StyledTableCell>
+                                <StyledTableCell align="center">{ec.codeEC}</StyledTableCell>
+                                <StyledTableCell align="center">{ec.cm}</StyledTableCell>
+                                <StyledTableCell align="center">{ec.td}</StyledTableCell>
+                                <StyledTableCell align="center">{ec.tp}</StyledTableCell>
+                                <StyledTableCell align="center">{ec.cm + ec.td + ec.tp}</StyledTableCell>
+                                <StyledTableCell align="center">{ec.tpe}</StyledTableCell>
+                                <StyledTableCell align="center">{ec.cm + ec.td + ec.tp + ec.tpe}</StyledTableCell>
+                                <StyledTableCell align="center">{ec.coefficientEC}</StyledTableCell>
                             </StyledTableRow>
                         ))}
                     </TableBody>
