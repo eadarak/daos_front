@@ -25,6 +25,8 @@ import Ajouter_UE from '../../_Ajouter/Aj-Maquette/Ajouter_UE';
 import DetailsUE from '../../_Details/Maquette/DetailsUE';
 import { MAQUETTE_URL } from '../../../Server_URL/Urls';
 import Modifier_UE from '../../_Modifier/Maquette/Modifier_UE';
+import EditIcon from '@mui/icons-material/Edit';
+
 
 
 const rows = [];
@@ -171,7 +173,9 @@ export default function ListeUE() {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [data, setData] = React.useState([]);
   const [ues, setUEs] = React.useState([]) ;
-  const [selectedUE, setSelectedUE] = React.useState(null);
+  const [selectedUE, setSelectedUEDelete] = React.useState(null);
+  const [selectedUpdateUE, setSelectedUpdateUE] = React.useState(null);
+
 
   React.useEffect(() => {
     axios.get('http://localhost:8084/maquette/ue')
@@ -182,8 +186,12 @@ export default function ListeUE() {
       .catch(err => console.log(err));
   },[]);
 
-  const handleUEClick = (ue) => {
-    setSelectedUE(ue);
+  const handleUEClickDelete = (ue) => {
+    setSelectedUEDelete(ue);
+  };
+
+  const handleEditClick = (ue) => {
+    setSelectedUpdateUE(ue); // Mettez à jour selectedUpdateUE avec l'UE à modifier
   };
 
   const handleUEDelete = (e, id) => { 
@@ -210,6 +218,10 @@ export default function ListeUE() {
 
   if (selectedUE) {
     return <DetailsUE ue={selectedUE} />;
+  }
+
+  if(selectedUpdateUE){
+    return <Modifier_UE ue={selectedUpdateUE} open={true} onClose={() => setSelectedUpdateUE(null)} />;
   }
 
 
@@ -264,6 +276,8 @@ export default function ListeUE() {
 
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
+
+    
 
   return (
     <div>
@@ -322,7 +336,9 @@ export default function ListeUE() {
                         <TableCell align="left">{row.coefficientUE}</TableCell>
                         <TableCell align="left">{row.dateCreationUE}</TableCell>
                         <TableCell > 
-                          <Modifier_UE ue={row}/>
+                        <IconButton aria-label="edit" onClick={() => handleEditClick(row)}>
+                          <EditIcon  color='success'/>
+                        </IconButton>
                             &nbsp; &nbsp;
 
                             <IconButton aria-label="delete" onClick={(event) => handleUEDelete(event, row.idUE)}>
@@ -338,7 +354,7 @@ export default function ListeUE() {
                             textTransform:"capitalize"
 
                             }}
-                              onClick={() => handleUEClick(row)}
+                              onClick={() => handleUEClickDelete(row)}
                             >
                               Détails
                             </Button>
