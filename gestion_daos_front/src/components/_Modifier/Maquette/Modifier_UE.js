@@ -7,8 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 
-function Modifier_UE ({ ue }) {
-    const [open, setOpen] = React.useState(false);
+function Modifier_UE ({ ue, open, onClose }) {
     const navigate = useNavigate();
     const initialUE = {
         libelleUE: '',
@@ -19,7 +18,7 @@ function Modifier_UE ({ ue }) {
     }
 
     const [data, setData] = React.useState(ue);
-
+/*
     const handleOpen = (e) => {
         e.stopPropagation();
         setOpen(true);
@@ -29,7 +28,7 @@ function Modifier_UE ({ ue }) {
         e.stopPropagation();
         setOpen(false);
     }    
-
+*/
     const handleChangeUE = (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -53,8 +52,8 @@ function Modifier_UE ({ ue }) {
         })
         .then(data => {
             console.log('UE modifiée avec succès', data);
-            setData(initialUE); // Réinitialise les valeurs du formulaire
-            setOpen(false);
+            setData(initialUE);
+            onClose();
             navigate('/listeUE', { replace: true });
             window.location.reload();
         })
@@ -62,17 +61,20 @@ function Modifier_UE ({ ue }) {
             console.error("Une erreur s'est produite lors de la modification de l'UE :", err);
         });
     }
+    /*
+         <IconButton aria-label="edit">
+             <EditIcon color='success' onClick={handleOpen}  />
+             </IconButton>
+     */
 
     return (
         <React.Fragment>
-            <IconButton aria-label="edit" >
-             <EditIcon color='success' onClick={handleOpen}  />
-             </IconButton>
+           
             <Modal
                 aria-labelledby="modal-title"
                 aria-describedby="modal-desc"
                 open={open}
-                onClose={handleClose}
+                onClose={onClose}
                 sx={{
                     display: 'flex',
                     justifyContent: 'center',
@@ -146,7 +148,7 @@ function Modifier_UE ({ ue }) {
                     </Stack>
                     <Box sx={{ mt: 2, display: 'flex', justifyContent: 'space-around' }}>
                         <Button 
-                            onClick={handleClose} 
+                            onClick={onClose} 
                             sx={{
                                 background: '#7d7d7d',
                                 color:'white', 
