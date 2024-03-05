@@ -40,7 +40,9 @@ function DetailsUE ({ ue }) {
     const [descriptionBatiment, setDescriptionBatiment] = useState('');
     return (
         <div>
-        <h2 id='title'>  {ue.libelleUE}</h2>
+        <h2 id='title'>  {ue.libelleUE} <br/>                
+            <span id='separator'></span>
+        </h2>
         <div id='BlockBtn'>
             <Button id='mybtnStyle2'>Ajouter EC</Button>
         </div>

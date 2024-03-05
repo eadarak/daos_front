@@ -3,9 +3,59 @@ import Modal from '@mui/joy/Modal';
 import Typography from '@mui/material/Typography';
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import { Box, Divider, Stack, TextField, Grid, Button} from '@mui/material';
+import { EMPLOI_URL } from '../../../Server_URL/Urls';
+import {useNavigate } from 'react-router-dom';
+
 
 function Ajouter_Batiment () {
     const [open, setOpen] = React.useState(false);
+    const navigate = useNavigate()
+
+    const modelBatiment = {
+        idBatiment : 0,
+        libelleBatiment: '',
+        codeBatiment : '',
+        positionBatiment : '',
+        descriptionBatiment : ''
+    };
+
+    const [data, setFormData] = React.useState(modelBatiment);
+
+    const handleChange = (e) =>{
+        const { id, value } = e.target;
+        setFormData({...data, [id] : value })
+    }
+
+
+    const handleSubmit = (e) =>{
+        e.preventDefault();
+
+        fetch(`${EMPLOI_URL}/batiment`, {
+            method : 'POST',
+            headers : {'Content-Type' : 'application/json'},
+            body : JSON.stringify(data)
+        })
+        .then(response => {
+            if(!response.ok){
+                throw new Error('Erreur lors de la requête vers l\'API');
+            }
+            return response.json()
+        })
+        .then(
+            data => {
+                console.log('Un nouveau batiment a été ajouté avec succès' ,data);
+                setFormData(modelBatiment);
+                setOpen(false);
+                navigate('/listeBatiment');
+                window.location.reload();
+            })
+        .catch( err => {
+            throw new Error("Une erreur s'est produite lors de l'operation d'ajout")
+        })
+    }
+
+    
+
 
     return (
         <React.Fragment>
@@ -25,27 +75,30 @@ function Ajouter_Batiment () {
             >
                 <Box sx={{ backgroundColor: 'white', p: 2, width: 800 , borderRadius:"10px"}}>
                     <Typography variant="h5" align="center" fontWeight='bold' fontSize='2rem' >
-                        Ajouter Batiment
+                        Nouveau Batiment
                     </Typography>
                     <Typography variant='body1' align='center' fontSize='1.2rem'> Veuillez remplir les champs ci-dessous...</Typography>
                     <Divider />
                     <Stack spacing={2} direction="column" sx={{ width: '95%' }}>
                         <Grid container spacing={2}>
-                            
-                            <Grid item xs={6}>
-                                <TextField
-                                    id="codeBatiment"
-                                    label="Code Batiment"
-                                    fullWidth
-                                    required
-                                />
-                            </Grid>
                             <Grid item xs={6}>
                                 <TextField
                                     id="libelleBatiment"
                                     label="Libelle Batiment"
                                     required
                                     fullWidth
+                                    value={data.libelleBatiment}
+                                    onChange={handleChange}
+                                />
+                            </Grid>
+                            <Grid item xs={6}>
+                                <TextField
+                                    id="codeBatiment"
+                                    label="Code Batiment"
+                                    fullWidth
+                                    required
+                                    value={data.codeBatiment}
+                                    onChange={handleChange}
                                 />
                             </Grid>
                             <Grid item xs={6}>
@@ -54,8 +107,11 @@ function Ajouter_Batiment () {
                                     label="Position Batiment"
                                     fullWidth
                                     required
+                                    value={data.positionBatiment}
+                                    onChange={handleChange}
                                 />
-                            </Grid>                        
+                            </Grid>
+                           
                             <Grid item xs={12}>
                                 <TextField
                                     id="descriptionBatiment"
@@ -64,6 +120,8 @@ function Ajouter_Batiment () {
                                     fullWidth
                                     multiline
                                     rows={3}
+                                    value={data.descriptionUE}
+                                    onChange={handleChange}
                                 />
                             </Grid>
                         </Grid>
@@ -77,7 +135,10 @@ function Ajouter_Batiment () {
                             '&:hover': { backgroundColor: '#000',color:'white' },
                             fontWeight:"600",
                             fontFamily:"Poppins"
-                        }}>Annuler</Button>
+                        }}>
+                            Annuler
+                        </Button>
+
                         <Button
                             variant="contained"  
                             sx={{ background: ' rgb(9, 44, 38)' , 
@@ -86,7 +147,11 @@ function Ajouter_Batiment () {
                             fontFamily:"Poppins"
                             }} 
                             className='validButton' 
-                            id='validButton'>Enregistrer</Button>
+                            id='validButton'
+                            onClick={handleSubmit}
+                        >
+                            Enregistrer
+                        </Button>
                     </Box>
                 </Box>
             </Modal>

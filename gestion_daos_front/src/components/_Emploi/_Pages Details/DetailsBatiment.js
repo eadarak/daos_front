@@ -65,7 +65,10 @@ function DetailsBatiment() {
 
     return (
         <div>
-            <h2 id='title'>  {batimentLibelle}</h2>
+            <h2 id='title'>  {batimentLibelle} <br/>
+                <span id='separator'></span>
+            </h2>
+
             <div id='BlockBtn'>
                 <Button id='mybtnStyle2'>Ajouter Salle</Button>
             </div>

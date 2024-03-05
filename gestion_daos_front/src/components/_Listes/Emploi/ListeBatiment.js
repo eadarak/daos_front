@@ -13,7 +13,6 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
@@ -23,9 +22,13 @@ import { visuallyHidden } from '@mui/utils';
 import { Button, TextField } from '@mui/material';
 import axios from 'axios';
 import { Dialog, DialogTitle, DialogContent, DialogActions} from '@mui/material';
+import { EMPLOI_URL } from '../../../Server_URL/Urls';
+import Ajouter_Batiment from '../../_Ajouter/Aj-Emploi/Ajouter_Batiment';
+import DetailsBatiment from '../../_Emploi/_Pages Details/DetailsBatiment';
 
 
-const rows = [];
+
+const row = [];
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -158,26 +161,9 @@ function EnhancedTableToolbar(props) {
           Liste des Batiments
         </Typography>
       )}
-
-        
-          
-              <Button id='mybtnStyle'> + </Button>
-            
-        
-
-          <Dialog >
-        <DialogTitle>Ajouter un Batiment</DialogTitle>
-        <DialogContent>
-
-          <TextField label="Nom du Batiment" fullWidth /> 
-          <TextField label="Description du Batiment" fullWidth multiline />
-        </DialogContent>
-        <DialogActions>
-          <Button >Annuler</Button>
-          <Button variant="contained" color="primary" >Ajouter</Button>
-        </DialogActions>
-      </Dialog>
-
+        <IconButton>
+          <Ajouter_Batiment/>
+        </IconButton>
       
     </Toolbar>
   );
@@ -196,13 +182,67 @@ export default function ListeBatiment() {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [data, setData] = React.useState([]);
 
-  React.useEffect(() => {
-    axios.get(`http://localhost:8084/emploi/batiment`)
+/*======================PARAMETRE BATIMENT===============================*/
+const [batimentSupp, setBatimentSupp] = React.useState(null);
+const [selectedBatDel, setSelectedBatDel]  = React.useState(null);
+const [selectedBatUp, setSelectedBatUp]  = React.useState(null);
+
+const handleSuppressionBatiment = (bat) =>{
+  setSelectedBatDel(bat);
+}
+const handleUpdateBatiment = (bat) =>{
+  setSelectedBatUp(bat);
+}
+
+/*======================FIN PARAMETRE BATIMENT===========================*/
+
+
+
+/*======================FETCH LISTE BATIMENT===============================*/
+
+React.useEffect(() => {
+    axios.get(`${EMPLOI_URL}/batiment`)
       .then(res => setData(res.data))
       .catch(err => console.log(err));
   }, []);
 
-  const handleRequestSort = (event, property) => {
+/*======================CREATE BATIMENT===============================*/
+
+/*======================UPDATE BATIMENT===============================*/
+
+/*======================DELETE BATIMENT===============================*/
+const batimentDelete = (bat, id) => { 
+    
+  bat.stopPropagation();
+  const confirmation = window.confirm(`Êtes-vous sûr de vouloir supprimer ce Batiment ${id} ?`);
+
+  if(confirmation){
+
+    axios.delete(`${EMPLOI_URL}/batiment/${id}`)
+    .then( response => {
+      console.log("Batiment supprimée avec succès :", id);
+      setData(data.filter(bat => bat.idBat !== id))
+    })
+    .catch( err => {
+      throw new Error("Erreur lors de la suppression du batiment :", err)
+    });
+  }
+  else{
+    window.alert(`Suppression  du Batiment ${id} annulée`);
+  }
+
+}
+/*=====================================================*/
+
+if (selectedBatDel){
+  <DetailsBatiment bat={selectedBatDel}/>
+}
+ if (selectedBatUp){
+ }
+
+/*=====================================================*/
+
+const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
@@ -307,14 +347,21 @@ export default function ListeBatiment() {
                         <TableCell align="left">{row.descriptionBatiment}</TableCell>
                         <TableCell align="left">{row.dateCreationBatiment}</TableCell>
                         <TableCell > 
-                            <IconButton aria-label="edit" >
+                            <IconButton 
+                              aria-label="edit"
+                              onClick={() => handleUpdateBatiment(row)}
+                              >
                                 <EditIcon color='success' />
                             </IconButton> 
                             &nbsp; &nbsp;
 
-                            <IconButton aria-label="delete">
+                            <IconButton 
+                              aria-label="delete"
+                              onClick={(event) => batimentDelete(event, row.idBatiment)} 
+                            >
                                 <DeleteIcon sx={{color:"#cd0000"}}/>
                             </IconButton>
+
                          </TableCell>
                                                 
                           <TableCell> 
