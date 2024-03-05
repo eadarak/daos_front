@@ -7,7 +7,6 @@ import Ajouter_UE from '../_Ajouter/Aj-Maquette/Ajouter_UE';
 
 function UE() {
     const [anchorEl, setAnchorEl] = useState(null);
-    const [newUE, setNewUE] = useState('');
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -17,10 +16,6 @@ function UE() {
         setAnchorEl(null);
     };
 
-    const handleAddUE = () => {
-        setNewUE('');
-        handleClose();
-    };
 
     return (
         <div>
