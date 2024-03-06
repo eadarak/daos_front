@@ -48,7 +48,7 @@ function Modifier_EC ({ ec, open, onClose }) {
             console.log('EC modifiée avec succès', data);
             setData(initialEC);
             onClose();
-            navigate('/liste-ec', { replace: true });
+            navigate('/listes-ec', { replace: true });
             window.location.reload();
         })
         .catch(err => {

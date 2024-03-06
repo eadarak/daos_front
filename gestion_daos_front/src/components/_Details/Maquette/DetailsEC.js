@@ -11,7 +11,7 @@ import Paper from '@mui/material/Paper';
 import axios from 'axios';
 import '../../../styles/general.css';
 import { MAQUETTE_URL } from '../../../Server_URL/Urls';
-import Ajouter_EC_UE from './_Ajouter/Ajouter_EC_UE';
+import Ajouter_Module_EC from './_Ajouter/Ajouter_Module_EC';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -33,81 +33,75 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-const HeadersEC = ['Identifiant', 'Libelle', 'Code', 'CM', 'TD', 'TP', 'CM + TD/TP', 'TPE', 'VHT', 'coefficient' ]
+const HeadersModule = ['Identifiant', 'Libelle', 'Cours', 'Durée', 'Coefficient'];
 
 function DetailsEC ({ ec }) {
-    const [ecs, setEcs] = useState([]);
+    const [module, setModule] = useState([]);
 
     useEffect(() => {
-        axios.get(`${MAQUETTE_URL}ec/${ec.idEC}/ecs`)
+        axios.get(`${MAQUETTE_URL}ec/${ec.idEC}/modules`)
           .then(res => {
-            console.log("les donnes recuperees depuis la db : \n ",res.data)
-            setEcs(res.data)
+            console.log("les données récupérées depuis la DB : \n ",res.data)
+            setModule(res.data)
           })
           .catch(err => console.log(err));
-      },[]);
+      },[ec.idEC]);
     
     return (
         <div>
-        <h2 id='title'>  {ec.libelleEC}</h2>
-        <div id='BlockBtn'>
-            <Ajouter_EC_UE ec={ec}/>   
+            <h2 id='title'>{ec.libelleEC}</h2>
+            <div id='BlockBtn'>
+                <Ajouter_Module_EC ec={ec} />
+            </div>
+            <div id='Block2'>
+                <Card id='MyCard1'>
+                    <p><b>Description :</b> <br/>
+                        {ec.descriptionEC}
+                    </p>
+                </Card>
+                <Card id='MyCard2'>
+                    <p><b>Code :</b> {ec.codeEC} </p>
+                    <p><b>Cours Magistral :</b> {ec.cm} </p>
+                    <p><b>Travaux Dirigés :</b> {ec.td} </p>
+                    <p><b>Travaux Pratiques :</b> {ec.tp} </p>
+                    <p><b>Travail Personnel Etudiant :</b> {ec.tpe} </p>
+                    <p><b>Coefficient :</b> {ec.coefficientEC} </p>
+                    <p><b>Date de Création :</b> {ec.dateCreationEC} </p>
+                </Card>
+            </div>
+            <div id='Block3'>
+                <h3 id='title'>
+                    <span id='separator1'></span>
+                    &nbsp;Liste des Modules
+                </h3>
+                <br/>
+                <TableContainer component={Paper} style={{ width: "70rem", margin: "auto" }}>
+                    <Table aria-label="customized table">
+                        <TableHead>
+                            <TableRow>
+                                {HeadersModule.map((th, index) => (
+                                    <StyledTableCell key={index}>{th}</StyledTableCell>
+                                ))}
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {module.length > 0 && module.map(mod => (
+                                <StyledTableRow key={mod.idModule}>
+                                    <StyledTableCell component="th" scope="row">
+                                        {mod.idModule}
+                                    </StyledTableCell>
+                                    <StyledTableCell align="left">{mod.libelleModule}</StyledTableCell>
+                                    <StyledTableCell align="left">{mod.coursModule}</StyledTableCell>
+                                    <StyledTableCell align="left">{mod.dureeModule}</StyledTableCell>
+                                    <StyledTableCell align="left">{mod.coefficientModule}</StyledTableCell>
+                                </StyledTableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </div>
         </div>
-        
-        <div id='Block2'>
-            <Card id='MyCard1'>
-                <p><b>Description :</b> <br/>
-                    {ec.descriptionEC}
-                </p>
-            </Card>
-            <Card id='MyCard2'>
-                <p><b>Code :</b> {ec.codeEC} </p>
-                <p><b>Cours Magistral :</b> {ec.cm} </p>
-                <p><b>Travaux Diriges :</b> {ec.td} </p>
-                <p><b>Travaux Pratiques :</b> {ec.tp} </p>
-                <p><b>Travail Personnel Etudiant :</b> {ec.tpe} </p>
-                <p><b>Coefficient :</b> {ec.coefficientEC} </p>
-                <p><b>date Creation :</b> {ec.dateCreationEC} </p>
-            </Card>
-        </div>
-        <div id='Block3'>
-            <h3 id='title'>
-                <span id='separator1'></span>
-                &nbsp;Liste des Seances
-            </h3>
-            <br/>
-            <TableContainer component={Paper} style={{ width: "70rem", margin: "auto" }}>
-                <Table aria-label="customized table">
-                    <TableHead>
-                        <TableRow>
-                        {HeadersEC.map((th, index) => (
-                            <StyledTableCell key={index}>{th}</StyledTableCell>
-                        ))}
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {ecs.length > 0 && ecs.map(ec => (
-                            <StyledTableRow key={ec.id}>
-                                <StyledTableCell component="th" scope="row">
-                                    {ec.idEC}
-                                </StyledTableCell>
-                                <StyledTableCell align="center">{ec.libelleEC}</StyledTableCell>
-                                <StyledTableCell align="center">{ec.codeEC}</StyledTableCell>
-                                <StyledTableCell align="center">{ec.cm}</StyledTableCell>
-                                <StyledTableCell align="center">{ec.td}</StyledTableCell>
-                                <StyledTableCell align="center">{ec.tp}</StyledTableCell>
-                                <StyledTableCell align="center">{ec.cm + ec.td + ec.tp}</StyledTableCell>
-                                <StyledTableCell align="center">{ec.tpe}</StyledTableCell>
-                                <StyledTableCell align="center">{ec.cm + ec.td + ec.tp + ec.tpe}</StyledTableCell>
-                                <StyledTableCell align="center">{ec.coefficientEC}</StyledTableCell>
-                            </StyledTableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-        </div>
-    </div>
-  )
+    )
 }
 
-export default DetailsEC
+export default DetailsEC;
