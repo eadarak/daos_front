@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Card } from '@mui/material';
+import { Card } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -49,7 +49,9 @@ function DetailsUE ({ ue }) {
     
     return (
         <div>
-        <h2 id='title'>  {ue.libelleUE}</h2>
+        <h2 id='title'>  {ue.libelleUE} <br/>                
+            <span id='separator'></span>
+        </h2>
         <div id='BlockBtn'>
             <Ajouter_EC_UE ue={ue}/>   
         </div>
