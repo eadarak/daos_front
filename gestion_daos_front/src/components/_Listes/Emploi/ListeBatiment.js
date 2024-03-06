@@ -20,11 +20,14 @@ import { visuallyHidden } from '@mui/utils';
 import { Button } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import axios from 'axios';
-import { EMPLOI_URL, MAQUETTE_URL } from '../../../Server_URL/Urls';
+import Modifier_Batiment from '../../_Modifier/Emploi/Modifier_Batiment';
+import Details_Batiment from '../../_Details/Emploi/DetailsBatiment';
 import EditIcon from '@mui/icons-material/Edit';
+import { Link } from 'react-router-dom';
 import Ajouter_Batiment from '../../_Ajouter/Aj-Emploi/Ajouter_Batiment';
-import DetailsBatiment from '../../_Emploi/_Pages Details/DetailsBatiment';
-import Modifier_Batiment from '../../_Modifier/Repartition/Modifier_Batiment';
+import { EMPLOI_URL } from '../../../Server_URL/Urls';
+
+const rows = [];
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -59,10 +62,9 @@ const headCells = [
   { id: 'libelleBatiment', numeric: false, disablePadding: false, label: 'Libelle' },
   { id: 'codeBatiment', numeric: false, disablePadding: false, label: 'Code'},
   { id: 'positionBatiment', numeric: false, disablePadding: false, label: 'Position' },
-  { id: 'descriptionBatiment', numeric: false, disablePadding: false, label: 'Description' },
   { id: 'dateCreationBatiment', numeric: false, disablePadding: false, label: 'Date Creation' },
-  { id: 'Operations', numeric: false, disablePadding: false, label: 'Opérations' },
-  { id: 'Details', numeric: false, disablePadding: false, label: 'Détails' },
+  { id: 'Operations', numeric: false, disablePadding: false, label: 'Operations' },
+  { id: 'Details', numeric: false, disablePadding: false, label: 'Details' },
 ];
 
 function EnhancedTableHead(props) {
@@ -172,7 +174,7 @@ export default function ListeBatiment() {
   React.useEffect(() => {
     axios.get(`${EMPLOI_URL}/batiment`)
       .then(res => {
-        console.log("les données récupérées depuis la db : \n ", res.data)
+        console.log("les données recupérées depuis la db : \n ",res.data)
         setData(res.data)
       })
       .catch(err => console.log(err));
@@ -183,7 +185,7 @@ export default function ListeBatiment() {
   };
 
   const handleEditClick = (batiment) => {
-    setSelectedUpdateBatiment(batiment); // Mettez à jour selectedUpdateUE avec le bâtiment à modifier
+    setSelectedUpdateBatiment(batiment);
   };
 
   const handleBatimentDelete = (e, id) => { 
@@ -203,13 +205,13 @@ export default function ListeBatiment() {
       });
     }
     else{
-      window.alert(`Suppression du bâtiment ${id} annulée`);
+      window.alert(`Suppression  du bâtiment ${id} annulée`);
     }
 
   }
 
   if (selectedBatiment) {
-    return <DetailsBatiment batiment={selectedBatiment} />;
+   return <Details_Batiment batiment={selectedBatiment}/>
   }
 
   if(selectedUpdateBatiment){
@@ -273,12 +275,6 @@ export default function ListeBatiment() {
 
   return (
     <div>
-      <Button 
-        href="/emploi" 
-        style={{ color: "white", borderRadius: "5px", background: "rgb(9, 44, 38)" }}
-      > ⬅
-      </Button>
-
       <Box sx={{ width: '100%', paddingTop: "10px" }}>
         <Paper sx={{ width: '100%', mb: 2 }}>
           <EnhancedTableToolbar numSelected={selected.length} />
@@ -300,17 +296,17 @@ export default function ListeBatiment() {
                 {stableSort(data, getComparator(order, orderBy))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => {
-                    const isItemSelected = isSelected(row.id);
+                    const isItemSelected = isSelected(row.idBatiment);
                     const labelId = `enhanced-table-checkbox-${index}`;
 
                     return (
                       <TableRow
                         hover
-                        onClick={(event) => handleClick(event, row.id)}
+                        onClick={(event) => handleClick(event, row.idBatiment)}
                         role="checkbox"
                         aria-checked={isItemSelected}
                         tabIndex={-1}
-                        key={row.id}
+                        key={row.idBatiment}
                         selected={isItemSelected}
                         sx={{ cursor: 'pointer' }}
                       >
@@ -325,7 +321,6 @@ export default function ListeBatiment() {
                         <TableCell align="left">{row.libelleBatiment}</TableCell>
                         <TableCell align="left">{row.codeBatiment}</TableCell>
                         <TableCell align="left">{row.positionBatiment}</TableCell>
-                        <TableCell align="left">{row.descriptionBatiment}</TableCell>
                         <TableCell align="left">{row.dateCreationBatiment}</TableCell>
                         <TableCell > 
                         <IconButton aria-label="edit" onClick={() => handleEditClick(row)}>

@@ -1,22 +1,21 @@
-import React, { useState } from 'react';
-import Modal from '@mui/joy/Modal';
-import Typography from '@mui/material/Typography';
-import { Box, Divider, Stack, TextField, Grid, Button } from '@mui/material';
-import { EMPLOI_URL } from '../../../Server_URL/Urls';
-import DetailsBatiment from '../../_Emploi/_Pages Details/DetailsBatiment';
+import React from 'react';
+import { Card, CardContent, CardActions, Button, Typography, TextField, Grid, Box, Modal, Stack, Divider } from '@mui/material';
+import { MAQUETTE_URL } from '../../../../Server_URL/Urls';
+import DetailsUE from '../DetailsUE';
 
-function Ajouter_Salle_Batiment({ batiment }) {
-    const [open, setOpen] = useState(false);
+function Ajouter_Module_UE({ ue }) {
+    const [open, setOpen] = React.useState(false);
 
-    const modelBatiment = {
-        idSalle: 0,
-        libelleSalle: '',
-        codeSalle: '',
-        capaciteSalle: 0,
-        descriptionSalle: ''
+    const initialModule = {
+        libelleModule: '',
+        coursModule: '',
+        dureeModule: 0,
+        coefficientModule: 0,
+        objectifsModule: '',
+        descriptionModule: ''
     };
 
-    const [data, setFormData] = useState(modelBatiment);
+    const [data, setFormData] = React.useState(initialModule);
 
     const handleChange = (e) => {
         const { id, value } = e.target;
@@ -25,35 +24,26 @@ function Ajouter_Salle_Batiment({ batiment }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (!batiment) {
-            console.error('Erreur: batiment non défini');
-            return;
-        }
-        console.log(`${EMPLOI_URL}/batiment/${batiment.idBatiment}/salles`);
-        fetch(`${EMPLOI_URL}/batiment/${batiment.idBatiment}/salles`, {
+        fetch(`${MAQUETTE_URL}ue/${ue.idUE}/modules`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
         })
-            .then(response => {
+            .then((response) => {
                 if (!response.ok) {
-                    throw new Error('Erreur lors de la requête vers l\'API');
+                    throw new Error("Erreur lors de l'ajout du module");
                 }
                 return response.json();
             })
-            .then(data => {
-                console.log('Une nouvelle salle a été ajoutée avec succès', data);
-                setFormData(modelBatiment);
+            .then((data) => {
+                console.log('Un nouveau module a été ajouté avec succès', data);
+                setFormData(initialModule);
                 setOpen(false);
-                redirectToBatDetails(batiment);
+                window.location.reload();
             })
-            .catch(err => {
-                console.error('Une erreur s\'est produite lors de l\'ajout de la salle', err.message);
+            .catch((err) => {
+                console.error("Une erreur s'est produite lors de l'ajout du module", err.message);
             });
-    };
-
-    const redirectToBatDetails = (batiment) => {
-        return <DetailsBatiment batiment={batiment} />;
     };
 
     return (
@@ -63,24 +53,22 @@ function Ajouter_Salle_Batiment({ batiment }) {
                     backgroundColor: '#00AF91',
                     borderRadius: '4px',
                     fontWeight: 600,
-                    fontFamily: "Poppins",
+                    fontFamily: 'Poppins',
                     color: 'rgb(0, 0, 0)',
                     textTransform: 'capitalize',
                     letterSpacing: '0.5px',
                     padding: '10px',
                     '&:hover': {
                         color: 'rgb(255, 255, 255)',
-                        backgroundColor: 'rgb(9, 44, 38)'
-                    }
+                        backgroundColor: 'rgb(9, 44, 38)',
+                    },
                 }}
                 onClick={() => setOpen(true)}
             >
-                Ajouter Salle
+                Ajouter Module
             </Button>
 
             <Modal
-                aria-labelledby="modal-title"
-                aria-describedby="modal-desc"
                 open={open}
                 onClose={() => setOpen(false)}
                 sx={{
@@ -90,56 +78,78 @@ function Ajouter_Salle_Batiment({ batiment }) {
                     fontFamily: 'Poppins',
                     backdropFilter: 'saturate(100%) blur(2px)',
                 }}
-                className='Modal'
             >
-                <Box sx={{ backgroundColor: 'white', p: 2, width: 800, borderRadius: "10px" }}>
-                    <Typography variant="h5" align="center" fontWeight='bold' fontSize='2rem' >
-                        Ajouter Salle
+                <Box sx={{ backgroundColor: 'white', p: 2, width: 800, borderRadius: '10px' }}>
+                    <Typography variant="h5" align="center" fontWeight="bold" fontSize="2rem">
+                        Ajouter Module
                     </Typography>
-                    <Typography variant='body1' align='center' fontSize='1.2rem'> Veuillez remplir les champs ci-dessous...</Typography>
+                    <Typography variant="body1" align="center" fontSize="1.2rem">
+                        Veuillez remplir les champs ci-dessous...
+                    </Typography>
                     <Divider />
                     <Stack spacing={2} direction="column" sx={{ width: '95%' }}>
                         <Grid container spacing={2}>
                             <Grid item xs={6}>
                                 <TextField
-                                    id="libelleSalle"
-                                    label="Libelle Salle"
-                                    required
+                                    id="libelleModule"
+                                    label="Libellé Module"
                                     fullWidth
-                                    value={data.libelleSalle}
+                                    required
+                                    value={data.libelleModule}
                                     onChange={handleChange}
                                 />
                             </Grid>
                             <Grid item xs={6}>
                                 <TextField
-                                    id="codeSalle"
-                                    label="Code Salle"
+                                    id="coursModule"
+                                    label="Cours Module"
                                     fullWidth
                                     required
-                                    value={data.codeSalle}
+                                    value={data.coursModule}
                                     onChange={handleChange}
                                 />
                             </Grid>
-
                             <Grid item xs={6}>
                                 <TextField
-                                    id="capaciteSalle"
-                                    label="Capacite Salle"
+                                    id="dureeModule"
+                                    label="Durée Module"
                                     fullWidth
                                     required
-                                    value={data.capaciteSalle}
+                                    value={data.dureeModule}
+                                    onChange={handleChange}
+                                />
+                            </Grid>
+                            <Grid item xs={6}>
+                                <TextField
+                                    id="coefficientModule"
+                                    label="Coefficient Module"
+                                    fullWidth
+                                    required
+                                    value={data.coefficientModule}
                                     onChange={handleChange}
                                 />
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField
-                                    id="descriptionSalle"
-                                    label="Description Salle"
+                                    id="objectifsModule"
+                                    label="Objectifs Module"
                                     variant="filled"
                                     fullWidth
                                     multiline
                                     rows={3}
-                                    value={data.descriptionSalle}
+                                    value={data.objectifsModule}
+                                    onChange={handleChange}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    id="descriptionModule"
+                                    label="Description Module"
+                                    variant="filled"
+                                    fullWidth
+                                    multiline
+                                    rows={3}
+                                    value={data.descriptionModule}
                                     onChange={handleChange}
                                 />
                             </Grid>
@@ -152,22 +162,21 @@ function Ajouter_Salle_Batiment({ batiment }) {
                                 background: '#7d7d7d',
                                 color: 'white',
                                 '&:hover': { backgroundColor: '#000', color: 'white' },
-                                fontWeight: "600",
-                                fontFamily: "Poppins"
-                            }}>
+                                fontWeight: '600',
+                                fontFamily: 'Poppins',
+                            }}
+                        >
                             Annuler
                         </Button>
 
                         <Button
                             variant="contained"
                             sx={{
-                                background: ' rgb(9, 44, 38)',
+                                background: 'rgb(9, 44, 38)',
                                 '&:hover': { backgroundColor: 'rgb(17, 77, 67)' },
-                                fontWeight: "600",
-                                fontFamily: "Poppins"
+                                fontWeight: '600',
+                                fontFamily: 'Poppins',
                             }}
-                            className='validButton'
-                            id='validButton'
                             onClick={handleSubmit}
                         >
                             Enregistrer
@@ -179,4 +188,4 @@ function Ajouter_Salle_Batiment({ batiment }) {
     );
 }
 
-export default Ajouter_Salle_Batiment;
+export default Ajouter_Module_UE;
