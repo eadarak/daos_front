@@ -1,22 +1,21 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Modal from '@mui/joy/Modal';
 import Typography from '@mui/material/Typography';
 import { Box, Divider, Stack, TextField, Grid, Button } from '@mui/material';
-import { EMPLOI_URL } from '../../../Server_URL/Urls';
-import DetailsBatiment from '../../_Emploi/_Pages Details/DetailsBatiment';
+import '../../../../styles/general.css';
+import { EMPLOI_URL } from '../../../../Server_URL/Urls';
 
 function Ajouter_Salle_Batiment({ batiment }) {
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = React.useState(false);
 
-    const modelBatiment = {
-        idSalle: 0,
+    const initialSalle = {
         libelleSalle: '',
         codeSalle: '',
         capaciteSalle: 0,
-        descriptionSalle: ''
+        descriptionSalle : ''
     };
 
-    const [data, setFormData] = useState(modelBatiment);
+    const [data, setFormData] = React.useState(initialSalle);
 
     const handleChange = (e) => {
         const { id, value } = e.target;
@@ -25,10 +24,6 @@ function Ajouter_Salle_Batiment({ batiment }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (!batiment) {
-            console.error('Erreur: batiment non défini');
-            return;
-        }
         console.log(`${EMPLOI_URL}/batiment/${batiment.idBatiment}/salles`);
         fetch(`${EMPLOI_URL}/batiment/${batiment.idBatiment}/salles`, {
             method: 'POST',
@@ -43,17 +38,12 @@ function Ajouter_Salle_Batiment({ batiment }) {
             })
             .then(data => {
                 console.log('Une nouvelle salle a été ajoutée avec succès', data);
-                setFormData(modelBatiment);
+                setFormData(initialSalle);
                 setOpen(false);
-                redirectToBatDetails(batiment);
             })
             .catch(err => {
                 console.error('Une erreur s\'est produite lors de l\'ajout de la salle', err.message);
             });
-    };
-
-    const redirectToBatDetails = (batiment) => {
-        return <DetailsBatiment batiment={batiment} />;
     };
 
     return (
@@ -63,7 +53,7 @@ function Ajouter_Salle_Batiment({ batiment }) {
                     backgroundColor: '#00AF91',
                     borderRadius: '4px',
                     fontWeight: 600,
-                    fontFamily: "Poppins",
+                    fontFamily: 'Poppins',
                     color: 'rgb(0, 0, 0)',
                     textTransform: 'capitalize',
                     letterSpacing: '0.5px',
@@ -92,9 +82,9 @@ function Ajouter_Salle_Batiment({ batiment }) {
                 }}
                 className='Modal'
             >
-                <Box sx={{ backgroundColor: 'white', p: 2, width: 800, borderRadius: "10px" }}>
+                <Box sx={{ backgroundColor: 'white', p: 2, width: 800, borderRadius: '10px' }}>
                     <Typography variant="h5" align="center" fontWeight='bold' fontSize='2rem' >
-                        Ajouter Salle
+                        Ajouter une Salle au Bâtiment
                     </Typography>
                     <Typography variant='body1' align='center' fontSize='1.2rem'> Veuillez remplir les champs ci-dessous...</Typography>
                     <Divider />
@@ -103,7 +93,7 @@ function Ajouter_Salle_Batiment({ batiment }) {
                             <Grid item xs={6}>
                                 <TextField
                                     id="libelleSalle"
-                                    label="Libelle Salle"
+                                    label="Libellé de la Salle"
                                     required
                                     fullWidth
                                     value={data.libelleSalle}
@@ -113,18 +103,17 @@ function Ajouter_Salle_Batiment({ batiment }) {
                             <Grid item xs={6}>
                                 <TextField
                                     id="codeSalle"
-                                    label="Code Salle"
+                                    label="Code de la Salle"
                                     fullWidth
                                     required
                                     value={data.codeSalle}
                                     onChange={handleChange}
                                 />
                             </Grid>
-
                             <Grid item xs={6}>
                                 <TextField
                                     id="capaciteSalle"
-                                    label="Capacite Salle"
+                                    label="Capacité de la Salle"
                                     fullWidth
                                     required
                                     value={data.capaciteSalle}
@@ -134,7 +123,7 @@ function Ajouter_Salle_Batiment({ batiment }) {
                             <Grid item xs={12}>
                                 <TextField
                                     id="descriptionSalle"
-                                    label="Description Salle"
+                                    label="Description de la Salle"
                                     variant="filled"
                                     fullWidth
                                     multiline

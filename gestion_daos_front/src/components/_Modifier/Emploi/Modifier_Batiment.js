@@ -2,20 +2,20 @@ import * as React from 'react';
 import Modal from '@mui/joy/Modal';
 import Typography from '@mui/material/Typography';
 import { Box, Divider, Stack, TextField, Grid, Button} from '@mui/material';
-import { EMPLOI_URL } from '../../../Server_URL/Urls';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { EMPLOI_URL } from '../../../Server_URL/Urls';
 
-function Modifier_Batiment ({ bat, open, onClose }) {
+
+function Modifier_Batiment ({ batiment, open, onClose }) {
     const navigate = useNavigate();
-    const modelBatiment = {
+    const initialBatiment = {
         libelleBatiment: '',
-        codeBatiment : '',
-        positionBatiment : '',
-        descriptionBatiment : ''
+        codeBatiment: '',
+        positionBatiment: '',
+        descriptionBatiment: ''
     }
 
-    const [data, setData] = React.useState(bat);
+    const [data, setData] = React.useState(batiment);
 
     const handleChangeBatiment = (e) => {
         e.preventDefault();
@@ -27,7 +27,7 @@ function Modifier_Batiment ({ bat, open, onClose }) {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        fetch(`${EMPLOI_URL}/batiment/${bat.idBatiment}`, {
+        fetch(`${EMPLOI_URL}/batiment/${batiment.idBatiment}`, {
             method : 'PUT',
             headers : {'Content-Type' : 'application/json'},
             body : JSON.stringify(data)
@@ -39,21 +39,19 @@ function Modifier_Batiment ({ bat, open, onClose }) {
             return response.json()
         })
         .then(data => {
-            console.log('BATIMENT modifiée avec succès', data);
-            setData(modelBatiment);
+            console.log('Bâtiment modifié avec succès', data);
+            setData(initialBatiment);
             onClose();
             navigate('/listeBatiment', { replace: true });
             window.location.reload();
         })
         .catch(err => {
-            console.error("Une erreur s'est produite lors de la modification du batiment :", err);
+            console.error("Une erreur s'est produite lors de la modification du bâtiment :", err);
         });
     }
-    
 
     return (
         <React.Fragment>
-           
             <Modal
                 aria-labelledby="modal-title"
                 aria-describedby="modal-desc"
@@ -70,7 +68,7 @@ function Modifier_Batiment ({ bat, open, onClose }) {
             >
                 <Box sx={{ backgroundColor: 'white', p: 2, width: 800 , borderRadius:"10px"}}>
                     <Typography variant="h5" align="center" fontWeight='bold' fontSize='2rem' >
-                       Modifier un Batiment
+                        Modifier un Bâtiment
                     </Typography>
                     <Typography variant='body1' align='center' fontSize='1.2rem'> Veuillez remplir les champs ci-dessous...</Typography>
                     <Divider />
@@ -79,7 +77,7 @@ function Modifier_Batiment ({ bat, open, onClose }) {
                             <Grid item xs={6}>
                                 <TextField
                                     id="libelleBatiment"
-                                    label="Libelle Batiment"
+                                    label="Libellé du Bâtiment"
                                     required
                                     fullWidth
                                     value={data.libelleBatiment}
@@ -89,7 +87,7 @@ function Modifier_Batiment ({ bat, open, onClose }) {
                             <Grid item xs={6}>
                                 <TextField
                                     id="codeBatiment"
-                                    label="Code Batiment"
+                                    label="Code du Bâtiment"
                                     fullWidth
                                     required
                                     value={data.codeBatiment}
@@ -99,18 +97,17 @@ function Modifier_Batiment ({ bat, open, onClose }) {
                             <Grid item xs={6}>
                                 <TextField
                                     id="positionBatiment"
-                                    label="Position Batiment"
+                                    label="Position du Bâtiment"
                                     fullWidth
                                     required
                                     value={data.positionBatiment}
                                     onChange={handleChangeBatiment}
                                 />
                             </Grid>
-
                             <Grid item xs={12}>
                                 <TextField
                                     id="descriptionBatiment"
-                                    label="Description Batiment"
+                                    label="Description du Bâtiment"
                                     variant="filled"
                                     fullWidth
                                     multiline
