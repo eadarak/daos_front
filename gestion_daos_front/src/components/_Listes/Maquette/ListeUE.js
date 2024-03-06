@@ -13,7 +13,6 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
@@ -149,8 +148,6 @@ function EnhancedTableToolbar(props) {
           Liste des Unites d'enseignements
         </Typography>
       )}
-
-      
         
           <IconButton>
             <Ajouter_UE/>
@@ -394,3 +391,4 @@ export default function ListeUE() {
     </div>
   );
 }
+

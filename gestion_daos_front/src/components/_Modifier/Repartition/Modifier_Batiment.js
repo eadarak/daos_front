@@ -1,37 +1,34 @@
 import * as React from 'react';
 import Modal from '@mui/joy/Modal';
 import Typography from '@mui/material/Typography';
-import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import { Box, Divider, Stack, TextField, Grid, Button} from '@mui/material';
 import { EMPLOI_URL } from '../../../Server_URL/Urls';
-import {useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-
-function Ajouter_Batiment () {
-    const [open, setOpen] = React.useState(false);
-    const navigate = useNavigate()
-
+function Modifier_Batiment ({ bat, open, onClose }) {
+    const navigate = useNavigate();
     const modelBatiment = {
-        idBatiment : 0,
         libelleBatiment: '',
         codeBatiment : '',
         positionBatiment : '',
         descriptionBatiment : ''
-    };
-
-    const [data, setFormData] = React.useState(modelBatiment);
-
-    const handleChange = (e) =>{
-        const { id, value } = e.target;
-        setFormData({...data, [id] : value })
     }
 
+    const [data, setData] = React.useState(bat);
 
-    const handleSubmit = (e) =>{
+    const handleChangeBatiment = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const { id, value } = e.target;
+        setData({...data, [id]: value });
+    }
+
+    const handleSubmit = (e) => {
         e.preventDefault();
 
-        fetch(`${EMPLOI_URL}/batiment`, {
-            method : 'POST',
+        fetch(`${EMPLOI_URL}/batiment/${bat.idBatiment}`, {
+            method : 'PUT',
             headers : {'Content-Type' : 'application/json'},
             body : JSON.stringify(data)
         })
@@ -41,41 +38,39 @@ function Ajouter_Batiment () {
             }
             return response.json()
         })
-        .then(
-            data => {
-                console.log('Un nouveau batiment a été ajouté avec succès' ,data);
-                setFormData(modelBatiment);
-                setOpen(false);
-                navigate('/listeBatiment');
-                window.location.reload();
-            })
-        .catch( err => {
-            throw new Error("Une erreur s'est produite lors de l'operation d'ajout")
+        .then(data => {
+            console.log('BATIMENT modifiée avec succès', data);
+            setData(modelBatiment);
+            onClose();
+            navigate('/listeBatiment', { replace: true });
+            window.location.reload();
         })
+        .catch(err => {
+            console.error("Une erreur s'est produite lors de la modification du batiment :", err);
+        });
     }
-
     
-
 
     return (
         <React.Fragment>
-            <LibraryAddIcon onClick={() => setOpen(true)} />
+           
             <Modal
                 aria-labelledby="modal-title"
                 aria-describedby="modal-desc"
                 open={open}
-                onClose={() => setOpen(false)}
-                sx={{ display: 'flex',
+                onClose={onClose}
+                sx={{
+                    display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center', 
                     fontFamily:'Poppins',  
                     backdropFilter: 'saturate(100%) blur(2px)',
-                 }}
+                }}
                 className='Modal'
             >
                 <Box sx={{ backgroundColor: 'white', p: 2, width: 800 , borderRadius:"10px"}}>
                     <Typography variant="h5" align="center" fontWeight='bold' fontSize='2rem' >
-                        Nouveau Batiment
+                       Modifier un Batiment
                     </Typography>
                     <Typography variant='body1' align='center' fontSize='1.2rem'> Veuillez remplir les champs ci-dessous...</Typography>
                     <Divider />
@@ -88,7 +83,7 @@ function Ajouter_Batiment () {
                                     required
                                     fullWidth
                                     value={data.libelleBatiment}
-                                    onChange={handleChange}
+                                    onChange={handleChangeBatiment}
                                 />
                             </Grid>
                             <Grid item xs={6}>
@@ -98,7 +93,7 @@ function Ajouter_Batiment () {
                                     fullWidth
                                     required
                                     value={data.codeBatiment}
-                                    onChange={handleChange}
+                                    onChange={handleChangeBatiment}
                                 />
                             </Grid>
                             <Grid item xs={6}>
@@ -108,10 +103,10 @@ function Ajouter_Batiment () {
                                     fullWidth
                                     required
                                     value={data.positionBatiment}
-                                    onChange={handleChange}
+                                    onChange={handleChangeBatiment}
                                 />
                             </Grid>
-                           
+
                             <Grid item xs={12}>
                                 <TextField
                                     id="descriptionBatiment"
@@ -120,31 +115,33 @@ function Ajouter_Batiment () {
                                     fullWidth
                                     multiline
                                     rows={3}
-                                    value={data.descriptionUE}
-                                    onChange={handleChange}
+                                    value={data.descriptionBatiment}
+                                    onChange={handleChangeBatiment}
                                 />
                             </Grid>
                         </Grid>
                     </Stack>
                     <Box sx={{ mt: 2, display: 'flex', justifyContent: 'space-around' }}>
                         <Button 
-                            onClick={() => setOpen(false)} 
+                            onClick={onClose} 
                             sx={{
-                            background: '#7d7d7d',
-                            color:'white', 
-                            '&:hover': { backgroundColor: '#000',color:'white' },
-                            fontWeight:"600",
-                            fontFamily:"Poppins"
-                        }}>
+                                background: '#7d7d7d',
+                                color:'white', 
+                                '&:hover': { backgroundColor: '#000',color:'white' },
+                                fontWeight:"600",
+                                fontFamily:"Poppins"
+                            }}
+                        >
                             Annuler
                         </Button>
 
                         <Button
                             variant="contained"  
-                            sx={{ background: ' rgb(9, 44, 38)' , 
-                            '&:hover': { backgroundColor: 'rgb(17, 77, 67)' },
-                            fontWeight:"600",
-                            fontFamily:"Poppins"
+                            sx={{ 
+                                background: ' rgb(9, 44, 38)',
+                                '&:hover': { backgroundColor: 'rgb(17, 77, 67)' },
+                                fontWeight:"600",
+                                fontFamily:"Poppins"
                             }} 
                             className='validButton' 
                             id='validButton'
@@ -159,4 +156,4 @@ function Ajouter_Batiment () {
     );
 }
 
-export default Ajouter_Batiment;
+export default Modifier_Batiment;
