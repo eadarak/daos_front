@@ -4,6 +4,7 @@ import '../styles/general.css'
 import UE from './_Maquette/UE';
 import Semestre from './_Maquette/Semestre';
 import Niveau from './_Maquette/Niveau';
+import EC from './_Maquette/EC';
 function Card_Maquette(props) {
    
     const [modalOpen, setModalOpen] = useState(false);
@@ -17,12 +18,7 @@ function Card_Maquette(props) {
     return (
         <div>
            <UE/>
-           <br/>
-           <Semestre/>
-           <br/>
-            <Niveau/>
-            
-
+           <EC/>
         </div>
     );
 }
