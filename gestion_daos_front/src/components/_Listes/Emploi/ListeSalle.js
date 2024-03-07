@@ -13,18 +13,19 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
 import { visuallyHidden } from '@mui/utils';
-import { Button, colors } from '@mui/material';
+import { Button } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 import axios from 'axios';
+import EditIcon from '@mui/icons-material/Edit';
+import { EMPLOI_URL } from '../../../Server_URL/Urls';
+import Modifier_Salle from '../../_Modifier/Emploi/Modifier_Salle';
+import Details_Salle from '../../_Details/Emploi/DetailsSalle';
 
-const rows = [];
+const rows = []
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -54,25 +55,14 @@ function stableSort(array, comparator) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-/*const headCells = [
-  { id: 'idEns', numeric: false, disablePadding: false, label: 'IdEns', width: '10%' },
-  { id: 'matriculePer', numeric: false, disablePadding: false, label: 'MatriculePer', width: '15%' },
-  { id: 'nomEns', numeric: false, disablePadding: false, label: 'NomEns', width: '20%' },
-  { id: 'prenomEns', numeric: false, disablePadding: false, label: 'PrenomEns', width: '20%' },
-  { id: 'gradeEns', numeric: false, disablePadding: false, label: 'GradeEns', width: '15%' },
-  { id: 'dateCreationEns', numeric: false, disablePadding: false, label: 'Date Creation', width: '20%' },
-];*/
-
 const headCells = [
   { id: 'idSalle', numeric: false, disablePadding: false, label: 'Identifiant'},
-  { id: 'codeSalle', numeric: false, disablePadding: false, label: 'Code Salle' },
-  { id: 'libelleSalle', numeric: false, disablePadding: false, label: 'Libelle'},
-  { id: 'descriptionSalle', numeric: false, disablePadding: false, label: 'Description' },
-  { id: 'capaciteSalle', numeric: false, disablePadding: false, label: 'Capacite Salle' },
-  { id: 'dateCreationSalle', numeric: false, disablePadding: false, label: 'Date Creation' },
-  { id: 'Operations', numeric: false, disablePadding: false, label: 'Operations' },
-  { id: 'Details', numeric: false, disablePadding: false, label: 'Details' },
-
+  { id: 'libelleSalle', numeric: false, disablePadding: false, label: 'Libellé' },
+  { id: 'codeSalle', numeric: false, disablePadding: false, label: 'Code'},
+  { id: 'capaciteSalle', numeric: false, disablePadding: false, label: 'Capacité' },
+  { id: 'dateCreationSalle', numeric: false, disablePadding: false, label: 'Date de Création' },
+  { id: 'Operations', numeric: false, disablePadding: false, label: 'Opérations' },
+  { id: 'Details', numeric: false, disablePadding: false, label: 'Détails' },
 ];
 
 function EnhancedTableHead(props) {
@@ -84,17 +74,6 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{
-              'aria-label': 'select all desserts',
-            }}
-          />
-        </TableCell>
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
@@ -111,7 +90,7 @@ function EnhancedTableHead(props) {
               {headCell.label}
               {orderBy === headCell.id ? (
                 <Box component="span" sx={visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                  {order === 'desc' ? 'trié par ordre décroissant' : 'trié par ordre croissant'}
                 </Box>
               ) : null}
             </TableSortLabel>
@@ -152,7 +131,7 @@ function EnhancedTableToolbar(props) {
           variant="subtitle1"
           component="div"
         >
-          {numSelected} selected
+          {numSelected} sélectionné(s)
         </Typography>
       ) : (
         <Typography
@@ -164,20 +143,12 @@ function EnhancedTableToolbar(props) {
           Liste des Salles
         </Typography>
       )}
-
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Ajouter Salle">
-          <IconButton>
-            <Button id='mybtnStyle'> + </Button>
-          </IconButton>
-        </Tooltip>
-      )}
+        
+          {/* <IconButton>
+            <Ajouter_Salle/>
+          </IconButton> */}
+        
+     
     </Toolbar>
   );
 }
@@ -188,18 +159,63 @@ EnhancedTableToolbar.propTypes = {
 
 export default function ListeSalle() {
   const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('idEns');
+  const [orderBy, setOrderBy] = React.useState('idSalle');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [data, setData] = React.useState([]);
+  const [selectedSalle, setSelectedSalleDelete] = React.useState(null);
+  const [selectedUpdateSalle, setSelectedUpdateSalle] = React.useState(null);
+
 
   React.useEffect(() => {
-    axios.get('http://localhost:8084/emploi/salle')
-      .then(res => setData(res.data))
+    axios.get(`${EMPLOI_URL}/salle`)
+      .then(res => {
+        console.log("Les données récupérées depuis la base de données :\n", res.data)
+        setData(res.data)
+      })
       .catch(err => console.log(err));
-  }, []);
+  },[]);
+
+  const handleSalleClickDelete = (salle) => {
+    setSelectedSalleDelete(salle);
+  };
+
+  const handleEditClick = (salle) => {
+    setSelectedUpdateSalle(salle);
+  };
+
+  const handleSalleDelete = (e, id) => { 
+    
+    e.stopPropagation();
+    const confirmation = window.confirm(`Êtes-vous sûr de vouloir supprimer cette salle ${id} ?`);
+
+    if(confirmation){
+
+      axios.delete(`${EMPLOI_URL}/salle/${id}`)
+      .then( response => {
+        console.log("Salle supprimée avec succès :", id);
+        setData(data.filter(salle => salle.idSalle !== id))
+      })
+      .catch( err => {
+        throw new Error("Erreur lors de la suppression de la salle :", err)
+      });
+    }
+    else{
+      window.alert(`Suppression de la salle ${id} annulée`);
+    }
+
+  }
+
+  if (selectedSalle) {
+   return <Details_Salle salle={selectedSalle}/>
+  }
+
+  if(selectedUpdateSalle){
+    return <Modifier_Salle salle={selectedUpdateSalle} open={true} onClose={() => setSelectedUpdateSalle(null)} />;
+  }
+
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -253,14 +269,10 @@ export default function ListeSalle() {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
 
+    
+
   return (
     <div>
-      <Button 
-        href="/emploi" 
-        style={{ color: "white", borderRadius: "5px", background: "rgb(9, 44, 38)" }}
-      > ⬅
-      </Button>
-
       <Box sx={{ width: '100%', paddingTop: "10px" }}>
         <Paper sx={{ width: '100%', mb: 2 }}>
           <EnhancedTableToolbar numSelected={selected.length} />
@@ -282,29 +294,20 @@ export default function ListeSalle() {
                 {stableSort(data, getComparator(order, orderBy))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => {
-                    const isItemSelected = isSelected(row.id);
+                    const isItemSelected = isSelected(row.idSalle);
                     const labelId = `enhanced-table-checkbox-${index}`;
 
                     return (
                       <TableRow
                         hover
-                        onClick={(event) => handleClick(event, row.id)}
+                        onClick={(event) => handleClick(event, row.idSalle)}
                         role="checkbox"
                         aria-checked={isItemSelected}
                         tabIndex={-1}
-                        key={row.id}
+                        key={row.idSalle}
                         selected={isItemSelected}
                         sx={{ cursor: 'pointer' }}
                       >
-                        <TableCell padding="checkbox">
-                          <Checkbox
-                            color="primary"
-                            checked={isItemSelected}
-                            inputProps={{
-                              'aria-labelledby': labelId,
-                            }}
-                          />
-                        </TableCell>
                         <TableCell
                           component="th"
                           id={labelId}
@@ -313,33 +316,35 @@ export default function ListeSalle() {
                         >
                           {row.idSalle}
                         </TableCell>
+                        <TableCell align="left">{row.libelleSalle}</TableCell>
                         <TableCell align="left">{row.codeSalle}</TableCell>
-                        <TableCell align="left">{row.libelleSalle}</TableCell>                       
-                        <TableCell align="left">{row.descriptionSalle}</TableCell>
-                        <TableCell align="left">{row.dateCreationSalle}</TableCell>
                         <TableCell align="left">{row.capaciteSalle}</TableCell>
+                        <TableCell align="left">{row.dateCreationSalle}</TableCell>
                         <TableCell > 
-                            <IconButton aria-label="edit" >
-                                <EditIcon color='success' />
-                            </IconButton> 
+                        <IconButton aria-label="edit" onClick={() => handleEditClick(row)}>
+                          <EditIcon  color='success'/>
+                        </IconButton>
                             &nbsp; &nbsp;
 
-                            <IconButton aria-label="delete">
+                            <IconButton aria-label="delete" onClick={(event) => handleSalleDelete(event, row.idSalle)}>
                                 <DeleteIcon sx={{color:"#cd0000"}}/>
                             </IconButton>
                          </TableCell>
                          <TableCell> 
-                            <Button sx={{
-                            borderRadius:"30px solid",
-                            color:"white",
-                            fontWeight:"600",
-                            background:"rgb(9, 44, 38)",
-                            textTransform:"capitalize"
-
-                            }}>Détails
-                            </Button>
-                            </TableCell>
-                            
+                          
+                            <Button 
+                              sx={{
+                                borderRadius: "30px solid",
+                                color: "white",
+                                fontWeight: "600",
+                                background: "rgb(9, 44, 38)",
+                                textTransform: "capitalize"
+                              }}
+                              onClick={() => handleSalleClickDelete(row)}
+                            >
+                              Détails
+                            </Button> 
+                        </TableCell>
                       </TableRow>
                     );
                   })}
@@ -367,7 +372,7 @@ export default function ListeSalle() {
         </Paper>
         <FormControlLabel
           control={<Switch checked={dense} onChange={handleChangeDense} />}
-          label="Dense padding"
+          label="Padding dense"
         />
       </Box>
     </div>
