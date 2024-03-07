@@ -1,29 +1,26 @@
-import React , {useState}from 'react';
+import React, { useState } from 'react';
 import '@coreui/coreui/dist/css/coreui.min.css';
-import '../styles/general.css'
+import '../styles/general.css';
 import UE from './_Maquette/UE';
-import Semestre from './_Maquette/Semestre';
-import Niveau from './_Maquette/Niveau';
-function Card_Maquette(props) {
-   
-    const [modalOpen, setModalOpen] = useState(false);
-      
-    const toggleModal = () => {
-          setModalOpen(!modalOpen);
-    };
-    
-   
- 
-    return (
-        <div>
-           <UE/>
-           <br/>
-           <Semestre/>
-           <br/>
-            <Niveau/>
-            
+import EC from './_Maquette/EC';
+import Grid from '@mui/material/Grid';
 
-        </div>
+function Card_Maquette(props) {
+    const [modalOpen, setModalOpen] = useState(false);
+
+    const toggleModal = () => {
+        setModalOpen(!modalOpen);
+    };
+
+    return (
+        <Grid container spacing={3}>
+            <Grid item xs={12} md={6}>
+                <UE />
+            </Grid>
+            <Grid item xs={12} md={6}>
+                <EC />
+            </Grid>
+        </Grid>
     );
 }
 

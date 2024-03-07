@@ -13,19 +13,19 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
+import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import { visuallyHidden } from '@mui/utils';
 import { Button } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { MAQUETTE_URL } from '../../../Server_URL/Urls';
+import Ajouter_EC from '../../_Ajouter/Aj-Maquette/Ajouter_EC';
+import DetailsEC from '../../_Details/Maquette/DetailsEC';
+import Modifier_EC from '../../_Modifier/Maquette/Modifier_EC';
 import axios from 'axios';
-import Modifier_Batiment from '../../_Modifier/Emploi/Modifier_Batiment';
-import Details_Batiment from '../../_Details/Emploi/DetailsBatiment';
 import EditIcon from '@mui/icons-material/Edit';
-import { Link } from 'react-router-dom';
-import Ajouter_Batiment from '../../_Ajouter/Aj-Emploi/Ajouter_Batiment';
-import { EMPLOI_URL } from '../../../Server_URL/Urls';
 
 const rows = [];
 
@@ -58,13 +58,17 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-  { id: 'idBatiment', numeric: false, disablePadding: false, label: 'Identifiant'},
-  { id: 'libelleBatiment', numeric: false, disablePadding: false, label: 'Libelle' },
-  { id: 'codeBatiment', numeric: false, disablePadding: false, label: 'Code'},
-  { id: 'positionBatiment', numeric: false, disablePadding: false, label: 'Position' },
-  { id: 'dateCreationBatiment', numeric: false, disablePadding: false, label: 'Date Creation' },
-  { id: 'Operations', numeric: false, disablePadding: false, label: 'Operations' },
-  { id: 'Details', numeric: false, disablePadding: false, label: 'Details' },
+  { id: 'idEC', numeric: false, disablePadding: false, label: 'Identifiant' },
+  { id: 'libelleEC', numeric: false, disablePadding: false, label: 'Libellé' },
+  { id: 'codeEC', numeric: false, disablePadding: false, label: 'Code' },
+  { id: 'cm', numeric: true, disablePadding: false, label: 'CM' },
+  { id: 'td', numeric: true, disablePadding: false, label: 'TD' },
+  { id: 'tp', numeric: true, disablePadding: false, label: 'TP' },
+  { id: 'tpe', numeric: true, disablePadding: false, label: 'TPE' },
+  { id: 'coefficientEC', numeric: true, disablePadding: false, label: 'Coefficient' },
+  { id: 'descriptionEC', numeric: false, disablePadding: false, label: 'Description' },
+  { id: 'operations', numeric: false, disablePadding: false, label: 'Opérations' },
+  { id: 'details', numeric: false, disablePadding: false, label: 'Détails' },
 ];
 
 function EnhancedTableHead(props) {
@@ -142,15 +146,13 @@ function EnhancedTableToolbar(props) {
           id="tableTitle"
           component="div"
         >
-          Liste des Bâtiments
+          Liste des Éléments de Compétence
         </Typography>
       )}
-        
-          <IconButton>
-            <Ajouter_Batiment/>
-          </IconButton>
-        
-     
+
+      <IconButton>
+        <Ajouter_EC/>
+      </IconButton>
     </Toolbar>
   );
 }
@@ -159,65 +161,59 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function ListeBatiment() {
+export default function ListeEC() {
   const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('idBatiment');
+  const [orderBy, setOrderBy] = React.useState('idEC');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [data, setData] = React.useState([]);
-  const [selectedBatiment, setSelectedBatimentDelete] = React.useState(null);
-  const [selectedUpdateBatiment, setSelectedUpdateBatiment] = React.useState(null);
-
+  const [selectedEC, setSelectedECDelete] = React.useState(null);
+  const [selectedUpdateEC, setSelectedUpdateEC] = React.useState(null);
 
   React.useEffect(() => {
-    axios.get(`${EMPLOI_URL}/batiment`)
+    axios.get(`${MAQUETTE_URL}ec`)
       .then(res => {
-        console.log("les données recupérées depuis la db : \n ",res.data)
+        console.log("les données récupérées depuis la base de données :\n", res.data)
         setData(res.data)
       })
       .catch(err => console.log(err));
-  },[]);
+  }, []);
 
-  const handleBatimentClickDelete = (batiment) => {
-    setSelectedBatimentDelete(batiment);
+  const handleECClickDelete = (ec) => {
+    setSelectedECDelete(ec);
   };
 
-  const handleEditClick = (batiment) => {
-    setSelectedUpdateBatiment(batiment);
+  const handleEditClick = (ec) => {
+    setSelectedUpdateEC(ec);
   };
 
-  const handleBatimentDelete = (e, id) => { 
-    
+  const handleECDelete = (e, id) => {
     e.stopPropagation();
-    const confirmation = window.confirm(`Êtes-vous sûr de vouloir supprimer ce bâtiment ${id} ?`);
+    const confirmation = window.confirm(`Êtes-vous sûr de vouloir supprimer cet EC ${id} ?`);
 
-    if(confirmation){
-
-      axios.delete(`${EMPLOI_URL}/batiment/${id}`)
-      .then( response => {
-        console.log("Bâtiment supprimé avec succès :", id);
-        setData(data.filter(batiment => batiment.idBatiment !== id))
-      })
-      .catch( err => {
-        throw new Error("Erreur lors de la suppression du bâtiment :", err)
-      });
+    if (confirmation) {
+      axios.delete(`${MAQUETTE_URL}ec/${id}`)
+        .then(response => {
+          console.log("EC supprimé avec succès :", id);
+          setData(data.filter(ec => ec.idEC !== id))
+        })
+        .catch(err => {
+          throw new Error("Erreur lors de la suppression de l'EC :", err)
+        });
+    } else {
+      window.alert(`Suppression de l'EC ${id} annulée`);
     }
-    else{
-      window.alert(`Suppression  du bâtiment ${id} annulée`);
-    }
-
   }
 
-  if (selectedBatiment) {
-   return <Details_Batiment batiment={selectedBatiment}/>
+  if (selectedEC) {
+    return <DetailsEC ec={selectedEC} />;
   }
 
-  if(selectedUpdateBatiment){
-    return <Modifier_Batiment batiment={selectedUpdateBatiment} open={true} onClose={() => setSelectedUpdateBatiment(null)} />;
+  if (selectedUpdateEC) {
+    return <Modifier_EC ec={selectedUpdateEC} open={true} onClose={() => setSelectedUpdateEC(null)} />;
   }
-
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -271,10 +267,14 @@ export default function ListeBatiment() {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
 
-    
-
   return (
     <div>
+      <Button
+        href="/maquette"
+        style={{ color: "white", borderRadius: "5px", background: "rgb(9, 44, 38)" }}
+      > ⬅
+      </Button>
+
       <Box sx={{ width: '100%', paddingTop: "10px" }}>
         <Paper sx={{ width: '100%', mb: 2 }}>
           <EnhancedTableToolbar numSelected={selected.length} />
@@ -296,17 +296,17 @@ export default function ListeBatiment() {
                 {stableSort(data, getComparator(order, orderBy))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => {
-                    const isItemSelected = isSelected(row.idBatiment);
+                    const isItemSelected = isSelected(row.id);
                     const labelId = `enhanced-table-checkbox-${index}`;
 
                     return (
                       <TableRow
                         hover
-                        onClick={(event) => handleClick(event, row.idBatiment)}
+                        onClick={(event) => handleClick(event, row.id)}
                         role="checkbox"
                         aria-checked={isItemSelected}
                         tabIndex={-1}
-                        key={row.idBatiment}
+                        key={row.id}
                         selected={isItemSelected}
                         sx={{ cursor: 'pointer' }}
                       >
@@ -316,36 +316,38 @@ export default function ListeBatiment() {
                           scope="row"
                           padding="normal"
                         >
-                          {row.idBatiment}
+                          {row.idEC}
                         </TableCell>
-                        <TableCell align="left">{row.libelleBatiment}</TableCell>
-                        <TableCell align="left">{row.codeBatiment}</TableCell>
-                        <TableCell align="left">{row.positionBatiment}</TableCell>
-                        <TableCell align="left">{row.dateCreationBatiment}</TableCell>
-                        <TableCell > 
-                        <IconButton aria-label="edit" onClick={() => handleEditClick(row)}>
-                          <EditIcon  color='success'/>
-                        </IconButton>
-                            &nbsp; &nbsp;
-
-                            <IconButton aria-label="delete" onClick={(event) => handleBatimentDelete(event, row.idBatiment)}>
-                                <DeleteIcon sx={{color:"#cd0000"}}/>
-                            </IconButton>
-                         </TableCell>
-                         <TableCell> 
-                          
-                            <Button 
-                              sx={{
-                                borderRadius: "30px solid",
-                                color: "white",
-                                fontWeight: "600",
-                                background: "rgb(9, 44, 38)",
-                                textTransform: "capitalize"
-                              }}
-                              onClick={() => handleBatimentClickDelete(row)}
-                            >
-                              Détails
-                            </Button> 
+                        <TableCell align="left">{row.libelleEC}</TableCell>
+                        <TableCell align="left">{row.codeEC}</TableCell>
+                        <TableCell align="left">{row.cm}</TableCell>
+                        <TableCell align="left">{row.td}</TableCell>
+                        <TableCell align="left">{row.tp}</TableCell>
+                        <TableCell align="left">{row.tpe}</TableCell>
+                        <TableCell align="left">{row.coefficientEC}</TableCell>
+                        <TableCell align="left">{row.dateCreationEC}</TableCell>
+                        <TableCell >
+                          <IconButton aria-label="edit" onClick={() => handleEditClick(row)}>
+                            <EditIcon color='success'/>
+                          </IconButton>
+                          &nbsp; &nbsp;
+                          <IconButton aria-label="delete" onClick={(event) => handleECDelete(event, row.idEC)}>
+                            <DeleteIcon sx={{color:"#cd0000"}}/>
+                          </IconButton>
+                        </TableCell>
+                        <TableCell>
+                          <Button
+                            sx={{
+                              borderRadius: "30px solid",
+                              color: "white",
+                              fontWeight: "600",
+                              background: "rgb(9, 44, 38)",
+                              textTransform: "capitalize"
+                            }}
+                            onClick={() => handleECClickDelete(row)}
+                          >
+                            Détails
+                          </Button>
                         </TableCell>
                       </TableRow>
                     );

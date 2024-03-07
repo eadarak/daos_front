@@ -17,8 +17,9 @@ import ListeDeroulement from './components/_Listes/Emploi/ListeDeroulement';
 import ListeSalle from './components/_Listes/Emploi/ListeSalle';
 import ListeSeance from './components/_Listes/Emploi/ListeSeance';
 import ListeRepartition from './components/_Listes/Repartition/ListeRepartition';
-import DetailsBatiment from './components/_Emploi/_Pages Details/DetailsBatiment';
+import DetailsBatiment from './components/_Details/Emploi/DetailsBatiment';
 import DetailsUE from './components/_Details/Maquette/DetailsUE';
+import ListeEC from './components/_Listes/Maquette/ListeEC';
 
 const router = createBrowserRouter([
   {
@@ -88,7 +89,12 @@ const router = createBrowserRouter([
   {
     path : '/detailsUE/:id', // Mettez à jour le chemin ici en incluant un paramètre d'ID
     element : <Layout> <DetailsUE /> </Layout> // Utilisez le composant DetailsUE ici
-  }
+  },
+
+  {
+    path : '/listes-ec',
+    element: <Layout> <ListeEC/> </Layout>
+  },
 
 ]);
 

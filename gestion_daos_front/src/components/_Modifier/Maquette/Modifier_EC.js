@@ -2,22 +2,28 @@ import * as React from 'react';
 import Modal from '@mui/joy/Modal';
 import Typography from '@mui/material/Typography';
 import { Box, Divider, Stack, TextField, Grid, Button} from '@mui/material';
+import { MAQUETTE_URL } from '../../../Server_URL/Urls';
 import { useNavigate } from 'react-router-dom';
-import { EMPLOI_URL } from '../../../Server_URL/Urls';
+import EditIcon from '@mui/icons-material/Edit';
+import IconButton from '@mui/material/IconButton';
 
-
-function Modifier_Batiment ({ batiment, open, onClose }) {
+function Modifier_EC ({ ec, open, onClose }) {
     const navigate = useNavigate();
-    const initialBatiment = {
-        libelleBatiment: '',
-        codeBatiment: '',
-        positionBatiment: '',
-        descriptionBatiment: ''
+    const initialEC = {
+        idEC : 0,
+        libelleEC: '',
+        codeEC : '',
+        cm : 0,
+        td : 0,
+        tp : 0,
+        tpe : 0,
+        coefficientEC : 0,
+        descriptionEC : ''
     }
 
-    const [data, setData] = React.useState(batiment);
+    const [data, setData] = React.useState(ec);
 
-    const handleChangeBatiment = (e) => {
+    const handleChange = (e) => {
         e.preventDefault();
         e.stopPropagation();
         const { id, value } = e.target;
@@ -27,7 +33,7 @@ function Modifier_Batiment ({ batiment, open, onClose }) {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        fetch(`${EMPLOI_URL}/batiment/${batiment.idBatiment}`, {
+        fetch(`${MAQUETTE_URL}ec/${ec.idEC}`, {
             method : 'PUT',
             headers : {'Content-Type' : 'application/json'},
             body : JSON.stringify(data)
@@ -39,19 +45,20 @@ function Modifier_Batiment ({ batiment, open, onClose }) {
             return response.json()
         })
         .then(data => {
-            console.log('Bâtiment modifié avec succès', data);
-            setData(initialBatiment);
+            console.log('EC modifiée avec succès', data);
+            setData(initialEC);
             onClose();
-            navigate('/listeBatiment', { replace: true });
+            navigate('/listes-ec', { replace: true });
             window.location.reload();
         })
         .catch(err => {
-            console.error("Une erreur s'est produite lors de la modification du bâtiment :", err);
+            console.error("Une erreur s'est produite lors de la modification de l'EC :", err);
         });
     }
 
     return (
         <React.Fragment>
+           
             <Modal
                 aria-labelledby="modal-title"
                 aria-describedby="modal-desc"
@@ -68,7 +75,7 @@ function Modifier_Batiment ({ batiment, open, onClose }) {
             >
                 <Box sx={{ backgroundColor: 'white', p: 2, width: 800 , borderRadius:"10px"}}>
                     <Typography variant="h5" align="center" fontWeight='bold' fontSize='2rem' >
-                        Modifier un Bâtiment
+                        Element Constitutif
                     </Typography>
                     <Typography variant='body1' align='center' fontSize='1.2rem'> Veuillez remplir les champs ci-dessous...</Typography>
                     <Divider />
@@ -76,44 +83,84 @@ function Modifier_Batiment ({ batiment, open, onClose }) {
                         <Grid container spacing={2}>
                             <Grid item xs={6}>
                                 <TextField
-                                    id="libelleBatiment"
-                                    label="Libellé du Bâtiment"
+                                    id="libelleEC"
+                                    label="Libelle EC"
                                     required
                                     fullWidth
-                                    value={data.libelleBatiment}
-                                    onChange={handleChangeBatiment}
+                                    value={data.libelleEC}
+                                    onChange={handleChange}
                                 />
                             </Grid>
                             <Grid item xs={6}>
                                 <TextField
-                                    id="codeBatiment"
-                                    label="Code du Bâtiment"
+                                    id="codeEC"
+                                    label="Code EC"
                                     fullWidth
                                     required
-                                    value={data.codeBatiment}
-                                    onChange={handleChangeBatiment}
+                                    value={data.codeEC}
+                                    onChange={handleChange}
                                 />
                             </Grid>
                             <Grid item xs={6}>
                                 <TextField
-                                    id="positionBatiment"
-                                    label="Position du Bâtiment"
+                                    id="cm"
+                                    label="Cours Magistral"
                                     fullWidth
                                     required
-                                    value={data.positionBatiment}
-                                    onChange={handleChangeBatiment}
+                                    value={data.cm}
+                                    onChange={handleChange}
+                                />
+                            </Grid>
+                           <Grid item xs={6}>
+                                <TextField
+                                    id="td"
+                                    label="Travaux Diriges"
+                                    fullWidth
+                                    required
+                                    value={data.td}
+                                    onChange={handleChange}
+                                />
+                            </Grid>
+                            <Grid item xs={6}>
+                                <TextField
+                                    id="tp"
+                                    label="Travaux Pratique"
+                                    fullWidth
+                                    required
+                                    value={data.tp}
+                                    onChange={handleChange}
+                                />
+                            </Grid>
+                            <Grid item xs={6}>
+                                <TextField
+                                    id="tpe"
+                                    label="Travail Personnel Etudiant"
+                                    fullWidth
+                                    required
+                                    value={data.tpe}
+                                    onChange={handleChange}
+                                />
+                            </Grid>
+                            <Grid item xs={6}>
+                                <TextField
+                                    id="coefficientEC"
+                                    label="Coefficient"
+                                    fullWidth
+                                    required
+                                    value={data.coefficientEC}
+                                    onChange={handleChange}
                                 />
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField
-                                    id="descriptionBatiment"
-                                    label="Description du Bâtiment"
+                                    id="descriptionEC"
+                                    label="description EC"
                                     variant="filled"
                                     fullWidth
                                     multiline
                                     rows={3}
-                                    value={data.descriptionBatiment}
-                                    onChange={handleChangeBatiment}
+                                    value={data.descriptionEC}
+                                    onChange={handleChange}
                                 />
                             </Grid>
                         </Grid>
@@ -153,4 +200,4 @@ function Modifier_Batiment ({ batiment, open, onClose }) {
     );
 }
 
-export default Modifier_Batiment;
+export default Modifier_EC;
