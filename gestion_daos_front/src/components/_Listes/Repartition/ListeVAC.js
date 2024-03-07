@@ -13,7 +13,6 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -21,8 +20,11 @@ import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { visuallyHidden } from '@mui/utils';
-import { Button, colors } from '@mui/material';
+import { Button } from '@mui/material';
 import axios from 'axios';
+import { REPARTITION_URL } from '../../../Server_URL/Urls';
+import Ajouter_VAC from '../../_Ajouter/Aj-Repartition/Ajouter_VAC';
+import Modifier_VAC from '../../_Modifier/Repartition/Modifier_VAC';
 
 const rows = [];
 
@@ -54,24 +56,16 @@ function stableSort(array, comparator) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-/*const headCells = [
-  { id: 'idEns', numeric: false, disablePadding: false, label: 'IdEns', width: '10%' },
-  { id: 'matriculePer', numeric: false, disablePadding: false, label: 'MatriculePer', width: '15%' },
-  { id: 'nomEns', numeric: false, disablePadding: false, label: 'NomEns', width: '20%' },
-  { id: 'prenomEns', numeric: false, disablePadding: false, label: 'PrenomEns', width: '20%' },
-  { id: 'gradeEns', numeric: false, disablePadding: false, label: 'GradeEns', width: '15%' },
-  { id: 'dateCreationEns', numeric: false, disablePadding: false, label: 'Date Creation', width: '20%' },
-];*/
 
 const headCells = [
   { id: 'idEns', numeric: false, disablePadding: false, label: 'Identifiant'},
   { id: 'prenomEns', numeric: false, disablePadding: false, label: 'Prenom' },
   { id: 'nomEns', numeric: false, disablePadding: false, label: 'Nom'},
+  { id: 'specialite', numeric: false, disablePadding: false, label: 'Specialite_VAC' },
   { id: 'gradeEns', numeric: false, disablePadding: false, label: 'Grade' },
-  { id: 'specialite', numeric: false, disablePadding: false, label: 'Specialite-VAC' },
   { id: 'dateCreationEns', numeric: false, disablePadding: false, label: 'Date Creation' },
   { id: 'Operations', numeric: false, disablePadding: false, label: 'Operations' },
-  { id: 'Details', numeric: false, disablePadding: false, label: 'Details' },
+ // { id: 'Details', numeric: false, disablePadding: false, label: 'Details' },
 
 ];
 
@@ -84,17 +78,7 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{
-              'aria-label': 'select all desserts',
-            }}
-          />
-        </TableCell>
+        
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
@@ -164,21 +148,10 @@ function EnhancedTableToolbar(props) {
           Liste des Enseignants Vacataire
         </Typography>
       )}
-
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <DeleteIcon />
+        <IconButton>
+            <Ajouter_VAC/>
           </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Ajouter Vac">
-          <IconButton>
-            <Button id='mybtnStyle'> + </Button>
-          </IconButton>
-        </Tooltip>
-      )}
-    </Toolbar>
+        </Toolbar>
   );
 }
 
@@ -194,6 +167,7 @@ export default function ListeVAC() {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [data, setData] = React.useState([]);
+  const [selectedVAC, setSelectedVAC] = React.useState(null)
 
   React.useEffect(() => {
     axios.get('http://localhost:8084/repartition/vacataire')
@@ -201,6 +175,40 @@ export default function ListeVAC() {
       .catch(err => console.log(err));
   }, []);
 
+/*===========================================*/
+
+
+const handleEditClick = (vac) => {
+  setSelectedVAC(vac); 
+};
+
+const handleVACDelete = (e, id) => { 
+  
+  e.stopPropagation();
+  const confirmation = window.confirm(`Êtes-vous sûr de vouloir supprimer ce vacataire ${id} ?`);
+
+  if(confirmation){
+
+    axios.delete(`${REPARTITION_URL}/vacataire/${id}`)
+    .then( response => {
+      console.log("VAC supprimée avec succès :", id);
+      setData(data.filter(vac => vac.idEns !== id))
+    })
+    .catch( err => {
+      throw new Error("Erreur lors de la suppression du VAC :", err)
+    });
+  }
+  else{
+    window.alert(`Suppression  du VAC ${id} annulée`);
+  }
+
+}
+
+if(selectedVAC){
+  return <Modifier_VAC vac={selectedVAC} open={true} onClose={() => setSelectedVAC(null)} />;
+}
+
+/*===========================================*/
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -288,23 +296,14 @@ export default function ListeVAC() {
                     return (
                       <TableRow
                         hover
-                        onClick={(event) => handleClick(event, row.id)}
-                        role="checkbox"
+                        onClick={(event) => handleClick(event, row.id)}   
                         aria-checked={isItemSelected}
                         tabIndex={-1}
                         key={row.id}
                         selected={isItemSelected}
                         sx={{ cursor: 'pointer' }}
                       >
-                        <TableCell padding="checkbox">
-                          <Checkbox
-                            color="primary"
-                            checked={isItemSelected}
-                            inputProps={{
-                              'aria-labelledby': labelId,
-                            }}
-                          />
-                        </TableCell>
+                        
                         <TableCell
                           component="th"
                           id={labelId}
@@ -314,21 +313,26 @@ export default function ListeVAC() {
                           {row.idEns}
                         </TableCell>
                         <TableCell align="left">{row.prenomEns}</TableCell>
-                        <TableCell align="left">{row.nomEns}</TableCell>                       
-                        <TableCell align="left">{row.gradeEns}</TableCell>
+                        <TableCell align="left">{row.nomEns}</TableCell>
                         <TableCell align="left">{row.specialite}</TableCell>
+                        <TableCell align="left">{row.gradeEns}</TableCell>
                         <TableCell align="left">{row.dateCreationEns}</TableCell>
                         <TableCell > 
-                            <IconButton aria-label="edit" >
+                            <IconButton 
+                              aria-label="edit"
+                              onClick={() => handleEditClick (row)}
+                              >
                                 <EditIcon color='success' />
                             </IconButton> 
                             &nbsp; &nbsp;
 
-                            <IconButton aria-label="delete">
+                            <IconButton 
+                              aria-label="delete" 
+                              onClick={(event) => handleVACDelete(event, row.idEns)}>
                                 <DeleteIcon sx={{color:"#cd0000"}}/>
                             </IconButton>
                          </TableCell>
-                         <TableCell> 
+                         {/* <TableCell> 
                             <Button sx={{
                             borderRadius:"30px solid",
                             color:"white",
@@ -338,8 +342,7 @@ export default function ListeVAC() {
 
                             }}>Détails
                             </Button>
-                            </TableCell>
-                            
+                        </TableCell> */}
                       </TableRow>
                     );
                   })}

@@ -24,7 +24,7 @@ import { EMPLOI_URL, MAQUETTE_URL } from '../../../Server_URL/Urls';
 import EditIcon from '@mui/icons-material/Edit';
 import Ajouter_Batiment from '../../_Ajouter/Aj-Emploi/Ajouter_Batiment';
 import DetailsBatiment from '../../_Emploi/_Pages Details/DetailsBatiment';
-import Modifier_Batiment from '../../_Modifier/Repartition/Modifier_Batiment';
+import Modifier_Batiment from '../../_Modifier/Emploi/Modifier_Batiment';
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
