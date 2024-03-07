@@ -11,7 +11,7 @@ import Paper from '@mui/material/Paper';
 import axios from 'axios';
 import '../../../styles/general.css';
 import { EMPLOI_URL } from '../../../Server_URL/Urls';
-import Ajouter_Salle_Batiment from './_Ajouter/Ajouter_Salle_Batiment';
+import Ajouter_Seance_Salle from './_Ajouter/Ajouter_Seance_Salle';
 
 
 
@@ -36,14 +36,14 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-const HeadersSalle = ['Identifiant', 'Libelle', 'Code', 'Capacite'];
+const HeadersSeance = ['Identifiant', 'Jour-Seance', 'Duree-Seance', 'Debut-Seance', 'Fin-Seance', 'Numero-Seance','Date Creation'];
 
-function DetailsBatiment ({ batiment }) {
+function DetailsSalle ({ salle }) {
     const [salles, setSalle] = useState([]);
     const [showSalleTable, setShowSalleTable] = useState(false);
 
     useEffect(() => {
-        axios.get(`${EMPLOI_URL}/batiment/${batiment.idBatiment}/salles`)
+        axios.get(`${EMPLOI_URL}/batiment/${salle.idSalle}/salles`)
           .then(res => {
             console.log("Les données récupérées depuis la base de données : \n ",res.data);
            setSalle(res.data);
@@ -58,25 +58,27 @@ function DetailsBatiment ({ batiment }) {
         <div>
             <br/> &nbsp;&nbsp;&nbsp;
             <Button 
-                href="/listeBatiment" 
+                href="/listeSalle" 
                 style={{ color: "white", borderRadius: "5px", background: "rgb(9, 44, 38)" }}
             > ⬅
             </Button>
 
-            <h2 id='title'>{batiment.libelleBatiment}</h2>
+            <h2 id='title'>{salle.libelleSalle}</h2>
             <div id='BlockBtn'>
-                <Ajouter_Salle_Batiment batiment={batiment} />
+                <Ajouter_Seance_Salle salle={salle} />
             </div>
             
             <div id='Block2'>
                 <Card id='MyCard1'>
                     <p><b>Description :</b> <br/>
-                        {batiment.descriptionBatiment}
+                        {salle.descriptionSalle}
                     </p>
+                    <p><b>Date de Creation :</b> {salle.dateCreationSalle} </p>
+
                 </Card>
                 <Card id='MyCard2'>
-                    <p><b>Code :</b> {batiment.codeBatiment} </p>
-                    <p><b>Position :</b> {batiment.positionBatiment} </p>
+                    <p><b>Code :</b> {salle.codeSalle} </p>
+                    <p><b>Position :</b> {salle.capaciteSalle} </p>
                 </Card>
             </div>
             <div id='Block3'>
@@ -84,7 +86,7 @@ function DetailsBatiment ({ batiment }) {
                     <span id='separator1'></span>
                     &nbsp;
                     <Button onClick={toggleSalleTable}>
-                        {showSalleTable ? 'Cacher la liste des Salle' : 'Afficher la liste des Salles'}
+                        {showSalleTable ? 'Cacher la liste des Seances' : 'Afficher la liste des Seances'}
                     </Button>
                 </h3>
                 <br/>
@@ -93,20 +95,24 @@ function DetailsBatiment ({ batiment }) {
                     <Table aria-label="customized table">
                         <TableHead>
                             <TableRow>
-                                {HeadersSalle.map((th, index) => (
+                                {HeadersSeance.map((th, index) => (
                                     <StyledTableCell key={index}>{th}</StyledTableCell>
                                 ))}
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {salles.length > 0 && salles.map(salle => (
-                                <StyledTableRow key={salle.idSalle}>
+                            {salles.length > 0 && salles.map(seance => (
+                                <StyledTableRow key={seance.idSeance}>
                                     <StyledTableCell component="th" scope="row">
-                                        {salle.idSalle}
+                                        {seance.idSeance}
                                     </StyledTableCell>
-                                    <StyledTableCell align="left">{salle.libelleSalle}</StyledTableCell>
-                                    <StyledTableCell align="left">{salle.codeSalle}</StyledTableCell>
-                                    <StyledTableCell align="left">{salle.capaciteSalle}</StyledTableCell>
+                                    <StyledTableCell align="left">{seance.jourSeance}</StyledTableCell>
+                                    <StyledTableCell align="left">{seance.dureeSeance}</StyledTableCell>
+                                    <StyledTableCell align="left">{seance.debutSeance}</StyledTableCell>
+                                    <StyledTableCell align="left">{seance.finSeance}</StyledTableCell>
+                                    <StyledTableCell align="left">{seance.numeroSeance}</StyledTableCell>
+                                    <StyledTableCell align="left">{seance.dateCreationSeance}</StyledTableCell>
+
                                 </StyledTableRow>
                             ))}
                         </TableBody>    
@@ -118,4 +124,4 @@ function DetailsBatiment ({ batiment }) {
     );
 }
 
-export default DetailsBatiment;
+export default DetailsSalle;

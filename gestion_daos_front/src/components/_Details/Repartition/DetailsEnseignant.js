@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card } from '@mui/material';
+import { Button, Card } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -56,6 +56,12 @@ function DetailsEnseignant ({ ens }) {
     
     return (
         <div>
+            <br/> &nbsp;&nbsp;&nbsp;
+            <Button
+                href="/listeAllEnseignant" 
+                style={{ color: "white", borderRadius: "5px", background: "rgb(9, 44, 38)" }}
+            > ⬅
+            </Button>            
         <h2 id='title'>  {ens.prenomEns[0]}.{ens.nomEns} <br/>                
             <span id='separator'></span>
         </h2>
@@ -97,10 +103,8 @@ function DetailsEnseignant ({ ens }) {
                                     {repartition.idRepartition}
                                 </StyledTableCell>
                                 <StyledTableCell align="center">{repartition.descriptionRepartition}</StyledTableCell>
-                                <StyledTableCell align="center">{repartition.seance}</StyledTableCell>
                                 <StyledTableCell align="center">{repartition.dateCreationRepartition}</StyledTableCell>
-                                <StyledTableCell align="center">{repartition.enseignant}</StyledTableCell>
-                                <StyledTableCell align="center">{repartition.enseignement}</StyledTableCell>
+                               
                                 {/* <StyledTableCell align="center">{repartition.coefficientEC}</StyledTableCell> */}
                             </StyledTableRow>
                         ))}

@@ -263,6 +263,7 @@ if(selectedVAC){
 
   return (
     <div>
+      <br/> &nbsp;
       <Button 
         href="/repartition" 
         style={{ color: "white", borderRadius: "5px", background: "rgb(9, 44, 38)" }}
