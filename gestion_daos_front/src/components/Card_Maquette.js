@@ -18,28 +18,28 @@ function Card_Maquette(props) {
 
     return (
         <Grid container spacing={3}>
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} md={3.9} ml={1}>
                 <Classe />
             </Grid>
 
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} md={3.9} ml={1}>
                 <Groupe />
             </Grid>
 
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} md={3.9} ml={1}>
                 <Enseignement />
             </Grid>
 
 
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} md={3.9} ml={1}>
                 <UE />
             </Grid>
 
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} md={3.9} ml={1}>
                 <EC />
             </Grid>
             
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} md={3.9} ml={1}>
                 <Module />
             </Grid>
             

@@ -19,9 +19,8 @@ function UE() {
 
     return (
         <div>
-            <Card id="card">
-                <CardContent style={{ position: 'relative' }} id="content-card">
-                    <IconButton
+           <Card id="card" style={{ display: 'flex', flexDirection: 'column', height: '12rem' }}>
+                <CardContent style={{ flex: '1 0 auto', position: 'relative' }} id="content-card">                    <IconButton
                         aria-controls="simple-menu"
                         aria-haspopup="true"
                         onClick={handleClick}
@@ -29,8 +28,8 @@ function UE() {
                     >
                         <MoreVertIcon />
                     </IconButton>
-                    <Typography variant="h6">→<b> &nbsp;UE</b></Typography>
-                    <Typography variant="body1">
+                    <Typography variant="h5">→<b> &nbsp;UE</b></Typography>
+                    <Typography variant="body1" sx={{fontSize: "1.4rem !important", fontFamily:"Poppins"}}>
                         Cette page vous redirige vers la liste des UE.
                     </Typography>
                 </CardContent>

@@ -34,8 +34,8 @@ function PER() {
                     >
                         <MoreVertIcon />
                     </IconButton>
-                    <Typography variant="h6">→<b> &nbsp;PER</b></Typography>
-                    <Typography variant="body1">
+                    <Typography variant="h5">→<b> &nbsp;PER</b></Typography>
+                    <Typography variant="body1" sx={{fontSize: "1.4rem !important", fontFamily:"Poppins"}}>
                         Cette page vous redirige vers la liste des 
                         Enseignants PER.
                     </Typography>
