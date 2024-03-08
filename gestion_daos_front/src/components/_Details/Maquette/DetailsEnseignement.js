@@ -10,11 +10,8 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import axios from 'axios';
 import '../../../styles/general.css';
-import { EMPLOI_URL } from '../../../Server_URL/Urls';
-import Ajouter_Salle_Batiment from './_Ajouter/Ajouter_Salle_Batiment';
-
-
-
+import { MAQUETTE_URL } from '../../../Server_URL/Urls';
+;
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -36,74 +33,76 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-const HeadersSeance = ['Identifiant', 'Jour', 'Duree', 'Heure Debut', 'Heure Fin', 'Numero Seance'];
+const HeadersRepartition = ['Identifiant', 'Description'];
 
-function DetailsSalle ({ salle }) {
-    const [seances, setSeance] = useState([]);
-    const [showSeanceTable, setShowSeanceTable] = useState(false);
+function DetailsEnseignement ({ enseignement }) {
+    const [repartitions, setRepartitions] = useState([]);
+    const [ShowRepartitionTable, setShowRepartitionTable] = useState(false);
 
     useEffect(() => {
-        axios.get(`${EMPLOI_URL}/salle/${salle.idSalle}/seances`)
+        axios.get(`${MAQUETTE_URL}enseignement/${enseignement.idEnseignement}/repartitions`)
           .then(res => {
-            console.log("Les données récupérées depuis la base de données : \n ",res.data);
-           setSeance(res.data);
+            console.log("les données récupérées depuis la base de données : \n ",res.data);
+            setRepartitions(res.data);
           })
           .catch(err => console.log(err));
     }, []);
 
-    const toggleSeanceTable = () => {
-        setShowSeanceTable(!showSeanceTable);
+  
+
+    const toggleModuleTable = () => {
+        setShowRepartitionTable(!ShowRepartitionTable);
     };
+
     return (
         <div>
-            <h2 id='title'>{salle.libelleSalle}</h2>
+            <h2 id='title'>{enseignement.libelleEnseignement}</h2>
             <div id='BlockBtn'>
+                {/* <Ajouter_EC_UE enseignement={enseignement}/>
+                <Ajouter_Module_UE enseignement={enseignement}/> */}
+                {/* <Ajouter_Enseignement_Classe enseignement={enseignement}/> */}
             </div>
             
             <div id='Block2'>
                 <Card id='MyCard1'>
                     <p><b>Description :</b> <br/>
-                        {salle.descriptionSalle}
+                        {enseignement.descriptionEnseignement}
                     </p>
                 </Card>
                 <Card id='MyCard2'>
-                    <p><b>Code :</b> {salle.codeSalle} </p>
-                    <p><b>Capacité :</b> {salle.capaciteSalle} </p>
+                    <p><b>Objectifs :</b> {enseignement.objectifsEnseignement} </p>
+                    <p><b>Date Creation :</b> {enseignement.dateCreationEnseignement} </p>
                 </Card>
             </div>
             <div id='Block3'>
                 <h3 id='title'>
                     <span id='separator1'></span>
                     &nbsp;
-                    <Button onClick={toggleSeanceTable}>
-                        {showSeanceTable ? 'Cacher la liste des Seances' : 'Afficher la liste des Seances'}
+                    <Button onClick={toggleModuleTable}>
+                        {ShowRepartitionTable ? 'Cacher la liste des Repartitions' : 'Afficher la liste des Repartitions'}
                     </Button>
                 </h3>
                 <br/>
-                {showSeanceTable && (  
-                <TableContainer component={Paper} style={{ width: "70rem", margin: "auto", marginBottom: "1.5rem" }}>
+                {ShowRepartitionTable && ( 
+                <TableContainer component={Paper} style={{ width: "70rem", margin: "auto" }}>
                     <Table aria-label="customized table">
                         <TableHead>
                             <TableRow>
-                                {HeadersSeance.map((th, index) => (
+                                {HeadersRepartition.map((th, index) => (
                                     <StyledTableCell key={index}>{th}</StyledTableCell>
                                 ))}
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {seances.length > 0 && seances.map(seance => (
-                                <StyledTableRow key={seance.idSeance}>
+                            {repartitions.length > 0 && repartitions.map(repartition => (
+                                <StyledTableRow key={repartition.idRepartition}>
                                     <StyledTableCell component="th" scope="row">
-                                        {seance.idSeance}
+                                        {repartition.idRepartition}
                                     </StyledTableCell>
-                                    <StyledTableCell align="left">{seance.jourSeance}</StyledTableCell>
-                                    <StyledTableCell align="left">{seance.dureeSeance}</StyledTableCell>
-                                    <StyledTableCell align="left">{seance.debutSeance}</StyledTableCell>
-                                    <StyledTableCell align="left">{seance.finSeance}</StyledTableCell>
-                                    <StyledTableCell align="left">{seance.numeroSeance}</StyledTableCell>
+                                    <StyledTableCell align="left">{repartition.descriptionRepartition}</StyledTableCell>
                                 </StyledTableRow>
                             ))}
-                        </TableBody>    
+                        </TableBody>
                     </Table>
                 </TableContainer>
                 )}
@@ -112,4 +111,4 @@ function DetailsSalle ({ salle }) {
     );
 }
 
-export default DetailsSalle;
+export default DetailsEnseignement;

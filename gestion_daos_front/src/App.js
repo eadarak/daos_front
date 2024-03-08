@@ -20,6 +20,11 @@ import ListeRepartition from './components/_Listes/Repartition/ListeRepartition'
 import DetailsBatiment from './components/_Details/Emploi/DetailsBatiment';
 import DetailsUE from './components/_Details/Maquette/DetailsUE';
 import ListeEC from './components/_Listes/Maquette/ListeEC';
+import ListeModules from './components/_Listes/Maquette/ListeModule';
+import ListeClasse from './components/_Listes/Maquette/ListeClasse';
+import ListeGroupe from './components/_Listes/Maquette/ListeGroupe';
+import ListeEnseignement from './components/_Listes/Maquette/ListeEnseignement';
+
 
 const router = createBrowserRouter([
   {
@@ -94,6 +99,22 @@ const router = createBrowserRouter([
   {
     path : '/listes-ec',
     element: <Layout> <ListeEC/> </Layout>
+  },
+  {
+    path : '/listes-module',
+    element: <Layout> <ListeModules/> </Layout>
+  },
+  {
+    path : '/listes-classe',
+    element: <Layout> <ListeClasse/> </Layout>
+  },
+  {
+    path : '/listes-groupe',
+    element: <Layout> <ListeGroupe/> </Layout>
+  },
+  {
+    path : '/listes-enseignement',
+    element: <Layout> <ListeEnseignement/> </Layout>
   },
 
 ]);

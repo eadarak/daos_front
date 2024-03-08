@@ -11,8 +11,8 @@ import Paper from '@mui/material/Paper';
 import axios from 'axios';
 import '../../../styles/general.css';
 import { MAQUETTE_URL } from '../../../Server_URL/Urls';
-import Ajouter_EC_UE from './_Ajouter/Ajouter_EC_UE';
-import Ajouter_Module_UE from './_Ajouter/Ajouter_Module_UE';
+import Ajouter_Groupe_Classe from './_Ajouter/Ajouter_Groupe_Classe';
+;
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -34,58 +34,57 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-const HeadersEC = ['Identifiant', 'Libelle', 'Code', 'CM', 'TD', 'TP', 'CM + TD/TP', 'TPE', 'VHT', 'coefficient' ];
-const HeadersModule = ['Identifiant', 'Libelle', 'Cours', 'Durée', 'Coefficient'];
+const HeadersGroupe = ['Identifiant', 'Libelle', 'Numero', 'Effectif'];
+const HeadersEnseignement = ['Identifiant', 'Libelle', 'Objectifs'];
 
-function DetailsUE ({ ue }) {
-    const [ecs, setEcs] = useState([]);
-    const [modules, setModules] = useState([]);
-    const [ShowEcsTable, setShowEcsTable] = useState(false);
-    const [ShowModuleTable, setShowModuleTable] = useState(false);
+function DetailsClasse ({ classe }) {
+    const [groupes, setGroupes] = useState([]);
+    const [enseignements, setEnseignements] = useState([]);
+    const [showGroupesTable, setShowGroupesTable] = useState(false);
+    const [ShowEnseignementTable, setShowEnseignementTable] = useState(false);
 
     useEffect(() => {
-        axios.get(`${MAQUETTE_URL}ue/${ue.idUE}/ecs`)
+        axios.get(`${MAQUETTE_URL}classe/${classe.idClasse}/groupes`)
           .then(res => {
             console.log("les données récupérées depuis la base de données : \n ",res.data);
-            setEcs(res.data);
+            setGroupes(res.data);
           })
           .catch(err => console.log(err));
 
-        axios.get(`${MAQUETTE_URL}ue/${ue.idUE}/modules`)
+        axios.get(`${MAQUETTE_URL}classe/${classe.idClasse}/enseignements`)
           .then(res => {
             console.log("les données récupérées depuis la base de données : \n ",res.data);
-            setModules(res.data);
+            setEnseignements(res.data);
           })
           .catch(err => console.log(err));
     }, []);
 
     const toggleEcsTable = () => {
-        setShowEcsTable(!ShowEcsTable);
+        setShowGroupesTable(!showGroupesTable);
     };
 
     const toggleModuleTable = () => {
-        setShowModuleTable(!ShowModuleTable);
+        setShowEnseignementTable(!ShowEnseignementTable);
     };
 
     return (
         <div>
-            <h2 id='title'>{ue.libelleUE}</h2>
+            <h2 id='title'>{classe.libelleClasse}</h2>
             <div id='BlockBtn'>
-                <Ajouter_EC_UE ue={ue}/>
-                <Ajouter_Module_UE ue={ue}/>
+                {/* <Ajouter_EC_UE classe={classe}/>
+                <Ajouter_Module_UE classe={classe}/> */}
+                <Ajouter_Groupe_Classe classe={classe}/>
             </div>
             
             <div id='Block2'>
                 <Card id='MyCard1'>
                     <p><b>Description :</b> <br/>
-                        {ue.descriptionUE}
+                        {classe.descriptionClasse}
                     </p>
                 </Card>
                 <Card id='MyCard2'>
-                    <p><b>Code :</b> {ue.codeUE} </p>
-                    <p><b>Credit :</b> {ue.creditUE} </p>
-                    <p><b>Coefficient :</b> {ue.coefficientUE} </p>
-                    <p><b>Date de Création :</b> {ue.dateCreationUE} </p>
+                    <p><b>Effectif :</b> {classe.effectifClasse} </p>
+                    <p><b>Nombre de Groupe :</b> {classe.nbreGroupeClasse} </p>
                 </Card>
             </div>
             <div id='Block3'>
@@ -93,35 +92,29 @@ function DetailsUE ({ ue }) {
                     <span id='separator1'></span>
                     &nbsp;
                     <Button onClick={toggleEcsTable}>
-                        {ShowEcsTable ? 'Cacher la liste des ECs' : 'Afficher la liste des ECs'}
+                        {showGroupesTable ? 'Cacher la liste des Groupes' : 'Afficher la liste des Groupes'}
                     </Button>
                 </h3>
                 <br/>
-                {ShowEcsTable && (  
+                {showGroupesTable && (  
                 <TableContainer component={Paper} style={{ width: "70rem", margin: "auto", marginBottom: "1.5rem" }}>
                     <Table aria-label="customized table">
                         <TableHead>
                             <TableRow>
-                                {HeadersEC.map((th, index) => (
+                                {HeadersGroupe.map((th, index) => (
                                     <StyledTableCell key={index}>{th}</StyledTableCell>
                                 ))}
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {ecs.length > 0 && ecs.map(ec => (
-                                <StyledTableRow key={ec.idEC}>
+                            {groupes.length > 0 && groupes.map(groupe => (
+                                <StyledTableRow key={groupe.idGroupe}>
                                     <StyledTableCell component="th" scope="row">
-                                        {ec.idEC}
+                                        {groupe.idGroupe}
                                     </StyledTableCell>
-                                    <StyledTableCell align="left">{ec.libelleEC}</StyledTableCell>
-                                    <StyledTableCell align="left">{ec.codeEC}</StyledTableCell>
-                                    <StyledTableCell align="left">{ec.cm}</StyledTableCell>
-                                    <StyledTableCell align="left">{ec.td}</StyledTableCell>
-                                    <StyledTableCell align="left">{ec.tp}</StyledTableCell>
-                                    <StyledTableCell align="left">{ec.cm + ec.td + ec.tp}</StyledTableCell>
-                                    <StyledTableCell align="left">{ec.tpe}</StyledTableCell>
-                                    <StyledTableCell align="left">{ec.cm + ec.td + ec.tp + ec.tpe}</StyledTableCell>
-                                    <StyledTableCell align="left">{ec.coefficientEC}</StyledTableCell>
+                                    <StyledTableCell align="left">{groupe.libelleGroupe}</StyledTableCell>
+                                    <StyledTableCell align="left">{groupe.numeroGroupe}</StyledTableCell>
+                                    <StyledTableCell align="left">{groupe.effectifGroupe}</StyledTableCell>
                                 </StyledTableRow>
                             ))}
                         </TableBody>
@@ -133,30 +126,28 @@ function DetailsUE ({ ue }) {
                     <span id='separator1'></span>
                     &nbsp;
                     <Button onClick={toggleModuleTable}>
-                        {ShowModuleTable ? 'Cacher la liste des Modules' : 'Afficher la liste des Modules'}
+                        {ShowEnseignementTable ? 'Cacher la liste des Enseignements' : 'Afficher la liste des Enseignements'}
                     </Button>
                 </h3>
                 <br/>
-                {ShowModuleTable && ( 
+                {ShowEnseignementTable && ( 
                 <TableContainer component={Paper} style={{ width: "70rem", margin: "auto" }}>
                     <Table aria-label="customized table">
                         <TableHead>
                             <TableRow>
-                                {HeadersModule.map((th, index) => (
+                                {HeadersEnseignement.map((th, index) => (
                                     <StyledTableCell key={index}>{th}</StyledTableCell>
                                 ))}
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {modules.length > 0 && modules.map(module => (
-                                <StyledTableRow key={module.idModule}>
+                            {enseignements.length > 0 && enseignements.map(enseignement => (
+                                <StyledTableRow key={enseignement.idModule}>
                                     <StyledTableCell component="th" scope="row">
-                                        {module.idModule}
+                                        {enseignement.idModule}
                                     </StyledTableCell>
-                                    <StyledTableCell align="left">{module.libelleModule}</StyledTableCell>
-                                    <StyledTableCell align="left">{module.coursModule}</StyledTableCell>
-                                    <StyledTableCell align="left">{module.dureeModule}</StyledTableCell>
-                                    <StyledTableCell align="left">{module.coefficientModule}</StyledTableCell>
+                                    <StyledTableCell align="left">{enseignement.libelleEnseignement}</StyledTableCell>
+                                    <StyledTableCell align="left">{enseignement.objectifsEnseignements}</StyledTableCell>
                                 </StyledTableRow>
                             ))}
                         </TableBody>
@@ -168,4 +159,4 @@ function DetailsUE ({ ue }) {
     );
 }
 
-export default DetailsUE;
+export default DetailsClasse;

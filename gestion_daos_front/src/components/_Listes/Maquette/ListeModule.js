@@ -20,12 +20,13 @@ import { visuallyHidden } from '@mui/utils';
 import { Button } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import axios from 'axios';
+import DetailsModule from '../../_Details/Maquette/DetailsModule';
+import { MAQUETTE_URL } from '../../../Server_URL/Urls';
+import ModifierModule from '../../_Modifier/Maquette/Modifier_Module';
 import EditIcon from '@mui/icons-material/Edit';
-import { EMPLOI_URL } from '../../../Server_URL/Urls';
-import Modifier_Seance from '../../_Modifier/Emploi/Modifier_Seance';
-import Details_Seance from '../../_Details/Emploi/DetailsSeance';
+import { Link } from 'react-router-dom';
 
-const rows = []
+const rows = [];
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -56,14 +57,14 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-  { id: 'idSeance', numeric: false, disablePadding: false, label: 'Identifiant'},
-  { id: 'jourSeance', numeric: false, disablePadding: false, label: 'Jour'},
-  { id: 'dureeSeance', numeric: false, disablePadding: false, label: 'Durée' },
-  { id: 'debutSeance', numeric: false, disablePadding: false, label: 'Heure de Début' },
-  { id: 'finSeance', numeric: false, disablePadding: false, label: 'Heure de Fin' },
-  { id: 'numeroSeance', numeric: false, disablePadding: false, label: 'Numéro de Séance' },
-  { id: 'Operations', numeric: false, disablePadding: false, label: 'Opérations' },
-  { id: 'Details', numeric: false, disablePadding: false, label: 'Détails' },
+  { id: 'idModule', numeric: false, disablePadding: false, label: 'Identifiant'},
+  { id: 'libelleModule', numeric: false, disablePadding: false, label: 'Libelle' },
+  { id: 'coursModule', numeric: false, disablePadding: false, label: 'Cours'},
+  { id: 'dureeModule', numeric: false, disablePadding: false, label: 'Duree' },
+  { id: 'coefficientModule', numeric: false, disablePadding: false, label: 'Coefficient' },
+  { id: 'dateCreationModule', numeric: false, disablePadding: false, label: 'Date Creation' },
+  { id: 'Operations', numeric: false, disablePadding: false, label: 'Operations' },
+  { id: 'Details', numeric: false, disablePadding: false, label: 'Details' },
 ];
 
 function EnhancedTableHead(props) {
@@ -91,7 +92,7 @@ function EnhancedTableHead(props) {
               {headCell.label}
               {orderBy === headCell.id ? (
                 <Box component="span" sx={visuallyHidden}>
-                  {order === 'desc' ? 'trié par ordre décroissant' : 'trié par ordre croissant'}
+                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
                 </Box>
               ) : null}
             </TableSortLabel>
@@ -132,7 +133,7 @@ function EnhancedTableToolbar(props) {
           variant="subtitle1"
           component="div"
         >
-          {numSelected} sélectionné(s)
+          {numSelected} selected
         </Typography>
       ) : (
         <Typography
@@ -141,9 +142,15 @@ function EnhancedTableToolbar(props) {
           id="tableTitle"
           component="div"
         >
-          Liste des Séances
+          Liste des Modules
         </Typography>
       )}
+        
+          <IconButton>
+            {/* <AjouterModule/> */}
+          </IconButton>
+        
+     
     </Toolbar>
   );
 }
@@ -152,60 +159,65 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function ListeSeance() {
+export default function ListeModules() {
   const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('idSeance');
+  const [orderBy, setOrderBy] = React.useState('idModule');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [data, setData] = React.useState([]);
-  const [selectedSeance, setSelectedSeance] = React.useState(null);
-  const [selectedUpdateSeance, setSelectedUpdateSeance] = React.useState(null);
+  const [selectedModule, setSelectedModuleDelete] = React.useState(null);
+  const [selectedUpdateModule, setSelectedUpdateModule] = React.useState(null);
+
 
   React.useEffect(() => {
-    axios.get(`${EMPLOI_URL}/seance`)
+    axios.get(`${MAQUETTE_URL}module`)
       .then(res => {
-        console.log("Les données récupérées depuis la base de données :\n", res.data)
+        console.log("les donnes recuperees depuis la db : \n ",res.data)
         setData(res.data)
       })
       .catch(err => console.log(err));
   },[]);
 
-  const handleSeanceClick = (seance) => {
-    setSelectedSeance(seance);
+  const handleModuleClickDelete = (module) => {
+    setSelectedModuleDelete(module);
   };
 
-  const handleEditClick = (seance) => {
-    setSelectedUpdateSeance(seance);
+  const handleEditClick = (module) => {
+    setSelectedUpdateModule(module); // Mettez à jour selectedUpdateModule avec le module à modifier
   };
 
-  const handleSeanceDelete = (e, id) => { 
+  const handleModuleDelete = (e, id) => { 
+    
     e.stopPropagation();
-    const confirmation = window.confirm(`Êtes-vous sûr de vouloir supprimer cette séance ${id} ?`);
+    const confirmation = window.confirm(`Êtes-vous sûr de vouloir supprimer ce Module ${id} ?`);
 
     if(confirmation){
-      axios.delete(`${EMPLOI_URL}/seance/${id}`)
+
+      axios.delete(`${MAQUETTE_URL}module/${id}`)
       .then( response => {
-        console.log("Séance supprimée avec succès :", id);
-        setData(data.filter(seance => seance.idSeance !== id))
+        console.log("Module supprimé avec succès :", id);
+        setData(data.filter(module => module.idModule !== id))
       })
       .catch( err => {
-        throw new Error("Erreur lors de la suppression de la séance :", err)
+        throw new Error("Erreur lors de la suppression du Module :", err)
       });
     }
     else{
-      window.alert(`Suppression de la séance ${id} annulée`);
+      window.alert(`Suppression  du Module ${id} annulée`);
     }
+
   }
 
-  if (selectedSeance) {
-    return <Details_Seance seance={selectedSeance}/>
+  if (selectedModule) {
+    return <DetailsModule module={selectedModule} />;
   }
 
-  if(selectedUpdateSeance){
-    return <Modifier_Seance seance={selectedUpdateSeance} open={true} onClose={() => setSelectedUpdateSeance(null)} />;
+  if(selectedUpdateModule){
+    return <ModifierModule module={selectedUpdateModule} open={true} onClose={() => setSelectedUpdateModule(null)} />;
   }
+
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -259,10 +271,12 @@ export default function ListeSeance() {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
 
+    
+
   return (
     <div>
-      <Button
-        href="/emploi"
+      <Button 
+        href="/maquette" 
         style={{ color: "white", borderRadius: "5px", background: "rgb(9, 44, 38)" }}
       > ⬅
       </Button>
@@ -288,17 +302,17 @@ export default function ListeSeance() {
                 {stableSort(data, getComparator(order, orderBy))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => {
-                    const isItemSelected = isSelected(row.idSeance);
+                    const isItemSelected = isSelected(row.id);
                     const labelId = `enhanced-table-checkbox-${index}`;
 
                     return (
                       <TableRow
                         hover
-                        onClick={(event) => handleClick(event, row.idSeance)}
+                        onClick={(event) => handleClick(event, row.id)}
                         role="checkbox"
                         aria-checked={isItemSelected}
                         tabIndex={-1}
-                        key={row.idSeance}
+                        key={row.id}
                         selected={isItemSelected}
                         sx={{ cursor: 'pointer' }}
                       >
@@ -308,35 +322,37 @@ export default function ListeSeance() {
                           scope="row"
                           padding="normal"
                         >
-                          {row.idSeance}
+                          {row.idModule}
                         </TableCell>
-                        <TableCell align="left">{row.jourSeance}</TableCell>
-                        <TableCell align="left">{row.dureeSeance}</TableCell>
-                        <TableCell align="left">{row.debutSeance}</TableCell>
-                        <TableCell align="left">{row.finSeance}</TableCell>
-                        <TableCell align="left">{row.numeroSeance}</TableCell>
+                        <TableCell align="left">{row.libelleModule}</TableCell>
+                        <TableCell align="left">{row.coursModule}</TableCell>
+                        <TableCell align="left">{row.dureeModule}</TableCell>
+                        <TableCell align="left">{row.coefficientModule}</TableCell>
+                        <TableCell align="left">{row.dateCreationModule}</TableCell>
                         <TableCell > 
-                          <IconButton aria-label="edit" onClick={() => handleEditClick(row)}>
-                            <EditIcon  color='success'/>
-                          </IconButton>
-                          &nbsp; &nbsp;
-                          <IconButton aria-label="delete" onClick={(event) => handleSeanceDelete(event, row.idSeance)}>
-                            <DeleteIcon sx={{color:"#cd0000"}}/>
-                          </IconButton>
-                        </TableCell>
-                        <TableCell> 
-                          <Button 
-                            sx={{
-                              borderRadius: "30px solid",
-                              color: "white",
-                              fontWeight: "600",
-                              background: "rgb(9, 44, 38)",
-                              textTransform: "capitalize"
-                            }}
-                            onClick={() => handleSeanceClick(row)}
-                          >
-                            Détails
-                          </Button> 
+                        <IconButton aria-label="edit" onClick={() => handleEditClick(row)}>
+                          <EditIcon  color='success'/>
+                        </IconButton>
+                            &nbsp; &nbsp;
+
+                            <IconButton aria-label="delete" onClick={(event) => handleModuleDelete(event, row.idModule)}>
+                                <DeleteIcon sx={{color:"#cd0000"}}/>
+                            </IconButton>
+                         </TableCell>
+                         <TableCell> 
+                          
+                            <Button 
+                              sx={{
+                                borderRadius: "30px solid",
+                                color: "white",
+                                fontWeight: "600",
+                                background: "rgb(9, 44, 38)",
+                                textTransform: "capitalize"
+                              }}
+                              onClick={() => handleModuleClickDelete(row)}
+                            >
+                              Détails
+                            </Button> 
                         </TableCell>
                       </TableRow>
                     );
@@ -365,7 +381,7 @@ export default function ListeSeance() {
         </Paper>
         <FormControlLabel
           control={<Switch checked={dense} onChange={handleChangeDense} />}
-          label="Padding dense"
+          label="Dense padding"
         />
       </Box>
     </div>

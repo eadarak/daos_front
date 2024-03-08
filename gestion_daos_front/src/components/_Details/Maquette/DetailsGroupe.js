@@ -10,11 +10,9 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import axios from 'axios';
 import '../../../styles/general.css';
-import { EMPLOI_URL } from '../../../Server_URL/Urls';
-import Ajouter_Salle_Batiment from './_Ajouter/Ajouter_Salle_Batiment';
-
-
-
+import { MAQUETTE_URL } from '../../../Server_URL/Urls';
+import Ajouter_Groupe_Classe from './_Ajouter/Ajouter_Groupe_Classe';
+;
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -36,74 +34,77 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-const HeadersSeance = ['Identifiant', 'Jour', 'Duree', 'Heure Debut', 'Heure Fin', 'Numero Seance'];
+const HeadersEnseignement = ['Identifiant', 'Libelle', 'Objectifs'];
 
-function DetailsSalle ({ salle }) {
-    const [seances, setSeance] = useState([]);
-    const [showSeanceTable, setShowSeanceTable] = useState(false);
+function DetailsGroupe ({ groupe }) {
+    const [enseignements, setEnseignements] = useState([]);
+    const [ShowEnseignementTable, setShowEnseignementTable] = useState(false);
 
     useEffect(() => {
-        axios.get(`${EMPLOI_URL}/salle/${salle.idSalle}/seances`)
+        axios.get(`${MAQUETTE_URL}groupe/${groupe.idGroupe}/enseignements`)
           .then(res => {
-            console.log("Les données récupérées depuis la base de données : \n ",res.data);
-           setSeance(res.data);
+            console.log("les données récupérées depuis la base de données : \n ",res.data);
+            setEnseignements(res.data);
           })
           .catch(err => console.log(err));
     }, []);
 
-    const toggleSeanceTable = () => {
-        setShowSeanceTable(!showSeanceTable);
+  
+
+    const toggleModuleTable = () => {
+        setShowEnseignementTable(!ShowEnseignementTable);
     };
+
     return (
         <div>
-            <h2 id='title'>{salle.libelleSalle}</h2>
+            <h2 id='title'>{groupe.libelleGroupe}</h2>
             <div id='BlockBtn'>
+                {/* <Ajouter_EC_UE groupe={groupe}/>
+                <Ajouter_Module_UE groupe={groupe}/> */}
+                {/* <Ajouter_Groupe_Classe groupe={groupe}/> */}
             </div>
             
             <div id='Block2'>
                 <Card id='MyCard1'>
                     <p><b>Description :</b> <br/>
-                        {salle.descriptionSalle}
+                        {groupe.descriptionGroupe}
                     </p>
                 </Card>
                 <Card id='MyCard2'>
-                    <p><b>Code :</b> {salle.codeSalle} </p>
-                    <p><b>Capacité :</b> {salle.capaciteSalle} </p>
+                    <p><b>Numero :</b> {groupe.numeroGroupe} </p>
+                    <p><b>Effectif :</b> {groupe.effectifGroupe} </p>
                 </Card>
             </div>
             <div id='Block3'>
                 <h3 id='title'>
                     <span id='separator1'></span>
                     &nbsp;
-                    <Button onClick={toggleSeanceTable}>
-                        {showSeanceTable ? 'Cacher la liste des Seances' : 'Afficher la liste des Seances'}
+                    <Button onClick={toggleModuleTable}>
+                        {ShowEnseignementTable ? 'Cacher la liste des Enseignements' : 'Afficher la liste des Enseignements'}
                     </Button>
                 </h3>
                 <br/>
-                {showSeanceTable && (  
-                <TableContainer component={Paper} style={{ width: "70rem", margin: "auto", marginBottom: "1.5rem" }}>
+                {ShowEnseignementTable && ( 
+                <TableContainer component={Paper} style={{ width: "70rem", margin: "auto" }}>
                     <Table aria-label="customized table">
                         <TableHead>
                             <TableRow>
-                                {HeadersSeance.map((th, index) => (
+                                {HeadersEnseignement.map((th, index) => (
                                     <StyledTableCell key={index}>{th}</StyledTableCell>
                                 ))}
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {seances.length > 0 && seances.map(seance => (
-                                <StyledTableRow key={seance.idSeance}>
+                            {enseignements.length > 0 && enseignements.map(enseignement => (
+                                <StyledTableRow key={enseignement.idEnseignement}>
                                     <StyledTableCell component="th" scope="row">
-                                        {seance.idSeance}
+                                        {enseignement.idEnseignement}
                                     </StyledTableCell>
-                                    <StyledTableCell align="left">{seance.jourSeance}</StyledTableCell>
-                                    <StyledTableCell align="left">{seance.dureeSeance}</StyledTableCell>
-                                    <StyledTableCell align="left">{seance.debutSeance}</StyledTableCell>
-                                    <StyledTableCell align="left">{seance.finSeance}</StyledTableCell>
-                                    <StyledTableCell align="left">{seance.numeroSeance}</StyledTableCell>
+                                    <StyledTableCell align="left">{enseignement.libelleEnseignement}</StyledTableCell>
+                                    <StyledTableCell align="left">{enseignement.objectifsEnseignements}</StyledTableCell>
                                 </StyledTableRow>
                             ))}
-                        </TableBody>    
+                        </TableBody>
                     </Table>
                 </TableContainer>
                 )}
@@ -112,4 +113,4 @@ function DetailsSalle ({ salle }) {
     );
 }
 
-export default DetailsSalle;
+export default DetailsGroupe;

@@ -11,10 +11,7 @@ import Paper from '@mui/material/Paper';
 import axios from 'axios';
 import '../../../styles/general.css';
 import { EMPLOI_URL } from '../../../Server_URL/Urls';
-import Ajouter_Salle_Batiment from './_Ajouter/Ajouter_Salle_Batiment';
-
-
-
+import Ajouter_Salle_Seance from './_Ajouter/Ajouter_Salle_Seance';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -36,73 +33,76 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-const HeadersSeance = ['Identifiant', 'Jour', 'Duree', 'Heure Debut', 'Heure Fin', 'Numero Seance'];
+const HeadersSalle = ['Identifiant', 'Libelle', 'Code', 'Capacite'];
 
-function DetailsSalle ({ salle }) {
-    const [seances, setSeance] = useState([]);
-    const [showSeanceTable, setShowSeanceTable] = useState(false);
+function DetailsSeance ({ seance }) {
+    const [salles, setSalles] = useState([]);
+    const [showSallesTable, setShowSallesTable] = useState(false);
 
     useEffect(() => {
-        axios.get(`${EMPLOI_URL}/salle/${salle.idSalle}/seances`)
+        axios.get(`${EMPLOI_URL}/seance/${seance.idSeance}/salles`)
           .then(res => {
-            console.log("Les données récupérées depuis la base de données : \n ",res.data);
-           setSeance(res.data);
+            setSalles(res.data);
+            console.log("Les données récupérées depuis la base de données : \n ", res.data);
           })
           .catch(err => console.log(err));
-    }, []);
+    }, [seance.idSeance]);
 
-    const toggleSeanceTable = () => {
-        setShowSeanceTable(!showSeanceTable);
+    console.log('les donnees dans salle', salles);
+
+    const toggleSallesTable = () => {
+        setShowSallesTable(!showSallesTable);
     };
+
     return (
         <div>
-            <h2 id='title'>{salle.libelleSalle}</h2>
+            <h2 id='title'>{seance.idSeance}</h2>
             <div id='BlockBtn'>
+                <Ajouter_Salle_Seance seance={seance} />
             </div>
             
             <div id='Block2'>
                 <Card id='MyCard1'>
                     <p><b>Description :</b> <br/>
-                        {salle.descriptionSalle}
+                        {seance.descriptionSeance}
                     </p>
                 </Card>
                 <Card id='MyCard2'>
-                    <p><b>Code :</b> {salle.codeSalle} </p>
-                    <p><b>Capacité :</b> {salle.capaciteSalle} </p>
+                    <p><b>Jour :</b> {seance.jourSeance} </p>
+                    <p><b>Durée :</b> {seance.dureeSeance} </p>
+                    <p><b>Heure de Début :</b> {seance.debutSeance} </p>
+                    <p><b>Heure de Fin :</b> {seance.finSeance} </p>
+                    <p><b>Numéro de la Séance :</b> {seance.numeroSeance} </p>
                 </Card>
             </div>
             <div id='Block3'>
                 <h3 id='title'>
                     <span id='separator1'></span>
                     &nbsp;
-                    <Button onClick={toggleSeanceTable}>
-                        {showSeanceTable ? 'Cacher la liste des Seances' : 'Afficher la liste des Seances'}
+                    <Button onClick={toggleSallesTable}>
+                        {showSallesTable ? 'Cacher la liste des Salles' : 'Afficher la liste des Salles'}
                     </Button>
                 </h3>
                 <br/>
-                {showSeanceTable && (  
+                {showSallesTable && (  
                 <TableContainer component={Paper} style={{ width: "70rem", margin: "auto", marginBottom: "1.5rem" }}>
                     <Table aria-label="customized table">
                         <TableHead>
                             <TableRow>
-                                {HeadersSeance.map((th, index) => (
+                                {HeadersSalle.map((th, index) => (
                                     <StyledTableCell key={index}>{th}</StyledTableCell>
                                 ))}
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {seances.length > 0 && seances.map(seance => (
-                                <StyledTableRow key={seance.idSeance}>
-                                    <StyledTableCell component="th" scope="row">
-                                        {seance.idSeance}
-                                    </StyledTableCell>
-                                    <StyledTableCell align="left">{seance.jourSeance}</StyledTableCell>
-                                    <StyledTableCell align="left">{seance.dureeSeance}</StyledTableCell>
-                                    <StyledTableCell align="left">{seance.debutSeance}</StyledTableCell>
-                                    <StyledTableCell align="left">{seance.finSeance}</StyledTableCell>
-                                    <StyledTableCell align="left">{seance.numeroSeance}</StyledTableCell>
-                                </StyledTableRow>
-                            ))}
+                            <StyledTableRow key={salles.idSalle}>
+                                <StyledTableCell component="th" scope="row">
+                                    {salles.idSalle}
+                                </StyledTableCell>
+                                <StyledTableCell align="left">{salles.libelleSalle}</StyledTableCell>
+                                <StyledTableCell align="left">{salles.codeSalle}</StyledTableCell>
+                                <StyledTableCell align="left">{salles.capaciteSalle}</StyledTableCell>
+                            </StyledTableRow>
                         </TableBody>    
                     </Table>
                 </TableContainer>
@@ -112,4 +112,4 @@ function DetailsSalle ({ salle }) {
     );
 }
 
-export default DetailsSalle;
+export default DetailsSeance;
