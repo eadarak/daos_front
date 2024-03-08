@@ -15,17 +15,17 @@ function Card_Emploi(props) {
           setModalOpen(!modalOpen);
     };
     return (
-        <Grid container spacing={3}>
-            <Grid item xs={12} md={6}>
+        <Grid container spacing={5}>
+            <Grid item  md={5.5} >
                 <Batiment/>
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item  md={5.5} >
                 <Salle/>
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item  md={5.5} >
                 <Deroulement />
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item  md={5.5} >
                 <Seance/>
             </Grid>
         </Grid>
