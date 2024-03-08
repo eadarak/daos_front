@@ -11,7 +11,7 @@ import Paper from '@mui/material/Paper';
 import axios from 'axios';
 import '../../../styles/general.css';
 import { MAQUETTE_URL } from '../../../Server_URL/Urls';
-import Ajouter_Niveau_Cycle from './_Ajouter/Ajouter_Niveau_Cycle';
+;
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -35,77 +35,79 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 const HeadersNiveau = ['Identifiant', 'Libelle'];
 
-function DetailsCycle ({ cycle }) {
-    const [niveau, setNiveau] = useState([]);
-    const [ShowNiveauTable, setShowNiveauTable] = useState(false);
+function DetailsNiveau ({ niveau }) {
+    const [repartitions, setRepartitions] = useState([]);
+    // const [ShowRepartitionTable, setShowRepartitionTable] = useState(false);
 
-    useEffect(() => {
-        axios.get(`${MAQUETTE_URL}cycle/${cycle.idCycle}/niveau`)
-          .then(res => {
-            console.log("les données récupérées depuis la base de données : \n ",res.data);
-            setNiveau(res.data);
-          })
-          .catch(err => console.log(err));
-    }, []);
+    // useEffect(() => {
+    //     axios.get(`${MAQUETTE_URL}niveau/${niveau.idNiveau}/repartitions`)
+    //       .then(res => {
+    //         console.log("les données récupérées depuis la base de données : \n ",res.data);
+    //         setRepartitions(res.data);
+    //       })
+    //       .catch(err => console.log(err));
+    // }, []);
 
   
 
-    const toggleModuleTable = () => {
-        setShowNiveauTable(!ShowNiveauTable);
-    };
+    // const toggleModuleTable = () => {
+    //     setShowRepartitionTable(!ShowRepartitionTable);
+    // };
 
     return (
         <div>
-            <h2 id='title'>{cycle.libelleCycle}</h2>
+            <h2 id='title'>{niveau.libelleNiveau}</h2>
             <div id='BlockBtn'>
-              <Ajouter_Niveau_Cycle cycle={cycle}/>
+                {/* <Ajouter_EC_UE niveau={niveau}/>
+                <Ajouter_Module_UE niveau={niveau}/> */}
+                {/* <Ajouter_Niveau_Classe niveau={niveau}/> */}
             </div>
             
             <div id='Block2'>
                 <Card id='MyCard1'>
                     <p><b>Description :</b> <br/>
-                        {cycle.descriptionCycle}
+                        {niveau.descriptionNiveau}
                     </p>
                 </Card>
                 <Card id='MyCard2'>
             
                 </Card>
             </div>
-            <div id='Block3'>
+            {/* <div id='Block3'>
                 <h3 id='title'>
                     <span id='separator1'></span>
                     &nbsp;
                     <Button onClick={toggleModuleTable}>
-                        {ShowNiveauTable ? 'Cacher la liste des Niveau' : 'Afficher la liste des Niveau'}
+                        {ShowRepartitionTable ? 'Cacher la liste des Repartitions' : 'Afficher la liste des Repartitions'}
                     </Button>
                 </h3>
                 <br/>
-                {ShowNiveauTable && ( 
+                {ShowRepartitionTable && ( 
                 <TableContainer component={Paper} style={{ width: "70rem", margin: "auto" }}>
                     <Table aria-label="customized table">
                         <TableHead>
                             <TableRow>
-                                {HeadersNiveau.map((th, index) => (
+                                {HeadersRepartition.map((th, index) => (
                                     <StyledTableCell key={index}>{th}</StyledTableCell>
                                 ))}
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {niveau.length > 0 && niveau.map(niveau => (
-                                <StyledTableRow key={niveau.idNiveau}>
+                            {repartitions.length > 0 && repartitions.map(repartition => (
+                                <StyledTableRow key={repartition.idRepartition}>
                                     <StyledTableCell component="th" scope="row">
-                                        {niveau.idNiveau}
+                                        {repartition.idRepartition}
                                     </StyledTableCell>
-                                    <StyledTableCell align="left">{niveau.libelleNiveau}</StyledTableCell>
+                                    <StyledTableCell align="left">{repartition.descriptionRepartition}</StyledTableCell>
                                 </StyledTableRow>
                             ))}
                         </TableBody>
                     </Table>
                 </TableContainer>
                 )}
-            </div>
+            </div> */}
         </div>
     );
 }
 
-export default DetailsCycle;
+export default DetailsNiveau;

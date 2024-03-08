@@ -4,23 +4,31 @@ import Typography from '@mui/material/Typography';
 import { Box, Divider, Stack, TextField, Grid, Button} from '@mui/material';
 import { MAQUETTE_URL } from '../../../Server_URL/Urls';
 import { useNavigate } from 'react-router-dom';
+import EditIcon from '@mui/icons-material/Edit';
+import IconButton from '@mui/material/IconButton';
 
-function Modifier_Cycle ({ cycle, open, onClose }) {
+function Modifier_Niveau ({ niveau, open, onClose }) {
     const navigate = useNavigate();
-    const [libelleCycle, setLibelleCycle] = React.useState(cycle.libelleCycle);
-    const [descriptionCycle, setDescriptionCycle] = React.useState(cycle.descriptionCycle);
-    const [dateCreationCycle, setDateCreationCycle] = React.useState(cycle.dateCreationCycle);
-    const [libelleError, setLibelleError] = React.useState(false);
+
+    const initialNiveau = {
+        libelleNiveau: '',
+        descriptionNiveau: ''
+    };
+
+
+    const [data, setData] = React.useState(niveau);
+
+    const handleChange = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const { id, value } = e.target;
+        setData({...data, [id]: value });
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const data = { libelleCycle, descriptionCycle, dateCreationCycle };
-        if (libelleCycle !== 'Licence' && libelleCycle !== 'Master' && libelleCycle !== 'Doctorat') {
-            setLibelleError(true);
-            return;
-        }
 
-        fetch(`${MAQUETTE_URL}cycle/${cycle.idCycle}`, {
+        fetch(`${MAQUETTE_URL}niveau/${niveau.idNiveau}`, {
             method : 'PUT',
             headers : {'Content-Type' : 'application/json'},
             body : JSON.stringify(data)
@@ -32,18 +40,20 @@ function Modifier_Cycle ({ cycle, open, onClose }) {
             return response.json()
         })
         .then(data => {
-            console.log('Cycle modifiée avec succès', data);
+            console.log('EC modifiée avec succès', data);
+            setData(initialNiveau);
             onClose();
-            navigate('/listes-cycle', { replace: true });
+            navigate('/listes-niveau', { replace: true });
             window.location.reload();
         })
         .catch(err => {
-            console.error("Une erreur s'est produite lors de la modification de la Cycle :", err);
+            console.error("Une erreur s'est produite lors de la modification de l'EC :", err);
         });
     }
 
     return (
         <React.Fragment>
+           
             <Modal
                 aria-labelledby="modal-title"
                 aria-describedby="modal-desc"
@@ -60,7 +70,7 @@ function Modifier_Cycle ({ cycle, open, onClose }) {
             >
                 <Box sx={{ backgroundColor: 'white', p: 2, width: 800 , borderRadius:"10px"}}>
                     <Typography variant="h5" align="center" fontWeight='bold' fontSize='2rem' >
-                        Cycle 
+                        Niveau
                     </Typography>
                     <Typography variant='body1' align='center' fontSize='1.2rem'> Veuillez remplir les champs ci-dessous...</Typography>
                     <Divider />
@@ -68,30 +78,24 @@ function Modifier_Cycle ({ cycle, open, onClose }) {
                     <Grid container spacing={2}>
                             <Grid item xs={6}>
                                 <TextField
-                                    id="libelleCycle"
-                                    label="Libelle de l'cycle"
+                                    id="libelleNiveau"
+                                    label="Libelle de l'niveau"
                                     required
                                     fullWidth
-                                    value={libelleCycle}
-                                    onChange={(e) => {
-                                        setLibelleCycle(e.target.value);
-                                        setLibelleError(false);
-                                    }}
-                                    error={libelleError}
-                                    helperText={libelleError ? 'Veuillez entrer une valeur valide (Licence, Master, Doctorat)' : ''}
+                                    value={data.libelleNiveau}
+                                    onChange={handleChange}
                                 />
                             </Grid>
-
                             <Grid item xs={12}>
                                 <TextField
-                                    id="descriptionCycle"
-                                    label="description de la cycle"
+                                    id="descriptionNiveau"
+                                    label="description de l'niveau"
                                     variant="filled"
                                     fullWidth
                                     multiline
                                     rows={3}
-                                    value={descriptionCycle}
-                                    onChange={(e) => setDescriptionCycle(e.target.value)}
+                                    value={data.descriptionNiveau}
+                                    onChange={handleChange}
                                 />
                             </Grid>
                         </Grid>
@@ -131,4 +135,4 @@ function Modifier_Cycle ({ cycle, open, onClose }) {
     );
 }
 
-export default Modifier_Cycle;
+export default Modifier_Niveau;

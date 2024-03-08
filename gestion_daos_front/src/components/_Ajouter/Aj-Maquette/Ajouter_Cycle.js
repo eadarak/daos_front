@@ -2,53 +2,57 @@ import * as React from 'react';
 import Modal from '@mui/joy/Modal';
 import Typography from '@mui/material/Typography';
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
-import { Box, Divider, Stack, TextField, Grid, Button} from '@mui/material';
+import { Box, Divider, Stack, TextField, Grid, Button } from '@mui/material';
 import { MAQUETTE_URL } from '../../../Server_URL/Urls';
-import {useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-export default function Ajouter_Cycle () {
+export default function Ajouter_Cycle() {
     const [open, setOpen] = React.useState(false);
-    const navigate = useNavigate()
+    const [libelleCycle, setLibelleCycle] = React.useState('');
+    const [descriptionCycle, setDescriptionCycle] = React.useState('');
+    const [libelleError, setLibelleError] = React.useState(false);
+    const navigate = useNavigate();
 
-    const initialCycle = {
-        libelleCycle: '',
-        descriptionCycle: ''
-    };
-
-    const [data, setFormData] = React.useState(initialCycle);
-
-    const handleChange = (e) =>{
-        const { id, value } = e.target;
-        setFormData({...data, [id] : value })
-    }
-
-
-    const handleSubmit = (e) =>{
+    const handleSubmit = (e) => {
         e.preventDefault();
+        const data = { libelleCycle, descriptionCycle };
+        if (libelleCycle !== 'Licence' && libelleCycle !== 'Master' && libelleCycle !== 'Doctorat') {
+            setLibelleError(true);
+            return;
+        }
 
         fetch(`${MAQUETTE_URL}cycle`, {
-            method : 'POST',
-            headers : {'Content-Type' : 'application/json'},
-            body : JSON.stringify(data)
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
         })
-        .then(response => {
-            if(!response.ok){
-                throw new Error('Erreur lors de la requête vers l\'API');
-            }
-            return response.json()
-        })
-        .then(
-            data => {
-                console.log('Une nouvelle cycle a été ajoutée avec succès' ,data);
-                setFormData(initialCycle);
-                setOpen(false);
-                navigate('/listes-cycle');
-                window.location.reload();
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erreur lors de la requête vers l\'API');
+                }
+                return response.json()
             })
-        .catch( err => {
-            console.error("Une erreur s'est produite lors de l'opération d'ajout :", err);
-        })
+            .then(
+                data => {
+                    console.log('Une nouvelle cycle a été ajoutée avec succès', data);
+                    setLibelleCycle('');
+                    setDescriptionCycle('');
+                    setOpen(false);
+                    navigate('/listes-cycle');
+                    window.location.reload();
+                })
+            .catch(err => {
+                console.error("Une erreur s'est produite lors de l'opération d'ajout :", err);
+            })
     }
+
+    const handleClose = () => {
+        setOpen(false);
+        setLibelleCycle('');
+        setDescriptionCycle('');
+        setLibelleError(false);
+    };
+
 
     return (
         <React.Fragment>
@@ -57,16 +61,17 @@ export default function Ajouter_Cycle () {
                 aria-labelledby="modal-title"
                 aria-describedby="modal-desc"
                 open={open}
-                onClose={() => setOpen(false)}
-                sx={{ display: 'flex',
+                onClose={handleClose}
+                sx={{
+                    display: 'flex',
                     justifyContent: 'center',
-                    alignItems: 'center', 
-                    fontFamily:'Poppins',  
+                    alignItems: 'center',
+                    fontFamily: 'Poppins',
                     backdropFilter: 'saturate(100%) blur(2px)',
-                 }}
+                }}
                 className='Modal'
             >
-                <Box sx={{ backgroundColor: 'white', p: 2, width: 800 , borderRadius:"10px"}}>
+                <Box sx={{ backgroundColor: 'white', p: 2, width: 800, borderRadius: "10px" }}>
                     <Typography variant="h5" align="center" fontWeight='bold' fontSize='2rem' >
                         Cycle
                     </Typography>
@@ -74,52 +79,57 @@ export default function Ajouter_Cycle () {
                     <Divider />
                     <Stack spacing={2} direction="column" sx={{ width: '95%' }}>
                         <Grid container spacing={2}>
-                            <Grid item xs={6}>
+                            <Grid item xs={12}>
                                 <TextField
                                     id="libelleCycle"
-                                    label="Libelle de l'cycle"
-                                    required
+                                    label="Libelle de la cycle"
+                                    variant="filled"
                                     fullWidth
-                                    value={data.libelleCycle}
-                                    onChange={handleChange}
+                                    value={libelleCycle}
+                                    onChange={(e) => {
+                                        setLibelleCycle(e.target.value);
+                                        setLibelleError(false);
+                                    }}
+                                    error={libelleError}
+                                    helperText={libelleError ? 'Veuillez entrer une valeur valide (Licence, Master, Doctorat)' : ''}
                                 />
                             </Grid>
-
                             <Grid item xs={12}>
                                 <TextField
                                     id="descriptionCycle"
-                                    label="description de l'cycle"
+                                    label="Description de la cycle"
                                     variant="filled"
                                     fullWidth
                                     multiline
                                     rows={3}
-                                    value={data.descriptionCycle}
-                                    onChange={handleChange}
+                                    value={descriptionCycle}
+                                    onChange={(e) => setDescriptionCycle(e.target.value)}
                                 />
                             </Grid>
                         </Grid>
                     </Stack>
                     <Box sx={{ mt: 2, display: 'flex', justifyContent: 'space-around' }}>
-                        <Button 
-                            onClick={() => setOpen(false)} 
+                        <Button
+                            onClick={handleClose}
                             sx={{
-                            background: '#7d7d7d',
-                            color:'white', 
-                            '&:hover': { backgroundColor: '#000',color:'white' },
-                            fontWeight:"600",
-                            fontFamily:"Poppins"
-                        }}>
+                                background: '#7d7d7d',
+                                color: 'white',
+                                '&:hover': { backgroundColor: '#000', color: 'white' },
+                                fontWeight: "600",
+                                fontFamily: "Poppins"
+                            }}>
                             Annuler
                         </Button>
 
                         <Button
-                            variant="contained"  
-                            sx={{ background: ' rgb(9, 44, 38)' , 
-                            '&:hover': { backgroundColor: 'rgb(17, 77, 67)' },
-                            fontWeight:"600",
-                            fontFamily:"Poppins"
-                            }} 
-                            className='validButton' 
+                            variant="contained"
+                            sx={{
+                                background: ' rgb(9, 44, 38)',
+                                '&:hover': { backgroundColor: 'rgb(17, 77, 67)' },
+                                fontWeight: "600",
+                                fontFamily: "Poppins"
+                            }}
+                            className='validButton'
                             id='validButton'
                             onClick={handleSubmit}
                         >
@@ -131,5 +141,3 @@ export default function Ajouter_Cycle () {
         </React.Fragment>
     );
 }
-
-

@@ -25,6 +25,7 @@ import ListeClasse from './components/_Listes/Maquette/ListeClasse';
 import ListeGroupe from './components/_Listes/Maquette/ListeGroupe';
 import ListeEnseignement from './components/_Listes/Maquette/ListeEnseignement';
 import ListeCycle from './components/_Listes/Maquette/ListeCycle';
+import ListeNiveau from './components/_Listes/Maquette/ListeNiveau';
 
 
 
@@ -121,6 +122,10 @@ const router = createBrowserRouter([
   {
     path : '/listes-cycle',
     element: <Layout> <ListeCycle/> </Layout>
+  },
+  {
+    path : '/listes-niveau',
+    element: <Layout> <ListeNiveau/> </Layout>
   },
 
 ]);
