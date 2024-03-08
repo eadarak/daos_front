@@ -14,7 +14,7 @@ import ListeVAC from './components/_Listes/Repartition/ListeVAC';
 import ListeAllEnseignant from './components/_Listes/Repartition/ListeAllEnseignant';
 import ListeBatiment from './components/_Listes/Emploi/ListeBatiment';
 import ListeDeroulement from './components/_Listes/Emploi/ListeDeroulement';
-// import ListeSalle from './components/_Listes/Emploi/ListeSalle';
+import ListeSalle from './components/_Listes/Emploi/ListeSalle';
 import ListeSeance from './components/_Listes/Emploi/ListeSeance';
 import ListeRepartition from './components/_Listes/Repartition/ListeRepartition';
 import DetailsBatiment from './components/_Details/Emploi/DetailsBatiment';
@@ -24,6 +24,9 @@ import ListeModules from './components/_Listes/Maquette/ListeModule';
 import ListeClasse from './components/_Listes/Maquette/ListeClasse';
 import ListeGroupe from './components/_Listes/Maquette/ListeGroupe';
 import ListeEnseignement from './components/_Listes/Maquette/ListeEnseignement';
+import ListeCycle from './components/_Listes/Maquette/ListeCycle';
+import ListeNiveau from './components/_Listes/Maquette/ListeNiveau';
+
 
 
 const router = createBrowserRouter([
@@ -75,10 +78,10 @@ const router = createBrowserRouter([
     path : '/listeEmploiDuTemps',
     element : <Layout> <ListeAllEnseignant/> </Layout>
   },
-  // {
-  //   path : '/listeSalle',
-  //   element : <Layout> <ListeSalle/> </Layout>
-  // },
+  {
+      path : '/listeSalle',
+     element : <Layout> <ListeSalle/> </Layout>
+  },
   {
     path : '/listeSeance',
     element : <Layout> <ListeSeance/> </Layout>
@@ -115,6 +118,14 @@ const router = createBrowserRouter([
   {
     path : '/listes-enseignement',
     element: <Layout> <ListeEnseignement/> </Layout>
+  },
+  {
+    path : '/listes-cycle',
+    element: <Layout> <ListeCycle/> </Layout>
+  },
+  {
+    path : '/listes-niveau',
+    element: <Layout> <ListeNiveau/> </Layout>
   },
 
 ]);

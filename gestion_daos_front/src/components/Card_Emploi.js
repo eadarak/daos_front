@@ -6,6 +6,7 @@ import Deroulement from './_Emploi/Deroulement';
 import Salle from './_Emploi/Salle';
 import Seance from './_Emploi/Seance';
 import { Grid } from '@mui/material';
+import Emploi from '../pages/Emploi';
 
 function Card_Emploi(props) {
     const [modalOpen, setModalOpen] = useState(false);
