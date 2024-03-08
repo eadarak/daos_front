@@ -5,26 +5,25 @@ import VAC from './_Repartition/VAC';
 import '../styles/general.css'
 import AllEnseignant from './_Repartition/AllEnseignant';
 import Repartition from './_Repartition/Repartition';
+import { Grid } from '@mui/material';
 
 function Card_Maquette(props) {
-    const [modalOpen, setModalOpen] = useState(false);
-      
-    const toggleModal = () => {
-          setModalOpen(!modalOpen);
-    };
     return (
-        <div className='container'>
-           <PER/> 
-           &nbsp;
-           &nbsp;
-           <VAC/>
-           &nbsp;
-           &nbsp;
-           <AllEnseignant/>
-           &nbsp;
-           &nbsp;
-           <Repartition/>
-        </div>
+
+        <Grid container spacing={3}>
+          <Grid item xs={12} md={6}>
+            <PER/> 
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <VAC/>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <AllEnseignant/> 
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Repartition/> 
+          </Grid>
+      </Grid>
 
     );
 }

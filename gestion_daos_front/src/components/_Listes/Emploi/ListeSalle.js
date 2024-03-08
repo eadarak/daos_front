@@ -22,8 +22,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import axios from 'axios';
 import EditIcon from '@mui/icons-material/Edit';
 import { EMPLOI_URL } from '../../../Server_URL/Urls';
-import Modifier_Seance from '../../_Modifier/Emploi/Modifier_Seance';
-import Details_Seance from '../../_Details/Emploi/DetailsSeance';
+import Modifier_Salle from '../../_Modifier/Emploi/Modifier_Salle';
+import Details_Salle from '../../_Details/Emploi/DetailsSalle';
 
 const rows = []
 
@@ -56,12 +56,11 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-  { id: 'idSeance', numeric: false, disablePadding: false, label: 'Identifiant'},
-  { id: 'jourSeance', numeric: false, disablePadding: false, label: 'Jour'},
-  { id: 'dureeSeance', numeric: false, disablePadding: false, label: 'Durée' },
-  { id: 'debutSeance', numeric: false, disablePadding: false, label: 'Heure de Début' },
-  { id: 'finSeance', numeric: false, disablePadding: false, label: 'Heure de Fin' },
-  { id: 'numeroSeance', numeric: false, disablePadding: false, label: 'Numéro de Séance' },
+  { id: 'idSalle', numeric: false, disablePadding: false, label: 'Identifiant'},
+  { id: 'libelleSalle', numeric: false, disablePadding: false, label: 'Libellé' },
+  { id: 'codeSalle', numeric: false, disablePadding: false, label: 'Code'},
+  { id: 'capaciteSalle', numeric: false, disablePadding: false, label: 'Capacité' },
+  { id: 'dateCreationSalle', numeric: false, disablePadding: false, label: 'Date de Création' },
   { id: 'Operations', numeric: false, disablePadding: false, label: 'Opérations' },
   { id: 'Details', numeric: false, disablePadding: false, label: 'Détails' },
 ];
@@ -75,17 +74,6 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{
-              'aria-label': 'select all desserts',
-            }}
-          />
-        </TableCell>
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
@@ -152,9 +140,15 @@ function EnhancedTableToolbar(props) {
           id="tableTitle"
           component="div"
         >
-          Liste des Séances
+          Liste des Salles
         </Typography>
       )}
+        
+          {/* <IconButton>
+            <Ajouter_Salle/>
+          </IconButton> */}
+        
+     
     </Toolbar>
   );
 }
@@ -163,19 +157,20 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function ListeSeance() {
+export default function ListeSalle() {
   const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('idSeance');
+  const [orderBy, setOrderBy] = React.useState('idSalle');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [data, setData] = React.useState([]);
-  const [selectedSeance, setSelectedSeance] = React.useState(null);
-  const [selectedUpdateSeance, setSelectedUpdateSeance] = React.useState(null);
+  const [selectedSalle, setSelectedSalleDelete] = React.useState(null);
+  const [selectedUpdateSalle, setSelectedUpdateSalle] = React.useState(null);
+
 
   React.useEffect(() => {
-    axios.get(`${EMPLOI_URL}/seance`)
+    axios.get(`${EMPLOI_URL}/salle`)
       .then(res => {
         console.log("Les données récupérées depuis la base de données :\n", res.data)
         setData(res.data)
@@ -183,40 +178,44 @@ export default function ListeSeance() {
       .catch(err => console.log(err));
   },[]);
 
-  const handleSeanceClick = (seance) => {
-    setSelectedSeance(seance);
+  const handleSalleClickDelete = (salle) => {
+    setSelectedSalleDelete(salle);
   };
 
-  const handleEditClick = (seance) => {
-    setSelectedUpdateSeance(seance);
+  const handleEditClick = (salle) => {
+    setSelectedUpdateSalle(salle);
   };
 
-  const handleSeanceDelete = (e, id) => { 
+  const handleSalleDelete = (e, id) => { 
+    
     e.stopPropagation();
-    const confirmation = window.confirm(`Êtes-vous sûr de vouloir supprimer cette séance ${id} ?`);
+    const confirmation = window.confirm(`Êtes-vous sûr de vouloir supprimer cette salle ${id} ?`);
 
     if(confirmation){
-      axios.delete(`${EMPLOI_URL}/seance/${id}`)
+
+      axios.delete(`${EMPLOI_URL}/salle/${id}`)
       .then( response => {
-        console.log("Séance supprimée avec succès :", id);
-        setData(data.filter(seance => seance.idSeance !== id))
+        console.log("Salle supprimée avec succès :", id);
+        setData(data.filter(salle => salle.idSalle !== id))
       })
       .catch( err => {
-        throw new Error("Erreur lors de la suppression de la séance :", err)
+        throw new Error("Erreur lors de la suppression de la salle :", err)
       });
     }
     else{
-      window.alert(`Suppression de la séance ${id} annulée`);
+      window.alert(`Suppression de la salle ${id} annulée`);
     }
+
   }
 
-  if (selectedSeance) {
-    return <Details_Seance seance={selectedSeance}/>
+  if (selectedSalle) {
+   return <Details_Salle salle={selectedSalle}/>
   }
 
-  if(selectedUpdateSeance){
-    return <Modifier_Seance seance={selectedUpdateSeance} open={true} onClose={() => setSelectedUpdateSeance(null)} />;
+  if(selectedUpdateSalle){
+    return <Modifier_Salle salle={selectedUpdateSalle} open={true} onClose={() => setSelectedUpdateSalle(null)} />;
   }
+
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -270,6 +269,8 @@ export default function ListeSeance() {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
 
+    
+
   return (
     <div>
       <Button
@@ -277,7 +278,6 @@ export default function ListeSeance() {
         style={{ color: "white", borderRadius: "5px", background: "rgb(9, 44, 38)" }}
       > ⬅
       </Button>
-
       <Box sx={{ width: '100%', paddingTop: "10px" }}>
         <Paper sx={{ width: '100%', mb: 2 }}>
           <EnhancedTableToolbar numSelected={selected.length} />
@@ -299,17 +299,17 @@ export default function ListeSeance() {
                 {stableSort(data, getComparator(order, orderBy))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => {
-                    const isItemSelected = isSelected(row.idSeance);
+                    const isItemSelected = isSelected(row.idSalle);
                     const labelId = `enhanced-table-checkbox-${index}`;
 
                     return (
                       <TableRow
                         hover
-                        onClick={(event) => handleClick(event, row.idSeance)}
+                        onClick={(event) => handleClick(event, row.idSalle)}
                         role="checkbox"
                         aria-checked={isItemSelected}
                         tabIndex={-1}
-                        key={row.idSeance}
+                        key={row.idSalle}
                         selected={isItemSelected}
                         sx={{ cursor: 'pointer' }}
                       >
@@ -319,35 +319,36 @@ export default function ListeSeance() {
                           scope="row"
                           padding="normal"
                         >
-                          {row.idSeance}
+                          {row.idSalle}
                         </TableCell>
-                        <TableCell align="left">{row.jourSeance}</TableCell>
-                        <TableCell align="left">{row.dureeSeance}</TableCell>
-                        <TableCell align="left">{row.debutSeance}</TableCell>
-                        <TableCell align="left">{row.finSeance}</TableCell>
-                        <TableCell align="left">{row.numeroSeance}</TableCell>
+                        <TableCell align="left">{row.libelleSalle}</TableCell>
+                        <TableCell align="left">{row.codeSalle}</TableCell>
+                        <TableCell align="left">{row.capaciteSalle}</TableCell>
+                        <TableCell align="left">{row.dateCreationSalle}</TableCell>
                         <TableCell > 
-                          <IconButton aria-label="edit" onClick={() => handleEditClick(row)}>
-                            <EditIcon  color='success'/>
-                          </IconButton>
-                          &nbsp; &nbsp;
-                          <IconButton aria-label="delete" onClick={(event) => handleSeanceDelete(event, row.idSeance)}>
-                            <DeleteIcon sx={{color:"#cd0000"}}/>
-                          </IconButton>
-                        </TableCell>
-                        <TableCell> 
-                          <Button 
-                            sx={{
-                              borderRadius: "30px solid",
-                              color: "white",
-                              fontWeight: "600",
-                              background: "rgb(9, 44, 38)",
-                              textTransform: "capitalize"
-                            }}
-                            onClick={() => handleSeanceClick(row)}
-                          >
-                            Détails
-                          </Button> 
+                        <IconButton aria-label="edit" onClick={() => handleEditClick(row)}>
+                          <EditIcon  color='success'/>
+                        </IconButton>
+                            &nbsp; &nbsp;
+
+                            <IconButton aria-label="delete" onClick={(event) => handleSalleDelete(event, row.idSalle)}>
+                                <DeleteIcon sx={{color:"#cd0000"}}/>
+                            </IconButton>
+                         </TableCell>
+                         <TableCell> 
+                          
+                            <Button 
+                              sx={{
+                                borderRadius: "30px solid",
+                                color: "white",
+                                fontWeight: "600",
+                                background: "rgb(9, 44, 38)",
+                                textTransform: "capitalize"
+                              }}
+                              onClick={() => handleSalleClickDelete(row)}
+                            >
+                              Détails
+                            </Button> 
                         </TableCell>
                       </TableRow>
                     );

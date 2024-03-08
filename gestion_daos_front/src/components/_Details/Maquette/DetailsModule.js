@@ -10,11 +10,9 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import axios from 'axios';
 import '../../../styles/general.css';
-import { EMPLOI_URL } from '../../../Server_URL/Urls';
-import Ajouter_Salle_Batiment from './_Ajouter/Ajouter_Salle_Batiment';
-
-
-
+import { MAQUETTE_URL } from '../../../Server_URL/Urls';
+import Ajouter_Module_EC from './_Ajouter/Ajouter_Module_EC';
+import Ajouter_Enseignement_Module from './_Ajouter/Ajouter_Enseignement_Module';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -36,79 +34,81 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-const HeadersSalle = ['Identifiant', 'Libelle', 'Code', 'Capacite'];
+const HeadersEnseignement = ['Identifiant', 'Libelle', 'Objectifs'];
 
-function DetailsBatiment ({ batiment }) {
-    const [salles, setSalle] = useState([]);
-    const [showSalleTable, setShowSalleTable] = useState(false);
+function DetailsModule({ module }) {
+    const [enseignements, setEnseignements] = useState([]);
+    const [ShowEnseignementTable, setShowEnseignementTable] = useState(false);
 
     useEffect(() => {
-        axios.get(`${EMPLOI_URL}/batiment/${batiment.idBatiment}/salles`)
+        axios.get(`${MAQUETTE_URL}module/${module.idModule}/enseignements`)
           .then(res => {
-            console.log("Les données récupérées depuis la base de données : \n ",res.data);
-           setSalle(res.data);
+            console.log("les données récupérées depuis la base de données : \n ",res.data);
+            setEnseignements(res.data);
           })
           .catch(err => console.log(err));
     }, []);
 
-    const toggleSalleTable = () => {
-        setShowSalleTable(!showSalleTable);
+  
+
+    const toggleModuleTable = () => {
+        setShowEnseignementTable(!ShowEnseignementTable);
     };
     return (
         <div>
-            <h2 id='title'>{batiment.libelleBatiment}</h2>
+            <h2 id='title'>{module.libelleModule}</h2>
             <div id='BlockBtn'>
-                <Ajouter_Salle_Batiment batiment={batiment} />
+                <Ajouter_Enseignement_Module module={module}/>
             </div>
-            
             <div id='Block2'>
                 <Card id='MyCard1'>
-                    <p><b>Description :</b> <br/>
-                        {batiment.descriptionBatiment}
+                    <p><b>Description :</b> <br />
+                        {module.descriptionModule}
                     </p>
                 </Card>
                 <Card id='MyCard2'>
-                    <p><b>Code :</b> {batiment.codeBatiment} </p>
-                    <p><b>Position :</b> {batiment.positionBatiment} </p>
+                    <p><b>Libelle :</b> {module.libelleModule} </p>
+                    <p><b>Cours :</b> {module.coursModule} </p>
+                    <p><b>Duree :</b> {module.dureeModule} </p>
+                    <p><b>Coefficient :</b> {module.coefficientModule} </p>
                 </Card>
             </div>
             <div id='Block3'>
                 <h3 id='title'>
                     <span id='separator1'></span>
                     &nbsp;
-                    <Button onClick={toggleSalleTable}>
-                        {showSalleTable ? 'Cacher la liste des Salle' : 'Afficher la liste des Salles'}
+                    <Button onClick={toggleModuleTable}>
+                        {ShowEnseignementTable ? 'Cacher la liste des Enseignements' : 'Afficher la liste des Enseignements'}
                     </Button>
                 </h3>
                 <br/>
-                {showSalleTable && (  
-                <TableContainer component={Paper} style={{ width: "70rem", margin: "auto", marginBottom: "1.5rem" }}>
+                {ShowEnseignementTable && ( 
+                <TableContainer component={Paper} style={{ width: "70rem", margin: "auto" }}>
                     <Table aria-label="customized table">
                         <TableHead>
                             <TableRow>
-                                {HeadersSalle.map((th, index) => (
+                                {HeadersEnseignement.map((th, index) => (
                                     <StyledTableCell key={index}>{th}</StyledTableCell>
                                 ))}
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {salles.length > 0 && salles.map(salle => (
-                                <StyledTableRow key={salle.idSalle}>
+                            {enseignements.length > 0 && enseignements.map(enseignement => (
+                                <StyledTableRow key={enseignement.idEnseignement}>
                                     <StyledTableCell component="th" scope="row">
-                                        {salle.idSalle}
+                                        {enseignement.idEnseignement}
                                     </StyledTableCell>
-                                    <StyledTableCell align="left">{salle.libelleSalle}</StyledTableCell>
-                                    <StyledTableCell align="left">{salle.codeSalle}</StyledTableCell>
-                                    <StyledTableCell align="left">{salle.capaciteSalle}</StyledTableCell>
+                                    <StyledTableCell align="left">{enseignement.libelleEnseignement}</StyledTableCell>
+                                    <StyledTableCell align="left">{enseignement.objectifsEnseignement}</StyledTableCell>
                                 </StyledTableRow>
                             ))}
-                        </TableBody>    
+                        </TableBody>
                     </Table>
                 </TableContainer>
                 )}
             </div>
         </div>
-    );
+    )
 }
 
-export default DetailsBatiment;
+export default DetailsModule;

@@ -5,6 +5,7 @@ import Batiment from './_Emploi/Batiment';
 import Deroulement from './_Emploi/Deroulement';
 import Salle from './_Emploi/Salle';
 import Seance from './_Emploi/Seance';
+import { Grid } from '@mui/material';
 
 function Card_Emploi(props) {
     const [modalOpen, setModalOpen] = useState(false);
@@ -13,20 +14,20 @@ function Card_Emploi(props) {
           setModalOpen(!modalOpen);
     };
     return (
-        <div className='container'>
-          <Batiment/>
-           &nbsp;
-           &nbsp;
-           <Deroulement/>
-           &nbsp;
-           &nbsp;
-           <Salle/>
-           &nbsp;
-           &nbsp;
-           <Seance/>
-          
-           
-        </div>
+        <Grid container spacing={3}>
+            <Grid item xs={12} md={6}>
+                <Batiment/>
+            </Grid>
+            <Grid item xs={12} md={6}>
+                <Salle/>
+            </Grid>
+            <Grid item xs={12} md={6}>
+                <Deroulement />
+            </Grid>
+            <Grid item xs={12} md={6}>
+                <Deroulement/>
+            </Grid>
+        </Grid>
 
     );
 }
