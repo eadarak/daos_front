@@ -23,8 +23,8 @@ function Ajouter_Module_EC({ ec }) {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (selectedModule !== null) {
-            fetch(`${MAQUETTE_URL}ec/${ec.idEC}/modules`, {
-                method: 'POST',
+            fetch(`${MAQUETTE_URL}ec/${ec.idEC}/modules/${selectedModule.idModule}`, {
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
                 },

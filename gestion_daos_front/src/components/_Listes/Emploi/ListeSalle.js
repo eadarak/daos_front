@@ -24,8 +24,10 @@ import EditIcon from '@mui/icons-material/Edit';
 import { EMPLOI_URL } from '../../../Server_URL/Urls';
 import Ajouter_Salle from '../../_Ajouter/Aj-Emploi/Ajouter_Salle';
 import DetailsSalle from '../../_Details/Emploi/DetailsSalle';
+import Modifier_Salle from '../../_Modifier/Emploi/Modifier_Salle';
+import Details_Salle from '../../_Details/Emploi/DetailsSalle';
 
-const rows = [];
+const rows = []
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -91,7 +93,7 @@ function EnhancedTableHead(props) {
               {headCell.label}
               {orderBy === headCell.id ? (
                 <Box component="span" sx={visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                  {order === 'desc' ? 'trié par ordre décroissant' : 'trié par ordre croissant'}
                 </Box>
               ) : null}
             </TableSortLabel>
@@ -132,7 +134,7 @@ function EnhancedTableToolbar(props) {
           variant="subtitle1"
           component="div"
         >
-          {numSelected} selected
+          {numSelected} sélectionné(s)
         </Typography>
       ) : (
         <Typography
@@ -145,10 +147,10 @@ function EnhancedTableToolbar(props) {
         </Typography>
       )}
         
+
           <IconButton>
             <Ajouter_Salle/>
-          </IconButton>
-        
+          </IconButton>      
      
     </Toolbar>
   );
@@ -161,6 +163,7 @@ EnhancedTableToolbar.propTypes = {
 export default function ListeSalle() {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('idBatiment');
+  const [orderBy, setOrderBy] = React.useState('idSalle');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
@@ -168,12 +171,16 @@ export default function ListeSalle() {
   const [data, setData] = React.useState([]);
   const [selectedSalle, setSelectedSalle] = React.useState(null);
   const [selectedUpdateBatiment, setSelectedUpdateBatiment] = React.useState(null);
+  const [selectedSalle, setSelectedSalleDelete] = React.useState(null);
+  const [selectedUpdateSalle, setSelectedUpdateSalle] = React.useState(null);
+
 
 
   React.useEffect(() => {
     axios.get(`${EMPLOI_URL}/salle`)
       .then(res => {
         console.log("les données recupérées depuis la db : \n ",res.data)
+        console.log("Les données récupérées depuis la base de données :\n", res.data)
         setData(res.data)
       })
       .catch(err => console.log(err));
@@ -191,6 +198,18 @@ export default function ListeSalle() {
     
     e.stopPropagation();
     const confirmation = window.confirm(`Êtes-vous sûr de vouloir supprimer cette salle  ${id} ?`);
+  const handleSalleClickDelete = (salle) => {
+    setSelectedSalleDelete(salle);
+  };
+
+  const handleEditClick = (salle) => {
+    setSelectedUpdateSalle(salle);
+  };
+
+  const handleSalleDelete = (e, id) => { 
+    
+    e.stopPropagation();
+    const confirmation = window.confirm(`Êtes-vous sûr de vouloir supprimer cette salle ${id} ?`);
 
     if(confirmation){
 
@@ -205,8 +224,16 @@ export default function ListeSalle() {
     }
     else{
       window.alert(`Suppression de la Salle ${id} annulée`);
+        console.log("Salle supprimée avec succès :", id);
+        setData(data.filter(salle => salle.idSalle !== id))
+      })
+      .catch( err => {
+        throw new Error("Erreur lors de la suppression de la salle :", err)
+      });
     }
-
+    else{
+      window.alert(`Suppression de la salle ${id} annulée`);
+    }
   }
 
   if (selectedSalle) {
@@ -216,7 +243,12 @@ export default function ListeSalle() {
   // if(selectedUpdateBatiment){
   //   return <Modifier_Salle salle={selectedSalle} open={true} onClose={() => setSelectedSalle(null)} />;
   // }
+   return <Details_Salle salle={selectedSalle}/>
+  }
 
+  if(selectedUpdateSalle){
+    return <Modifier_Salle salle={selectedUpdateSalle} open={true} onClose={() => setSelectedUpdateSalle(null)} />;
+  }
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -274,7 +306,7 @@ export default function ListeSalle() {
 
   return (
     <div>
-      <br/> &nbsp;
+     <br/> &nbsp;
       <Button 
         href="/emploi" 
         style={{ color: "white", borderRadius: "5px", background: "rgb(9, 44, 38)" }}
@@ -301,9 +333,11 @@ export default function ListeSalle() {
                 {stableSort(data, getComparator(order, orderBy))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => {
+
                    // const isItemSelected = isSelected(row.idBatiment);
                     
-
+                    const isItemSelected = isSelected(row.idSalle);
+                    const labelId = `enhanced-table-checkbox-${index}`;
                     return (
                       <TableRow
                         hover
@@ -313,6 +347,12 @@ export default function ListeSalle() {
                         tabIndex={-1}
                         key={row.idSalle}
                         //selected={isItemSelected}
+                        onClick={(event) => handleClick(event, row.idSalle)}
+                        role="checkbox"
+                        aria-checked={isItemSelected}
+                        tabIndex={-1}
+                        key={row.idSalle}
+                        selected={isItemSelected}
                         sx={{ cursor: 'pointer' }}
                       >
                         <TableCell
@@ -326,7 +366,6 @@ export default function ListeSalle() {
                         <TableCell align="left">{row.codeSalle}</TableCell>
                         <TableCell align="left">{row.capaciteSalle}</TableCell>
                         <TableCell align="left">{row.dateCreationSalle}</TableCell>
-
                         <TableCell > 
                         <IconButton aria-label="edit" onClick={() => handleEditClick(row)}>
                           <EditIcon  color='success'/>
@@ -334,7 +373,8 @@ export default function ListeSalle() {
                             &nbsp; &nbsp;
 
                             <IconButton aria-label="delete" onClick={(event) => handleBatimentDelete(event, row.idSalle)}>
-                                <DeleteIcon sx={{color:"#cd0000"}}/>
+                            <IconButton aria-label="delete" onClick={(event) => handleSalleDelete(event, row.idSalle)}>
+                            <DeleteIcon sx={{color:"#cd0000"}}/>
                             </IconButton>
                          </TableCell>
                          <TableCell> 
@@ -348,6 +388,7 @@ export default function ListeSalle() {
                                 textTransform: "capitalize"
                               }}
                               onClick={() => handleClickSalle(row)}
+                              onClick={() => handleSalleClickDelete(row)}
                             >
                               Détails
                             </Button> 
@@ -379,7 +420,7 @@ export default function ListeSalle() {
         </Paper>
         <FormControlLabel
           control={<Switch checked={dense} onChange={handleChangeDense} />}
-          label="Dense padding"
+          label="Padding dense"
         />
       </Box>
     </div>
