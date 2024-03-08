@@ -3,23 +3,23 @@ import Modal from '@mui/joy/Modal';
 import Typography from '@mui/material/Typography';
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import { Box, Divider, Stack, TextField, Grid, Button} from '@mui/material';
-import { EMPLOI_URL } from '../../../Server_URL/Urls';
+import { REPARTITION_URL } from '../../../Server_URL/Urls';
 import {useNavigate } from 'react-router-dom';
 
-
-function Ajouter_Batiment () {
+function Ajouter_VAC () {
     const [open, setOpen] = React.useState(false);
     const navigate = useNavigate()
 
-    const modelBatiment = {
-        idBatiment : 0,
-        libelleBatiment: '',
-        codeBatiment : '',
-        positionBatiment : '',
-        descriptionBatiment : ''
+    const modelVAC = {
+        idEns : 0,
+        nomEns: '',
+        prenomEns : '',
+        specialite : '',
+        gradeEns : ''
+       
     };
 
-    const [data, setFormData] = React.useState(modelBatiment);
+    const [data, setFormData] = React.useState(modelVAC);
 
     const handleChange = (e) =>{
         const { id, value } = e.target;
@@ -30,7 +30,7 @@ function Ajouter_Batiment () {
     const handleSubmit = (e) =>{
         e.preventDefault();
 
-        fetch(`${EMPLOI_URL}/batiment`, {
+        fetch(`${REPARTITION_URL}/vacataire`, {
             method : 'POST',
             headers : {'Content-Type' : 'application/json'},
             body : JSON.stringify(data)
@@ -43,19 +43,16 @@ function Ajouter_Batiment () {
         })
         .then(
             data => {
-                console.log('Un nouveau batiment a été ajouté avec succès' ,data);
-                setFormData(modelBatiment);
+                console.log('Un nouveau vacataire a ete ajoute avec succes' ,data);
+                setFormData(modelVAC);
                 setOpen(false);
-                navigate('/listeBatiment');
+                navigate('/listeVAC');
                 window.location.reload();
             })
         .catch( err => {
             throw new Error("Une erreur s'est produite lors de l'operation d'ajout")
         })
     }
-
-    
-
 
     return (
         <React.Fragment>
@@ -75,7 +72,7 @@ function Ajouter_Batiment () {
             >
                 <Box sx={{ backgroundColor: 'white', p: 2, width: 800 , borderRadius:"10px"}}>
                     <Typography variant="h5" align="center" fontWeight='bold' fontSize='2rem' >
-                        Nouveau Batiment
+                       Ajouter un Enseignant Vacataire
                     </Typography>
                     <Typography variant='body1' align='center' fontSize='1.2rem'> Veuillez remplir les champs ci-dessous...</Typography>
                     <Divider />
@@ -83,47 +80,45 @@ function Ajouter_Batiment () {
                         <Grid container spacing={2}>
                             <Grid item xs={6}>
                                 <TextField
-                                    id="libelleBatiment"
-                                    label="Libelle Batiment"
+                                    id="nomEns"
+                                    label="Nom Ens"
                                     required
                                     fullWidth
-                                    value={data.libelleBatiment}
+                                    value={data.nomEns}
                                     onChange={handleChange}
                                 />
                             </Grid>
                             <Grid item xs={6}>
                                 <TextField
-                                    id="codeBatiment"
-                                    label="Code Batiment"
+                                    id="prenomEns"
+                                    label="Prenom Ens "
                                     fullWidth
                                     required
-                                    value={data.codeBatiment}
+                                    value={data.prenomEns}
                                     onChange={handleChange}
                                 />
                             </Grid>
                             <Grid item xs={6}>
                                 <TextField
-                                    id="positionBatiment"
-                                    label="Position Batiment"
+                                    id="specialite"
+                                    label="Specialite VAC"
                                     fullWidth
                                     required
-                                    value={data.positionBatiment}
+                                    value={data.specialite}
+                                    onChange={handleChange}
+                                />
+                            </Grid>
+                            <Grid item xs={6}>
+                                <TextField
+                                    id="gradeEns"
+                                    label="Grade Ens"
+                                    fullWidth
+                                    required
+                                    value={data.gradeEns}
                                     onChange={handleChange}
                                 />
                             </Grid>
                            
-                            <Grid item xs={12}>
-                                <TextField
-                                    id="descriptionBatiment"
-                                    label="Description Batiment"
-                                    variant="filled"
-                                    fullWidth
-                                    multiline
-                                    rows={3}
-                                    value={data.descriptionBatiment}
-                                    onChange={handleChange}
-                                />
-                            </Grid>
                         </Grid>
                     </Stack>
                     <Box sx={{ mt: 2, display: 'flex', justifyContent: 'space-around' }}>
@@ -158,5 +153,4 @@ function Ajouter_Batiment () {
         </React.Fragment>
     );
 }
-
-export default Ajouter_Batiment;
+export default Ajouter_VAC;

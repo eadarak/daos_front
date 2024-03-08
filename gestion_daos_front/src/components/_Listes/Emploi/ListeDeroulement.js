@@ -13,16 +13,17 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
 import { visuallyHidden } from '@mui/utils';
-import { Button} from '@mui/material';
+import { Button } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 import axios from 'axios';
+import EditIcon from '@mui/icons-material/Edit';
+import { EMPLOI_URL } from '../../../Server_URL/Urls';
+import Ajouter_Deroulement from '../../_Ajouter/Aj-Emploi/Ajouter_Deroulement';
+import Modifier_Deroulement from '../../_Modifier/Emploi/Modifier_Deroulement';
 
 const rows = [];
 
@@ -54,22 +55,12 @@ function stableSort(array, comparator) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-/*const headCells = [
-  { id: 'idEns', numeric: false, disablePadding: false, label: 'IdEns', width: '10%' },
-  { id: 'matriculePer', numeric: false, disablePadding: false, label: 'MatriculePer', width: '15%' },
-  { id: 'nomEns', numeric: false, disablePadding: false, label: 'NomEns', width: '20%' },
-  { id: 'prenomEns', numeric: false, disablePadding: false, label: 'PrenomEns', width: '20%' },
-  { id: 'gradeEns', numeric: false, disablePadding: false, label: 'GradeEns', width: '15%' },
-  { id: 'dateCreationEns', numeric: false, disablePadding: false, label: 'Date Creation', width: '20%' },
-];*/
-
 const headCells = [
   { id: 'idDeroulement', numeric: false, disablePadding: false, label: 'Identifiant'},
-  { id: 'objectifsDeroulement', numeric: false, disablePadding: false, label: 'Objectif' },
-  { id: 'descriptionDeroulement', numeric: false, disablePadding: false, label: 'Description'},
-  { id: 'dateCreationDeroulement', numeric: false, disablePadding: false, label: 'Date Creation ' },
+  { id: 'objectifsDeroulement', numeric: false, disablePadding: false, label: 'Objectif Deroulement' },
+  { id: 'descriptionDeroulement', numeric: false, disablePadding: false, label: 'Description Deroulement'},
+  { id: 'dateCreationDeroulement', numeric: false, disablePadding: false, label: 'Date Creation Deroulement ' },
   { id: 'Operations', numeric: false, disablePadding: false, label: 'Operations' },
-  { id: 'Details', numeric: false, disablePadding: false, label: 'Details' },
 
 ];
 
@@ -82,17 +73,6 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{
-              'aria-label': 'select all desserts',
-            }}
-          />
-        </TableCell>
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
@@ -162,20 +142,12 @@ function EnhancedTableToolbar(props) {
           Liste des Deroulements
         </Typography>
       )}
-
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
+        
           <IconButton>
-            <DeleteIcon />
+            <Ajouter_Deroulement/>
           </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Ajouter Deroulement">
-          <IconButton>
-            <Button id='mybtnStyle'> + </Button>
-          </IconButton>
-        </Tooltip>
-      )}
+        
+     
     </Toolbar>
   );
 }
@@ -186,18 +158,60 @@ EnhancedTableToolbar.propTypes = {
 
 export default function ListeDeroulement() {
   const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('idEns');
+  const [orderBy, setOrderBy] = React.useState('idBatiment');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [data, setData] = React.useState([]);
+  const [selectDeroulement, setSelectDeroulement] = React.useState(null);
+  const [selectedUpdateBatiment, setSelectedUpdateBatiment] = React.useState(null);
+
 
   React.useEffect(() => {
-    axios.get('http://localhost:8084/emploi/deroulement')
-      .then(res => setData(res.data))
+    axios.get(`${EMPLOI_URL}/deroulement`)
+      .then(res => {
+        console.log("les données recupérées depuis la db : \n ",res.data)
+        setData(res.data)
+      })
       .catch(err => console.log(err));
-  }, []);
+  },[]);
+
+  const handleClickDeroulement = (der) => {
+    setSelectDeroulement(der);
+  };
+
+ 
+  const handleDeroulementDelete = (e, id) => { 
+    
+    e.stopPropagation();
+    const confirmation = window.confirm(`Êtes-vous sûr de vouloir supprimer ce deroulement ${id} ?`);
+
+    if(confirmation){
+
+      axios.delete(`${EMPLOI_URL}/deroulement/${id}`)
+      .then( response => {
+        console.log("Deroulement supprimé avec succès :", id);
+        setData(data.filter(der => der.idDeroulement !== id))
+      })
+      .catch( err => {
+        throw new Error("Erreur lors de la suppression du deroulement :", err)
+      });
+    }
+    else{
+      window.alert(`Suppression  du deroulement ${id} annulée`);
+    }
+
+  }
+
+  // if (selectedBatiment) {
+  //  return <Details_Batiment batiment={selectedBatiment}/>
+  // }
+
+  if(selectDeroulement){
+    return <Modifier_Deroulement der={selectDeroulement} open={true} onClose={() => setSelectDeroulement(null)} />;
+  }
+
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -214,24 +228,7 @@ export default function ListeDeroulement() {
     setSelected([]);
   };
 
-  const handleClick = (event, id) => {
-    const selectedIndex = selected.indexOf(id);
-    let newSelected = [];
 
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
-      );
-    }
-    setSelected(newSelected);
-  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -246,19 +243,21 @@ export default function ListeDeroulement() {
     setDense(event.target.checked);
   };
 
-  const isSelected = (id) => selected.indexOf(id) !== -1;
+  //const isSelected = (id) => selected.indexOf(id) !== -1;
 
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
 
+    
+
   return (
     <div>
+      <br/> &nbsp;
       <Button 
         href="/emploi" 
         style={{ color: "white", borderRadius: "5px", background: "rgb(9, 44, 38)" }}
       > ⬅
       </Button>
-
       <Box sx={{ width: '100%', paddingTop: "10px" }}>
         <Paper sx={{ width: '100%', mb: 2 }}>
           <EnhancedTableToolbar numSelected={selected.length} />
@@ -272,7 +271,7 @@ export default function ListeDeroulement() {
                 numSelected={selected.length}
                 order={order}
                 orderBy={orderBy}
-                onSelectAllClick={handleSelectAllClick}
+                //onSelectAllClick={handleSelectAllClick}
                 onRequestSort={handleRequestSort}
                 rowCount={data.length}
               />
@@ -280,62 +279,55 @@ export default function ListeDeroulement() {
                 {stableSort(data, getComparator(order, orderBy))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => {
-                    const isItemSelected = isSelected(row.id);
-                    const labelId = `enhanced-table-checkbox-${index}`;
+                   // const isItemSelected = isSelected(row.idBatiment);
+                    
 
                     return (
                       <TableRow
                         hover
-                        onClick={(event) => handleClick(event, row.id)}
-                        role="checkbox"
-                        aria-checked={isItemSelected}
+                        //onClick={(event) => handleClick(event, row.idBatiment)}
+                       
+                        //aria-checked={isItemSelected}
                         tabIndex={-1}
-                        key={row.id}
-                        selected={isItemSelected}
+                        key={row.idDeroulement}
+                        //selected={isItemSelected}
                         sx={{ cursor: 'pointer' }}
                       >
-                        <TableCell padding="checkbox">
-                          <Checkbox
-                            color="primary"
-                            checked={isItemSelected}
-                            inputProps={{
-                              'aria-labelledby': labelId,
-                            }}
-                          />
-                        </TableCell>
                         <TableCell
                           component="th"
-                          id={labelId}
                           scope="row"
                           padding="normal"
                         >
                           {row.idDeroulement}
                         </TableCell>
                         <TableCell align="left">{row.objectifsDeroulement}</TableCell>
-                        <TableCell align="left">{row.descriptionDeroulement}</TableCell>                       
+                        <TableCell align="left">{row.descriptionDeroulement}</TableCell>
                         <TableCell align="left">{row.dateCreationDeroulement}</TableCell>
                         <TableCell > 
-                            <IconButton aria-label="edit" >
-                                <EditIcon color='success' />
-                            </IconButton> 
+                        <IconButton aria-label="edit" onClick={() => handleClickDeroulement(row)}>
+                          <EditIcon  color='success'/>
+                        </IconButton>
                             &nbsp; &nbsp;
 
-                            <IconButton aria-label="delete">
+                            <IconButton aria-label="delete" onClick={(event) => handleDeroulementDelete(event, row.idDeroulement)}>
                                 <DeleteIcon sx={{color:"#cd0000"}}/>
                             </IconButton>
                          </TableCell>
-                         <TableCell> 
-                            <Button sx={{
-                            borderRadius:"30px solid",
-                            color:"white",
-                            fontWeight:"600",
-                            background:"rgb(9, 44, 38)",
-                            textTransform:"capitalize"
-
-                            }}>Détails
-                            </Button>
-                            </TableCell>
-                            
+                         {/* <TableCell> 
+                          
+                            <Button 
+                              sx={{
+                                borderRadius: "30px solid",
+                                color: "white",
+                                fontWeight: "600",
+                                background: "rgb(9, 44, 38)",
+                                textTransform: "capitalize"
+                              }}
+                              onClick={() => handleClickDeroulemnet(row)}
+                            >
+                              Détails
+                            </Button> 
+                        </TableCell> */}
                       </TableRow>
                     );
                   })}

@@ -13,16 +13,14 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-import Checkbox from '@mui/material/Checkbox';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
+
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
+
 import { visuallyHidden } from '@mui/utils';
-import { Button, colors } from '@mui/material';
+import { Button } from '@mui/material';
 import axios from 'axios';
+import DetailsEnseignant from '../../_Details/Repartition/DetailsEnseignant';
 
 const rows = [];
 
@@ -54,23 +52,16 @@ function stableSort(array, comparator) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-/*const headCells = [
-  { id: 'idEns', numeric: false, disablePadding: false, label: 'IdEns', width: '10%' },
-  { id: 'matriculePer', numeric: false, disablePadding: false, label: 'MatriculePer', width: '15%' },
-  { id: 'nomEns', numeric: false, disablePadding: false, label: 'NomEns', width: '20%' },
-  { id: 'prenomEns', numeric: false, disablePadding: false, label: 'PrenomEns', width: '20%' },
-  { id: 'gradeEns', numeric: false, disablePadding: false, label: 'GradeEns', width: '15%' },
-  { id: 'dateCreationEns', numeric: false, disablePadding: false, label: 'Date Creation', width: '20%' },
-];*/
+
 
 const headCells = [
   { id: 'idEns', numeric: false, disablePadding: false, label: 'Identifiant'},
   { id: 'prenomEns', numeric: false, disablePadding: false, label: 'Prenom' },
   { id: 'nomEns', numeric: false, disablePadding: false, label: 'Nom'},
   { id: 'gradeEns', numeric: false, disablePadding: false, label: 'Grade' },
- // { id: 'specialite', numeric: false, disablePadding: false, label: 'Specialite-VAC' },
+  { id: 'matriculePer', numeric: false, disablePadding: false, label: 'Matricule-PER' },
+  { id: 'specialite', numeric: false, disablePadding: false, label: 'Specialite-VAC' },
   { id: 'dateCreationEns', numeric: false, disablePadding: false, label: 'Date Creation' },
-  { id: 'Operations', numeric: false, disablePadding: false, label: 'Operations' },
   { id: 'Details', numeric: false, disablePadding: false, label: 'Details' },
 
 ];
@@ -84,17 +75,7 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{
-              'aria-label': 'select all desserts',
-            }}
-          />
-        </TableCell>
+        
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
@@ -164,20 +145,6 @@ function EnhancedTableToolbar(props) {
           Liste de tous les Enseignants
         </Typography>
       )}
-
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Ajouter Vac">
-          <IconButton>
-            <Button id='mybtnStyle'> + </Button>
-          </IconButton>
-        </Tooltip>
-      )}
     </Toolbar>
   );
 }
@@ -194,13 +161,20 @@ export default function ListeAllEnseignant() {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [data, setData] = React.useState([]);
+  const [selectEnseignant, setSelectEnseignant] = React.useState(null);
 
   React.useEffect(() => {
-    axios.get('http://localhost:8084/enseignant/enseignant')
+    axios.get('http://localhost:8084/repartition/enseignant')
       .then(res => setData(res.data))
       .catch(err => console.log(err));
   }, []);
 
+  const ClickSurUnEnseignant = (ens) => {
+    setSelectEnseignant(ens);
+  }
+  if (selectEnseignant) {
+    return <DetailsEnseignant ens={selectEnseignant} />;
+  }
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -289,22 +263,14 @@ export default function ListeAllEnseignant() {
                       <TableRow
                         hover
                         onClick={(event) => handleClick(event, row.id)}
-                        role="checkbox"
+                       
                         aria-checked={isItemSelected}
                         tabIndex={-1}
                         key={row.id}
                         selected={isItemSelected}
                         sx={{ cursor: 'pointer' }}
                       >
-                        <TableCell padding="checkbox">
-                          <Checkbox
-                            color="primary"
-                            checked={isItemSelected}
-                            inputProps={{
-                              'aria-labelledby': labelId,
-                            }}
-                          />
-                        </TableCell>
+                       
                         <TableCell
                           component="th"
                           id={labelId}
@@ -316,9 +282,10 @@ export default function ListeAllEnseignant() {
                         <TableCell align="left">{row.prenomEns}</TableCell>
                         <TableCell align="left">{row.nomEns}</TableCell>                       
                         <TableCell align="left">{row.gradeEns}</TableCell>
-                        {/* <TableCell align="left">{row.specialite}</TableCell> */}
+                        <TableCell align="left">{row.matriculePer}</TableCell>
+                        <TableCell align="left">{row.specialite}</TableCell>
                         <TableCell align="left">{row.dateCreationEns}</TableCell>
-                        <TableCell > 
+                        {/* <TableCell > 
                             <IconButton aria-label="edit" >
                                 <EditIcon color='success' />
                             </IconButton> 
@@ -328,17 +295,20 @@ export default function ListeAllEnseignant() {
                                 <DeleteIcon sx={{color:"#cd0000"}}/>
                             </IconButton>
                          </TableCell>
+                         */}
                          <TableCell> 
                             <Button sx={{
                             borderRadius:"30px solid",
                             color:"white",
                             fontWeight:"600",
                             background:"rgb(9, 44, 38)",
-                            textTransform:"capitalize"
-
-                            }}>Détails
+                            textTransform:"capitalize",
+                            }}
+                            onClick = {() => ClickSurUnEnseignant(row)}
+                            
+                            >Détails
                             </Button>
-                            </TableCell>
+                          </TableCell> 
                             
                       </TableRow>
                     );

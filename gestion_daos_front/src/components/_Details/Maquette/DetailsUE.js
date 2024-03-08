@@ -68,7 +68,14 @@ function DetailsUE ({ ue }) {
     };
 
     return (
+        
         <div>
+            <br/> &nbsp;&nbsp;&nbsp;
+            <Button 
+                href="/listeUE" 
+                style={{ color: "white", borderRadius: "5px", background: "rgb(9, 44, 38)" }}
+            > ⬅
+            </Button>
             <h2 id='title'>{ue.libelleUE}</h2>
             <div id='BlockBtn'>
                 <Ajouter_EC_UE ue={ue}/>
