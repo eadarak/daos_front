@@ -12,6 +12,7 @@ import axios from 'axios';
 import '../../../styles/general.css';
 import { MAQUETTE_URL } from '../../../Server_URL/Urls';
 import Ajouter_Groupe_Classe from './_Ajouter/Ajouter_Groupe_Classe';
+import Ajouter_Enseignement_Groupe from './_Ajouter/Ajouter_Enseignement_Groupe';
 ;
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -59,9 +60,7 @@ function DetailsGroupe ({ groupe }) {
         <div>
             <h2 id='title'>{groupe.libelleGroupe}</h2>
             <div id='BlockBtn'>
-                {/* <Ajouter_EC_UE groupe={groupe}/>
-                <Ajouter_Module_UE groupe={groupe}/> */}
-                {/* <Ajouter_Groupe_Classe groupe={groupe}/> */}
+                <Ajouter_Enseignement_Groupe groupe={groupe} />
             </div>
             
             <div id='Block2'>
@@ -101,7 +100,7 @@ function DetailsGroupe ({ groupe }) {
                                         {enseignement.idEnseignement}
                                     </StyledTableCell>
                                     <StyledTableCell align="left">{enseignement.libelleEnseignement}</StyledTableCell>
-                                    <StyledTableCell align="left">{enseignement.objectifsEnseignements}</StyledTableCell>
+                                    <StyledTableCell align="left">{enseignement.objectifsEnseignement}</StyledTableCell>
                                 </StyledTableRow>
                             ))}
                         </TableBody>

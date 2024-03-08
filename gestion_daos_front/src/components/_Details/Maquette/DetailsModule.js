@@ -12,6 +12,7 @@ import axios from 'axios';
 import '../../../styles/general.css';
 import { MAQUETTE_URL } from '../../../Server_URL/Urls';
 import Ajouter_Module_EC from './_Ajouter/Ajouter_Module_EC';
+import Ajouter_Enseignement_Module from './_Ajouter/Ajouter_Enseignement_Module';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -33,25 +34,31 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-const HeadersModule = ['Identifiant', 'Libelle', 'Cours', 'Durée', 'Coefficient'];
+const HeadersEnseignement = ['Identifiant', 'Libelle', 'Objectifs'];
 
 function DetailsModule({ module }) {
-    const [ec, setEc] = useState([]);
+    const [enseignements, setEnseignements] = useState([]);
+    const [ShowEnseignementTable, setShowEnseignementTable] = useState(false);
 
-    // useEffect(() => {
-    //     axios.get(`${MAQUETTE_URL}module/${module.idModule}/ecs`)
-    //         .then(res => {
-    //             console.log("les données récupérées depuis la DB : \n ", res.data)
-    //             setEc(res.data)
-    //         })
-    //         .catch(err => console.log(err));
-    // }, [module.idModule]);
+    useEffect(() => {
+        axios.get(`${MAQUETTE_URL}module/${module.idModule}/enseignements`)
+          .then(res => {
+            console.log("les données récupérées depuis la base de données : \n ",res.data);
+            setEnseignements(res.data);
+          })
+          .catch(err => console.log(err));
+    }, []);
 
+  
+
+    const toggleModuleTable = () => {
+        setShowEnseignementTable(!ShowEnseignementTable);
+    };
     return (
         <div>
             <h2 id='title'>{module.libelleModule}</h2>
             <div id='BlockBtn'>
-                {/* <Ajouter_Module_EC module={module} /> */}
+                <Ajouter_Enseignement_Module module={module}/>
             </div>
             <div id='Block2'>
                 <Card id='MyCard1'>
@@ -69,33 +76,36 @@ function DetailsModule({ module }) {
             <div id='Block3'>
                 <h3 id='title'>
                     <span id='separator1'></span>
-                    &nbsp;Liste des ECs
+                    &nbsp;
+                    <Button onClick={toggleModuleTable}>
+                        {ShowEnseignementTable ? 'Cacher la liste des Enseignements' : 'Afficher la liste des Enseignements'}
+                    </Button>
                 </h3>
-                <br />
+                <br/>
+                {ShowEnseignementTable && ( 
                 <TableContainer component={Paper} style={{ width: "70rem", margin: "auto" }}>
                     <Table aria-label="customized table">
                         <TableHead>
                             <TableRow>
-                                {HeadersModule.map((th, index) => (
+                                {HeadersEnseignement.map((th, index) => (
                                     <StyledTableCell key={index}>{th}</StyledTableCell>
                                 ))}
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {ec.length > 0 && ec.map(ec => (
-                                <StyledTableRow key={ec.idEC}>
+                            {enseignements.length > 0 && enseignements.map(enseignement => (
+                                <StyledTableRow key={enseignement.idEnseignement}>
                                     <StyledTableCell component="th" scope="row">
-                                        {ec.idEC}
+                                        {enseignement.idEnseignement}
                                     </StyledTableCell>
-                                    <StyledTableCell align="left">{ec.libelleEC}</StyledTableCell>
-                                    <StyledTableCell align="left">{ec.coursEC}</StyledTableCell>
-                                    <StyledTableCell align="left">{ec.dureeEC}</StyledTableCell>
-                                    <StyledTableCell align="left">{ec.coefficientEC}</StyledTableCell>
+                                    <StyledTableCell align="left">{enseignement.libelleEnseignement}</StyledTableCell>
+                                    <StyledTableCell align="left">{enseignement.objectifsEnseignement}</StyledTableCell>
                                 </StyledTableRow>
                             ))}
                         </TableBody>
                     </Table>
                 </TableContainer>
+                )}
             </div>
         </div>
     )

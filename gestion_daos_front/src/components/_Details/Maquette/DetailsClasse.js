@@ -12,6 +12,7 @@ import axios from 'axios';
 import '../../../styles/general.css';
 import { MAQUETTE_URL } from '../../../Server_URL/Urls';
 import Ajouter_Groupe_Classe from './_Ajouter/Ajouter_Groupe_Classe';
+import Ajouter_Enseignement_Classe from './_Ajouter/Ajouter_Enseignement_Classe';
 ;
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -59,11 +60,11 @@ function DetailsClasse ({ classe }) {
           .catch(err => console.log(err));
     }, []);
 
-    const toggleEcsTable = () => {
+    const toggleGroupesTable = () => {
         setShowGroupesTable(!showGroupesTable);
     };
 
-    const toggleModuleTable = () => {
+    const toggleEnseignementTable = () => {
         setShowEnseignementTable(!ShowEnseignementTable);
     };
 
@@ -71,9 +72,8 @@ function DetailsClasse ({ classe }) {
         <div>
             <h2 id='title'>{classe.libelleClasse}</h2>
             <div id='BlockBtn'>
-                {/* <Ajouter_EC_UE classe={classe}/>
-                <Ajouter_Module_UE classe={classe}/> */}
                 <Ajouter_Groupe_Classe classe={classe}/>
+                <Ajouter_Enseignement_Classe classe={classe}/>
             </div>
             
             <div id='Block2'>
@@ -91,7 +91,7 @@ function DetailsClasse ({ classe }) {
                 <h3 id='title'>
                     <span id='separator1'></span>
                     &nbsp;
-                    <Button onClick={toggleEcsTable}>
+                    <Button onClick={toggleGroupesTable}>
                         {showGroupesTable ? 'Cacher la liste des Groupes' : 'Afficher la liste des Groupes'}
                     </Button>
                 </h3>
@@ -125,7 +125,7 @@ function DetailsClasse ({ classe }) {
                 <h3 id='title'>
                     <span id='separator1'></span>
                     &nbsp;
-                    <Button onClick={toggleModuleTable}>
+                    <Button onClick={toggleEnseignementTable}>
                         {ShowEnseignementTable ? 'Cacher la liste des Enseignements' : 'Afficher la liste des Enseignements'}
                     </Button>
                 </h3>
@@ -142,12 +142,12 @@ function DetailsClasse ({ classe }) {
                         </TableHead>
                         <TableBody>
                             {enseignements.length > 0 && enseignements.map(enseignement => (
-                                <StyledTableRow key={enseignement.idModule}>
+                                <StyledTableRow key={enseignement.idEnseignement}>
                                     <StyledTableCell component="th" scope="row">
-                                        {enseignement.idModule}
+                                        {enseignement.idEnseignement}
                                     </StyledTableCell>
                                     <StyledTableCell align="left">{enseignement.libelleEnseignement}</StyledTableCell>
-                                    <StyledTableCell align="left">{enseignement.objectifsEnseignements}</StyledTableCell>
+                                    <StyledTableCell align="left">{enseignement.objectifsEnseignement}</StyledTableCell>
                                 </StyledTableRow>
                             ))}
                         </TableBody>

@@ -144,7 +144,7 @@ function EnhancedTableToolbar(props) {
           id="tableTitle"
           component="div"
         >
-          Liste des Unites d'enseignements
+          Liste des [ classes ]
         </Typography>
       )}
         

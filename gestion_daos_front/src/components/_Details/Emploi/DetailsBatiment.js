@@ -56,13 +56,6 @@ function DetailsBatiment ({ batiment }) {
     };
     return (
         <div>
-            <br/> &nbsp;&nbsp;&nbsp;
-            <Button 
-                href="/listeBatiment" 
-                style={{ color: "white", borderRadius: "5px", background: "rgb(9, 44, 38)" }}
-            > ⬅
-            </Button>
-
             <h2 id='title'>{batiment.libelleBatiment}</h2>
             <div id='BlockBtn'>
                 <Ajouter_Salle_Batiment batiment={batiment} />

@@ -49,12 +49,6 @@ function DetailsEC ({ ec }) {
     
     return (
         <div>
-            <br/> &nbsp;&nbsp;&nbsp;
-            <Button 
-                href="/listeEC" 
-                style={{ color: "white", borderRadius: "5px", background: "rgb(9, 44, 38)" }}
-            > ⬅
-            </Button>            
             <h2 id='title'>{ec.libelleEC}</h2>
             <div id='BlockBtn'>
                 <Ajouter_Module_EC ec={ec} />
