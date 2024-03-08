@@ -22,6 +22,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import axios from 'axios';
 import EditIcon from '@mui/icons-material/Edit';
 import { EMPLOI_URL } from '../../../Server_URL/Urls';
+import Ajouter_Salle from '../../_Ajouter/Aj-Emploi/Ajouter_Salle';
+import DetailsSalle from '../../_Details/Emploi/DetailsSalle';
 import Modifier_Salle from '../../_Modifier/Emploi/Modifier_Salle';
 import Details_Salle from '../../_Details/Emploi/DetailsSalle';
 
@@ -57,12 +59,13 @@ function stableSort(array, comparator) {
 
 const headCells = [
   { id: 'idSalle', numeric: false, disablePadding: false, label: 'Identifiant'},
-  { id: 'libelleSalle', numeric: false, disablePadding: false, label: 'Libellé' },
-  { id: 'codeSalle', numeric: false, disablePadding: false, label: 'Code'},
-  { id: 'capaciteSalle', numeric: false, disablePadding: false, label: 'Capacité' },
-  { id: 'dateCreationSalle', numeric: false, disablePadding: false, label: 'Date de Création' },
-  { id: 'Operations', numeric: false, disablePadding: false, label: 'Opérations' },
-  { id: 'Details', numeric: false, disablePadding: false, label: 'Détails' },
+  { id: 'codeSalle', numeric: false, disablePadding: false, label: 'Code Salle' },
+  { id: 'libelleSalle', numeric: false, disablePadding: false, label: 'Libelle'},
+  { id: 'capaciteSalle', numeric: false, disablePadding: false, label: 'Capacite Salle' },
+  { id: 'dateCreationSalle', numeric: false, disablePadding: false, label: 'Date Creation' },
+  { id: 'Operations', numeric: false, disablePadding: false, label: 'Operations' },
+  { id: 'Details', numeric: false, disablePadding: false, label: 'Details' },
+
 ];
 
 function EnhancedTableHead(props) {
@@ -144,10 +147,10 @@ function EnhancedTableToolbar(props) {
         </Typography>
       )}
         
-          {/* <IconButton>
+
+          <IconButton>
             <Ajouter_Salle/>
-          </IconButton> */}
-        
+          </IconButton>      
      
     </Toolbar>
   );
@@ -159,25 +162,42 @@ EnhancedTableToolbar.propTypes = {
 
 export default function ListeSalle() {
   const [order, setOrder] = React.useState('asc');
+  const [orderBy, setOrderBy] = React.useState('idBatiment');
   const [orderBy, setOrderBy] = React.useState('idSalle');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [data, setData] = React.useState([]);
+  const [selectedSalle, setSelectedSalle] = React.useState(null);
+  const [selectedUpdateBatiment, setSelectedUpdateBatiment] = React.useState(null);
   const [selectedSalle, setSelectedSalleDelete] = React.useState(null);
   const [selectedUpdateSalle, setSelectedUpdateSalle] = React.useState(null);
+
 
 
   React.useEffect(() => {
     axios.get(`${EMPLOI_URL}/salle`)
       .then(res => {
+        console.log("les données recupérées depuis la db : \n ",res.data)
         console.log("Les données récupérées depuis la base de données :\n", res.data)
         setData(res.data)
       })
       .catch(err => console.log(err));
   },[]);
 
+  const handleClickSalle = (batiment) => {
+    setSelectedSalle(batiment);
+  };
+
+  const handleEditClick = (batiment) => {
+    setSelectedUpdateBatiment(batiment);
+  };
+
+  const handleBatimentDelete = (e, id) => { 
+    
+    e.stopPropagation();
+    const confirmation = window.confirm(`Êtes-vous sûr de vouloir supprimer cette salle  ${id} ?`);
   const handleSalleClickDelete = (salle) => {
     setSelectedSalleDelete(salle);
   };
@@ -195,6 +215,15 @@ export default function ListeSalle() {
 
       axios.delete(`${EMPLOI_URL}/salle/${id}`)
       .then( response => {
+        console.log("Salle",id," supprimé avec succès :");
+        setData(data.filter(salle => salle.idSalle !== id))
+      })
+      .catch( err => {
+        throw new Error("Erreur lors de la suppression du bâtiment :", err)
+      });
+    }
+    else{
+      window.alert(`Suppression de la Salle ${id} annulée`);
         console.log("Salle supprimée avec succès :", id);
         setData(data.filter(salle => salle.idSalle !== id))
       })
@@ -205,17 +234,21 @@ export default function ListeSalle() {
     else{
       window.alert(`Suppression de la salle ${id} annulée`);
     }
-
   }
 
   if (selectedSalle) {
+   return <DetailsSalle batiment={selectedSalle}/>
+  }
+
+  // if(selectedUpdateBatiment){
+  //   return <Modifier_Salle salle={selectedSalle} open={true} onClose={() => setSelectedSalle(null)} />;
+  // }
    return <Details_Salle salle={selectedSalle}/>
   }
 
   if(selectedUpdateSalle){
     return <Modifier_Salle salle={selectedUpdateSalle} open={true} onClose={() => setSelectedUpdateSalle(null)} />;
   }
-
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -232,24 +265,24 @@ export default function ListeSalle() {
     setSelected([]);
   };
 
-  const handleClick = (event, id) => {
-    const selectedIndex = selected.indexOf(id);
-    let newSelected = [];
+  // const handleClick = (event, id) => {
+  //   const selectedIndex = selected.indexOf(id);
+  //   let newSelected = [];
 
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
-      );
-    }
-    setSelected(newSelected);
-  };
+  //   if (selectedIndex === -1) {
+  //     newSelected = newSelected.concat(selected, id);
+  //   } else if (selectedIndex === 0) {
+  //     newSelected = newSelected.concat(selected.slice(1));
+  //   } else if (selectedIndex === selected.length - 1) {
+  //     newSelected = newSelected.concat(selected.slice(0, -1));
+  //   } else if (selectedIndex > 0) {
+  //     newSelected = newSelected.concat(
+  //       selected.slice(0, selectedIndex),
+  //       selected.slice(selectedIndex + 1),
+  //     );
+  //   }
+  //   setSelected(newSelected);
+  // };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -264,7 +297,7 @@ export default function ListeSalle() {
     setDense(event.target.checked);
   };
 
-  const isSelected = (id) => selected.indexOf(id) !== -1;
+  //const isSelected = (id) => selected.indexOf(id) !== -1;
 
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
@@ -273,6 +306,12 @@ export default function ListeSalle() {
 
   return (
     <div>
+     <br/> &nbsp;
+      <Button 
+        href="/emploi" 
+        style={{ color: "white", borderRadius: "5px", background: "rgb(9, 44, 38)" }}
+      > ⬅
+      </Button>
       <Box sx={{ width: '100%', paddingTop: "10px" }}>
         <Paper sx={{ width: '100%', mb: 2 }}>
           <EnhancedTableToolbar numSelected={selected.length} />
@@ -286,7 +325,7 @@ export default function ListeSalle() {
                 numSelected={selected.length}
                 order={order}
                 orderBy={orderBy}
-                onSelectAllClick={handleSelectAllClick}
+                //onSelectAllClick={handleSelectAllClick}
                 onRequestSort={handleRequestSort}
                 rowCount={data.length}
               />
@@ -294,12 +333,20 @@ export default function ListeSalle() {
                 {stableSort(data, getComparator(order, orderBy))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => {
+
+                   // const isItemSelected = isSelected(row.idBatiment);
+                    
                     const isItemSelected = isSelected(row.idSalle);
                     const labelId = `enhanced-table-checkbox-${index}`;
-
                     return (
                       <TableRow
                         hover
+                        //onClick={(event) => handleClick(event, row.idBatiment)}
+                       
+                        //aria-checked={isItemSelected}
+                        tabIndex={-1}
+                        key={row.idSalle}
+                        //selected={isItemSelected}
                         onClick={(event) => handleClick(event, row.idSalle)}
                         role="checkbox"
                         aria-checked={isItemSelected}
@@ -310,7 +357,6 @@ export default function ListeSalle() {
                       >
                         <TableCell
                           component="th"
-                          id={labelId}
                           scope="row"
                           padding="normal"
                         >
@@ -326,8 +372,9 @@ export default function ListeSalle() {
                         </IconButton>
                             &nbsp; &nbsp;
 
+                            <IconButton aria-label="delete" onClick={(event) => handleBatimentDelete(event, row.idSalle)}>
                             <IconButton aria-label="delete" onClick={(event) => handleSalleDelete(event, row.idSalle)}>
-                                <DeleteIcon sx={{color:"#cd0000"}}/>
+                            <DeleteIcon sx={{color:"#cd0000"}}/>
                             </IconButton>
                          </TableCell>
                          <TableCell> 
@@ -340,6 +387,7 @@ export default function ListeSalle() {
                                 background: "rgb(9, 44, 38)",
                                 textTransform: "capitalize"
                               }}
+                              onClick={() => handleClickSalle(row)}
                               onClick={() => handleSalleClickDelete(row)}
                             >
                               Détails

@@ -7,19 +7,19 @@ import { EMPLOI_URL } from '../../../Server_URL/Urls';
 import {useNavigate } from 'react-router-dom';
 
 
-function Ajouter_Batiment () {
+function Ajouter_Salle () {
     const [open, setOpen] = React.useState(false);
     const navigate = useNavigate()
 
-    const modelBatiment = {
-        idBatiment : 0,
-        libelleBatiment: '',
-        codeBatiment : '',
-        positionBatiment : '',
-        descriptionBatiment : ''
+    const modelSalle = {
+        idSalle : 0,
+        libelleSalle: '',
+        codeSalle : '',
+        capaciteSalle : 0,
+        descriptionSalle : ''
     };
 
-    const [data, setFormData] = React.useState(modelBatiment);
+    const [data, setFormData] = React.useState(modelSalle);
 
     const handleChange = (e) =>{
         const { id, value } = e.target;
@@ -30,7 +30,7 @@ function Ajouter_Batiment () {
     const handleSubmit = (e) =>{
         e.preventDefault();
 
-        fetch(`${EMPLOI_URL}/batiment`, {
+        fetch(`${EMPLOI_URL}/salle`, {
             method : 'POST',
             headers : {'Content-Type' : 'application/json'},
             body : JSON.stringify(data)
@@ -43,20 +43,19 @@ function Ajouter_Batiment () {
         })
         .then(
             data => {
-                console.log('Un nouveau batiment a été ajouté avec succès' ,data);
-                setFormData(modelBatiment);
+                console.log('Une nouvelle Salle a été ajouté avec succès' ,data);
+                setFormData(modelSalle);
                 setOpen(false);
-                navigate('/listeBatiment');
+                navigate('/listeSalle');
                 window.location.reload();
             })
-        .catch( err => {
-            throw new Error("Une erreur s'est produite lors de l'operation d'ajout")
-        })
+            .catch(err => {
+                console.error("Une erreur s'est produite lors de l'opération d'ajout :", err);
+            });
+            
     }
 
     
-
-
     return (
         <React.Fragment>
             <LibraryAddIcon onClick={() => setOpen(true)} />
@@ -75,7 +74,7 @@ function Ajouter_Batiment () {
             >
                 <Box sx={{ backgroundColor: 'white', p: 2, width: 800 , borderRadius:"10px"}}>
                     <Typography variant="h5" align="center" fontWeight='bold' fontSize='2rem' >
-                        Nouveau Batiment
+                       Add Nouvelle Salle
                     </Typography>
                     <Typography variant='body1' align='center' fontSize='1.2rem'> Veuillez remplir les champs ci-dessous...</Typography>
                     <Divider />
@@ -83,44 +82,44 @@ function Ajouter_Batiment () {
                         <Grid container spacing={2}>
                             <Grid item xs={6}>
                                 <TextField
-                                    id="libelleBatiment"
-                                    label="Libelle Batiment"
+                                    id="libelleSalle"
+                                    label="Libelle Salle"
                                     required
                                     fullWidth
-                                    value={data.libelleBatiment}
+                                    value={data.libelleSalle}
                                     onChange={handleChange}
                                 />
                             </Grid>
                             <Grid item xs={6}>
                                 <TextField
-                                    id="codeBatiment"
-                                    label="Code Batiment"
+                                    id="codeSalle"
+                                    label="Code Salle"
                                     fullWidth
                                     required
-                                    value={data.codeBatiment}
+                                    value={data.codeSalle}
                                     onChange={handleChange}
                                 />
                             </Grid>
                             <Grid item xs={6}>
                                 <TextField
-                                    id="positionBatiment"
-                                    label="Position Batiment"
+                                    id="capaciteSalle"
+                                    label="Position Salle"
                                     fullWidth
                                     required
-                                    value={data.positionBatiment}
+                                    value={data.capaciteSalle}
                                     onChange={handleChange}
                                 />
                             </Grid>
                            
                             <Grid item xs={12}>
                                 <TextField
-                                    id="descriptionBatiment"
-                                    label="Description Batiment"
+                                    id="descriptionSalle"
+                                    label="Description Salle"
                                     variant="filled"
                                     fullWidth
                                     multiline
                                     rows={3}
-                                    value={data.descriptionBatiment}
+                                    value={data.descriptionSalle}
                                     onChange={handleChange}
                                 />
                             </Grid>
@@ -159,4 +158,4 @@ function Ajouter_Batiment () {
     );
 }
 
-export default Ajouter_Batiment;
+export default Ajouter_Salle;

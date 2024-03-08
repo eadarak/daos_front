@@ -234,24 +234,24 @@ export default function ListeBatiment() {
     setSelected([]);
   };
 
-  const handleClick = (event, id) => {
-    const selectedIndex = selected.indexOf(id);
-    let newSelected = [];
+  // const handleClick = (event, id) => {
+  //   const selectedIndex = selected.indexOf(id);
+  //   let newSelected = [];
 
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
-      );
-    }
-    setSelected(newSelected);
-  };
+  //   if (selectedIndex === -1) {
+  //     newSelected = newSelected.concat(selected, id);
+  //   } else if (selectedIndex === 0) {
+  //     newSelected = newSelected.concat(selected.slice(1));
+  //   } else if (selectedIndex === selected.length - 1) {
+  //     newSelected = newSelected.concat(selected.slice(0, -1));
+  //   } else if (selectedIndex > 0) {
+  //     newSelected = newSelected.concat(
+  //       selected.slice(0, selectedIndex),
+  //       selected.slice(selectedIndex + 1),
+  //     );
+  //   }
+  //   setSelected(newSelected);
+  // };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -266,7 +266,7 @@ export default function ListeBatiment() {
     setDense(event.target.checked);
   };
 
-  const isSelected = (id) => selected.indexOf(id) !== -1;
+  //const isSelected = (id) => selected.indexOf(id) !== -1;
 
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
@@ -275,6 +275,12 @@ export default function ListeBatiment() {
 
   return (
     <div>
+      <br/> &nbsp;
+      <Button 
+        href="/emploi" 
+        style={{ color: "white", borderRadius: "5px", background: "rgb(9, 44, 38)" }}
+      > ⬅
+      </Button>
       <Box sx={{ width: '100%', paddingTop: "10px" }}>
         <Paper sx={{ width: '100%', mb: 2 }}>
           <EnhancedTableToolbar numSelected={selected.length} />
@@ -288,7 +294,7 @@ export default function ListeBatiment() {
                 numSelected={selected.length}
                 order={order}
                 orderBy={orderBy}
-                onSelectAllClick={handleSelectAllClick}
+                //onSelectAllClick={handleSelectAllClick}
                 onRequestSort={handleRequestSort}
                 rowCount={data.length}
               />
@@ -296,23 +302,22 @@ export default function ListeBatiment() {
                 {stableSort(data, getComparator(order, orderBy))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => {
-                    const isItemSelected = isSelected(row.idBatiment);
-                    const labelId = `enhanced-table-checkbox-${index}`;
+                   // const isItemSelected = isSelected(row.idBatiment);
+                    
 
                     return (
                       <TableRow
                         hover
-                        onClick={(event) => handleClick(event, row.idBatiment)}
-                        role="checkbox"
-                        aria-checked={isItemSelected}
+                        //onClick={(event) => handleClick(event, row.idBatiment)}
+                       
+                        //aria-checked={isItemSelected}
                         tabIndex={-1}
                         key={row.idBatiment}
-                        selected={isItemSelected}
+                        //selected={isItemSelected}
                         sx={{ cursor: 'pointer' }}
                       >
                         <TableCell
                           component="th"
-                          id={labelId}
                           scope="row"
                           padding="normal"
                         >

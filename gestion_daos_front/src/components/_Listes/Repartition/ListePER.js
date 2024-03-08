@@ -13,7 +13,6 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -23,6 +22,9 @@ import EditIcon from '@mui/icons-material/Edit';
 import { visuallyHidden } from '@mui/utils';
 import { Button } from '@mui/material';
 import axios from 'axios';
+import Ajouter_PER from '../../_Ajouter/Aj-Repartition/Ajouter_PER';
+import { REPARTITION_URL } from '../../../Server_URL/Urls';
+import Modifier_PER from '../../_Modifier/Repartition/Modifier_PER';
 
 const rows = [];
 
@@ -63,7 +65,7 @@ const headCells = [
   { id: 'gradeEns', numeric: false, disablePadding: false, label: 'Grade' },
   { id: 'dateCreationEns', numeric: false, disablePadding: false, label: 'Date Creation' },
   { id: 'Operations', numeric: false, disablePadding: false, label: 'Operations' },
-  { id: 'Details', numeric: false, disablePadding: false, label: 'Details' },
+ // { id: 'Details', numeric: false, disablePadding: false, label: 'Details' },
 
 ];
 
@@ -76,17 +78,7 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{
-              'aria-label': 'select all desserts',
-            }}
-          />
-        </TableCell>
+        
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
@@ -156,21 +148,10 @@ function EnhancedTableToolbar(props) {
           Liste des Enseignants PER
         </Typography>
       )}
-
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <DeleteIcon />
+        <IconButton>
+            <Ajouter_PER/>
           </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <Button id='mybtnStyle'> + </Button>
-          </IconButton>
-        </Tooltip>
-      )}
-    </Toolbar>
+        </Toolbar>
   );
 }
 
@@ -186,6 +167,7 @@ export default function ListePER() {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [data, setData] = React.useState([]);
+  const [selectedPER, setSelectedPER] = React.useState(null)
 
   React.useEffect(() => {
     axios.get('http://localhost:8084/repartition/per')
@@ -193,6 +175,42 @@ export default function ListePER() {
       .catch(err => console.log(err));
   }, []);
 
+/*===========================================*/
+const handlePERClickDelete = (per) => {
+  setSelectedPER(per);
+};
+
+const handleEditClick = (per) => {
+  setSelectedPER(per); // Mettez à jour selectedUpdateUE avec l'UE à modifier
+};
+
+const handlePERDelete = (e, id) => { 
+  
+  e.stopPropagation();
+  const confirmation = window.confirm(`Êtes-vous sûr de vouloir supprimer ce PER ${id} ?`);
+
+  if(confirmation){
+
+    axios.delete(`${REPARTITION_URL}/per/${id}`)
+    .then( response => {
+      console.log("PER supprimée avec succès :", id);
+      setData(data.filter(per => per.idEns !== id))
+    })
+    .catch( err => {
+      throw new Error("Erreur lors de la suppression de l'UE :", err)
+    });
+  }
+  else{
+    window.alert(`Suppression  du PER ${id} annulée`);
+  }
+
+}
+
+if(selectedPER){
+  return <Modifier_PER per={selectedPER} open={true} onClose={() => setSelectedPER(null)} />;
+}
+
+/*===========================================*/
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -247,6 +265,7 @@ export default function ListePER() {
 
   return (
     <div>
+      <br/> &nbsp;
       <Button 
         href="/repartition" 
         style={{ color: "white", borderRadius: "5px", background: "rgb(9, 44, 38)" }}
@@ -280,23 +299,14 @@ export default function ListePER() {
                     return (
                       <TableRow
                         hover
-                        onClick={(event) => handleClick(event, row.id)}
-                        role="checkbox"
+                        onClick={(event) => handleClick(event, row.id)}   
                         aria-checked={isItemSelected}
                         tabIndex={-1}
                         key={row.id}
                         selected={isItemSelected}
                         sx={{ cursor: 'pointer' }}
                       >
-                        <TableCell padding="checkbox">
-                          <Checkbox
-                            color="primary"
-                            checked={isItemSelected}
-                            inputProps={{
-                              'aria-labelledby': labelId,
-                            }}
-                          />
-                        </TableCell>
+                        
                         <TableCell
                           component="th"
                           id={labelId}
@@ -311,16 +321,21 @@ export default function ListePER() {
                         <TableCell align="left">{row.gradeEns}</TableCell>
                         <TableCell align="left">{row.dateCreationEns}</TableCell>
                         <TableCell > 
-                            <IconButton aria-label="edit" >
+                            <IconButton 
+                              aria-label="edit"
+                              onClick={() => handleEditClick (row)}
+                              >
                                 <EditIcon color='success' />
                             </IconButton> 
                             &nbsp; &nbsp;
 
-                            <IconButton aria-label="delete">
+                            <IconButton 
+                              aria-label="delete" 
+                              onClick={(event) => handlePERDelete(event, row.idEns)}>
                                 <DeleteIcon sx={{color:"#cd0000"}}/>
                             </IconButton>
                          </TableCell>
-                         <TableCell> 
+                         {/* <TableCell> 
                             <Button sx={{
                             borderRadius:"30px solid",
                             color:"white",
@@ -330,7 +345,7 @@ export default function ListePER() {
 
                             }}>Détails
                             </Button>
-                        </TableCell>
+                        </TableCell> */}
                       </TableRow>
                     );
                   })}
