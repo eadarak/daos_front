@@ -156,6 +156,7 @@ export default function SidebarComp({ sidebarOpen, handleDrawerOpen, handleDrawe
             </ListItem>
             {/* <p>𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃𓂃</p> */}
             <br/><br/><br/><br/><br/><br/><br/><br/>
+            <br/><br/><br/>
             <ListItem disablePadding>
              <NavLink to="/authentification" className="sidebar-link">
              <ListItemButton>
