@@ -1,4 +1,5 @@
- import * as React from 'react';
+
+import * as React from 'react';
 import Modal from '@mui/joy/Modal';
 import Typography from '@mui/material/Typography';
 import { Box, Divider, Stack, TextField, Grid, Button} from '@mui/material';
@@ -7,17 +8,16 @@ import { useNavigate } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 
-function Modifier_Enseignement ({ enseignement, open, onClose }) {
+function Modifier_Filiere ({ filiere, open, onClose }) {
     const navigate = useNavigate();
 
-    const initialEnseignement = {
-        libelleEnseignement: '',
-        objectifsEnseignement: '',
-        descriptionEnseignement: ''
+    const initialFiliere = {
+        libelleFiliere: '',
+        descriptionFiliere: ''
     };
 
 
-    const [data, setData] = React.useState(enseignement);
+    const [data, setData] = React.useState(filiere);
 
     const handleChange = (e) => {
         e.preventDefault();
@@ -29,7 +29,7 @@ function Modifier_Enseignement ({ enseignement, open, onClose }) {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        fetch(`${MAQUETTE_URL}enseignement/${enseignement.idEnseignement}`, {
+        fetch(`${MAQUETTE_URL}filiere/${filiere.idFiliere}`, {
             method : 'PUT',
             headers : {'Content-Type' : 'application/json'},
             body : JSON.stringify(data)
@@ -42,9 +42,9 @@ function Modifier_Enseignement ({ enseignement, open, onClose }) {
         })
         .then(data => {
             console.log('EC modifiée avec succès', data);
-            setData(initialEnseignement);
+            setData(initialFiliere);
             onClose();
-            navigate('/listes-enseignement', { replace: true });
+            navigate('/listes-filiere', { replace: true });
             window.location.reload();
         })
         .catch(err => {
@@ -54,7 +54,7 @@ function Modifier_Enseignement ({ enseignement, open, onClose }) {
 
     return (
         <React.Fragment>
-           
+            
             <Modal
                 aria-labelledby="modal-title"
                 aria-describedby="modal-desc"
@@ -79,35 +79,24 @@ function Modifier_Enseignement ({ enseignement, open, onClose }) {
                     <Grid container spacing={2}>
                             <Grid item xs={6}>
                                 <TextField
-                                    id="libelleEnseignement"
-                                    label="Libelle de l'enseignement"
+                                    id="libelleFiliere"
+                                    label="Libelle de l'filiere"
                                     required
                                     fullWidth
-                                    value={data.libelleEnseignement}
-                                    onChange={handleChange}
-                                />
-                            </Grid>
-                            <Grid item xs={6}>
-                                <TextField
-                                    id="objectifsEnseignement"
-                                    label="Objectifs de l'enseignement"
-                                    fullWidth
-                                    multiline
-                                    rows={3}
-                                    value={data.objectifsEnseignement}
+                                    value={data.libelleFiliere}
                                     onChange={handleChange}
                                 />
                             </Grid>
 
                             <Grid item xs={12}>
                                 <TextField
-                                    id="descriptionEnseignement"
-                                    label="description de l'enseignement"
+                                    id="descriptionFiliere"
+                                    label="description de l'filiere"
                                     variant="filled"
                                     fullWidth
                                     multiline
                                     rows={3}
-                                    value={data.descriptionEnseignement}
+                                    value={data.descriptionFiliere}
                                     onChange={handleChange}
                                 />
                             </Grid>
@@ -148,4 +137,4 @@ function Modifier_Enseignement ({ enseignement, open, onClose }) {
     );
 }
 
-export default Modifier_Enseignement;
+export default Modifier_Filiere;

@@ -11,7 +11,7 @@ import Paper from '@mui/material/Paper';
 import axios from 'axios';
 import '../../../styles/general.css';
 import { MAQUETTE_URL } from '../../../Server_URL/Urls';
-import Ajouter_Formation_Niveau from './_Ajouter/Ajouter_Formation_Niveau';
+import Ajouter_Formation_Filiere from './_Ajouter/Ajouter_Formation_Filiere';
 ;
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -34,28 +34,20 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-const HeadersFormation = ['Identifiant', 'Libelle','Date de Creation'];
+const HeadersFormation = ['Identifiant', 'Libelle', 'Description', 'Date Creation', ''];
 
-function DetailsNiveau ({ niveau }) {
+function DetailsFiliere ({ filiere }) {
     const [formations, setFormations] = useState([]);
-    const [cycle, setCycle] = useState({})
     const [ShowFormationTable, setShowFormationTable] = useState(false);
 
     useEffect(() => {
-        axios.get(`${MAQUETTE_URL}niveau/${niveau.idNiveau}/formations`)
+        axios.get(`${MAQUETTE_URL}filiere/${filiere.idFiliere}/formations`)
           .then(res => {
             console.log("les données récupérées depuis la base de données : \n ",res.data);
             setFormations(res.data);
           })
           .catch(err => console.log(err));
-
-          axios.get(`${MAQUETTE_URL}niveau/${niveau.idNiveau}/cycle`)
-          .then(res => {
-            console.log("les données récupérées depuis la base de données : \n ",res.data);
-            setCycle(res.data);
-          })
-          .catch(err => console.log(err));
-    }, [niveau.idNiveau]);
+    }, [filiere.idFiliere]);
 
   
 
@@ -65,32 +57,22 @@ function DetailsNiveau ({ niveau }) {
 
     return (
         <div>
-            <br/> &nbsp;
-            <Button 
-                href="/listes-niveau" 
-                style={{ color: "white", borderRadius: "5px", background: "rgb(9, 44, 38)" }}
-            > ⬅
-            </Button>
-            <h2 id='title'>{niveau.libelleNiveau}
-            <br></br>
-            <span id='separator'></span>
-            </h2>
-            
+              <br/> &nbsp;
+        <Button 
+            href="/listes-filiere" 
+            style={{ color: "white", borderRadius: "5px", background: "rgb(9, 44, 38)" }}
+        > ⬅
+        </Button>
+            <h2 id='title'>{filiere.libelleFiliere}</h2>
             <div id='BlockBtn'>
-                <Ajouter_Formation_Niveau niveau={niveau}/>
+                <Ajouter_Formation_Filiere filiere={filiere}/>
             </div>
             
             <div id='Block2'>
                 <Card id='MyCard1'>
                     <p><b>Description :</b> <br/>
-                        {niveau.descriptionNiveau}
+                        {filiere.descriptionFiliere}
                     </p>
-                </Card>
-                <Card id='MyCard2'>
-                    <p><b>Cycle : </b>{cycle.libelleCycle}</p>
-                    <p><b>Description : </b>{cycle.descriptionCycle}</p>
-                    <p><b>Date Creation : </b>{cycle.dateCreationCycle}</p>
-
                 </Card>
             </div>
             <div id='Block3'>
@@ -119,7 +101,9 @@ function DetailsNiveau ({ niveau }) {
                                         {formation.idFormation}
                                     </StyledTableCell>
                                     <StyledTableCell align="left">{formation.libelleFormation}</StyledTableCell>
+                                    <StyledTableCell align="left">{formation.descriptionFormation}</StyledTableCell>
                                     <StyledTableCell align="left">{formation.dateCreationFormation}</StyledTableCell>
+                                    <StyledTableCell align="left"> <Button href='/listes-formation' variant='outlined'>Voir Liste </Button> </StyledTableCell>
                                 </StyledTableRow>
                             ))}
                         </TableBody>
@@ -131,4 +115,4 @@ function DetailsNiveau ({ niveau }) {
     );
 }
 
-export default DetailsNiveau;
+export default DetailsFiliere;

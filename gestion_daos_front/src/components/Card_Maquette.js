@@ -10,6 +10,8 @@ import Groupe from './_Maquette/Groupe';
 import Enseignement from './_Maquette/Enseignement';
 import Cycle from './_Maquette/Cycle';
 import Niveau from './_Maquette/Niveau';
+import Formation from './_Maquette/Formation';
+import Filiere from './_Maquette/Filiere';
 
 function Card_Maquette(props) {
     const [modalOpen, setModalOpen] = useState(false);
@@ -48,7 +50,15 @@ function Card_Maquette(props) {
             </Grid>
 
             <Grid item xs={12} md={3.9} ml={1}>
+                <Formation/>
+            </Grid>
+
+            <Grid item xs={12} md={3.9} ml={1}>
                 <Niveau />
+            </Grid>
+
+            <Grid item xs={12} md={3.9} ml={1}>
+                <Filiere/>
             </Grid>
             
         </Grid>

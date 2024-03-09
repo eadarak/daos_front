@@ -11,7 +11,7 @@ import Paper from '@mui/material/Paper';
 import axios from 'axios';
 import '../../../styles/general.css';
 import { MAQUETTE_URL } from '../../../Server_URL/Urls';
-import Ajouter_Formation_Niveau from './_Ajouter/Ajouter_Formation_Niveau';
+import Ajouter_Classe_Formation from './_Ajouter/Ajouter_Classe_Formation';
 ;
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -34,63 +34,49 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-const HeadersFormation = ['Identifiant', 'Libelle','Date de Creation'];
+const HeadersClasse = ['Identifiant', 'Libelle', 'Effectif' , 'Nombre de Groupe(s)', 'Date Creation', ''];
 
-function DetailsNiveau ({ niveau }) {
-    const [formations, setFormations] = useState([]);
-    const [cycle, setCycle] = useState({})
-    const [ShowFormationTable, setShowFormationTable] = useState(false);
+function DetailsFormation ({ formation }) {
+    const [classes, setClasses] = useState([]);
+    const [maquette , setMaquette] = useState({})
+    const [ShowClasseTable, setShowClasseTable] = useState(false);
 
     useEffect(() => {
-        axios.get(`${MAQUETTE_URL}niveau/${niveau.idNiveau}/formations`)
+        axios.get(`${MAQUETTE_URL}formation/${formation.idFormation}/classes`)
           .then(res => {
             console.log("les données récupérées depuis la base de données : \n ",res.data);
-            setFormations(res.data);
+            setClasses(res.data);
           })
           .catch(err => console.log(err));
-
-          axios.get(`${MAQUETTE_URL}niveau/${niveau.idNiveau}/cycle`)
-          .then(res => {
-            console.log("les données récupérées depuis la base de données : \n ",res.data);
-            setCycle(res.data);
-          })
-          .catch(err => console.log(err));
-    }, [niveau.idNiveau]);
+    }, []);
 
   
 
     const toggleModuleTable = () => {
-        setShowFormationTable(!ShowFormationTable);
+        setShowClasseTable(!ShowClasseTable);
     };
 
     return (
         <div>
-            <br/> &nbsp;
-            <Button 
-                href="/listes-niveau" 
-                style={{ color: "white", borderRadius: "5px", background: "rgb(9, 44, 38)" }}
-            > ⬅
-            </Button>
-            <h2 id='title'>{niveau.libelleNiveau}
-            <br></br>
-            <span id='separator'></span>
-            </h2>
-            
+              <br/> &nbsp;
+        <Button 
+            href="/listes-formation" 
+            style={{ color: "white", borderRadius: "5px", background: "rgb(9, 44, 38)" }}
+        > ⬅
+        </Button>
+            <h2 id='title'>{formation.libelleFormation}</h2>
             <div id='BlockBtn'>
-                <Ajouter_Formation_Niveau niveau={niveau}/>
+                <Ajouter_Classe_Formation formation={formation}/>
             </div>
             
             <div id='Block2'>
                 <Card id='MyCard1'>
                     <p><b>Description :</b> <br/>
-                        {niveau.descriptionNiveau}
+                        {formation.descriptionFormation}
                     </p>
                 </Card>
                 <Card id='MyCard2'>
-                    <p><b>Cycle : </b>{cycle.libelleCycle}</p>
-                    <p><b>Description : </b>{cycle.descriptionCycle}</p>
-                    <p><b>Date Creation : </b>{cycle.dateCreationCycle}</p>
-
+                  
                 </Card>
             </div>
             <div id='Block3'>
@@ -98,28 +84,34 @@ function DetailsNiveau ({ niveau }) {
                     <span id='separator1'></span>
                     &nbsp;
                     <Button onClick={toggleModuleTable}>
-                        {ShowFormationTable ? 'Cacher la liste des Formations' : 'Afficher la liste des Formations'}
+                        {ShowClasseTable ? 'Cacher la liste des Classes' : 'Afficher la liste des Classes'}
                     </Button>
                 </h3>
                 <br/>
-                {ShowFormationTable && ( 
+                {ShowClasseTable && ( 
                 <TableContainer component={Paper} style={{ width: "70rem", margin: "auto" }}>
                     <Table aria-label="customized table">
                         <TableHead>
                             <TableRow>
-                                {HeadersFormation.map((th, index) => (
+                                {HeadersClasse.map((th, index) => (
                                     <StyledTableCell key={index}>{th}</StyledTableCell>
                                 ))}
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {formations.length > 0 && formations.map(formation => (
-                                <StyledTableRow key={formation.idFormation}>
+                            {classes.length > 0 && classes.map(classe => (
+                                <StyledTableRow key={classe.idClasse}>
                                     <StyledTableCell component="th" scope="row">
-                                        {formation.idFormation}
+                                        {classe.idClasse}
                                     </StyledTableCell>
-                                    <StyledTableCell align="left">{formation.libelleFormation}</StyledTableCell>
-                                    <StyledTableCell align="left">{formation.dateCreationFormation}</StyledTableCell>
+                                    <StyledTableCell align="left">{classe.libelleClasse}</StyledTableCell>
+                                    <StyledTableCell align="left">{classe.effectifClasse}</StyledTableCell>
+                                    <StyledTableCell align="left">{classe.nbreGroupeClasse}</StyledTableCell>
+                                    <StyledTableCell align="left">{classe.dateCreationClasse}</StyledTableCell>
+                                    <StyledTableCell align="left"> <Button href='/listes-classe' variant='outlined'>Voir Liste </Button> </StyledTableCell>
+
+
+
                                 </StyledTableRow>
                             ))}
                         </TableBody>
@@ -131,4 +123,4 @@ function DetailsNiveau ({ niveau }) {
     );
 }
 
-export default DetailsNiveau;
+export default DetailsFormation;
