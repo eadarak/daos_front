@@ -245,6 +245,13 @@ export default function ListeRepartition() {
 
   return (
     <div>
+      &nbsp;
+      &nbsp;
+      <Button 
+        href="/repartition" 
+        style={{ color: "white", borderRadius: "5px", background: "rgb(9, 44, 38)" }}
+      > ⬅
+      </Button>      
       <Box sx={{ width: '100%', paddingTop: "10px" }}>
         <Paper sx={{ width: '100%', mb: 2 }}>
           <EnhancedTableToolbar numSelected={selected.length} />

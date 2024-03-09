@@ -11,10 +11,8 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import axios from 'axios';
 import '../../../styles/general.css';
-import { REPARTITION_URL } from '../../../Server_URL/Urls';
-import Ajouter_Enseignant_Repartition from './_Ajouter/Ajouter_Enseignant_Repartition';
-
-;
+import { MAQUETTE_URL, REPARTITION_URL } from '../../../Server_URL/Urls';
+import Ajouter_Enseignement_Repartition from './_Ajouter/Ajouter_Enseignement_Repartition';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -36,13 +34,13 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-const HeadersGroupe = ['Identifiant', 'Libelle', 'Numero', 'Effectif'];
-const HeadersEnseignement = ['Identifiant', 'Libelle', 'Objectifs', 'Description'];
+const HeadersSeance = [
+      'Identifiant', 'Jour','Durée' , 'Heure de Début' ,'Heure de Fin','Numéro de Séance' 
+];
 
 function DetailsRepartition ({ repartition }) {
-    const [groupes, setGroupes] = useState([]);
     const [enseignements, setEnseignements] = useState([]);
-    const [showGroupesTable, setShowGroupesTable] = useState(false);
+    const [enseignement, setEnseignement] = useState({});
     const [ShowEnseignementTable, setShowEnseignementTable] = useState(false);
 
     useEffect(() => {
@@ -52,104 +50,82 @@ function DetailsRepartition ({ repartition }) {
             setEnseignements(res.data);
           })
           .catch(err => console.log(err));
-    }, []);
-
-    const toggleGroupesTable = () => {
-        setShowGroupesTable(!showGroupesTable);
-    };
+    }, [repartition.idRepartition]);
 
     const toggleEnseignementTable = () => {
         setShowEnseignementTable(!ShowEnseignementTable);
     };
 
+    useEffect(() => {
+        axios.get(`${REPARTITION_URL}/repartition/${repartition.idRepartition}/enseignement`)
+            .then(response => {
+                setEnseignement(response.data);
+            console.log("Enseignement data:", enseignement);    
+            })
+            .catch(error => console.error("Erreur lors de la récupération des enseignements:", error));
+    }, []);
+
     return (
         <div>
+            &nbsp;
+            &nbsp;
+            <Button 
+                href="/listeRepartition" 
+                style={{ color: "white", borderRadius: "5px", background: "rgb(9, 44, 38)" }}
+            > ⬅
+            </Button>            
             <h2 id='title'>{repartition.descriptionRepartition}
-            <br/>
-            <span id='separator'></span>
+                <br/>
+                <span id='separator'></span>
             </h2>
             <div id='BlockBtn'>
-                <Ajouter_Enseignant_Repartition repartition={repartition}/>
-                {/* <Ajouter_Enseignement_Repartition repartition={repartition}/> */}
+                <Ajouter_Enseignement_Repartition repartition={repartition}/>
             </div>
-            
             <div id='Block2'>
                 <Card id='MyCard1'>
                     <p><b>Description :</b> <br/>
                         {repartition.descriptionRepartition}         
-                   </p>
+                    </p>
                 </Card>
-                {/* <Card id='MyCard2'>
-                    <p><b>Effectif :</b>  </p>
-                    <p><b>Nombre de Groupe :</b>  </p>
-                </Card> */}
+                <Card id='MyCard2'>
+                    <h6 sx={{textAlign:"center !important"}}> <b>Enseignement</b> </h6>
+                    <p><b>Libellé  :</b> {enseignement.libelleEnseignement} </p>
+                    <p><b>Objectif  :</b> {enseignement.objectifsEnseignement} </p>
+                    <p><b>Description  :</b> {enseignement.descriptionEnseignement} </p>
+                </Card>
             </div>
             <div id='Block3'>
                 <h3 id='title'>
                     <span id='separator1'></span>
                     &nbsp;
-                    <Button onClick={toggleGroupesTable}>
-                        {showGroupesTable ? 'Cacher la liste des Groupes' : 'Afficher la liste des Groupes'}
-                    </Button>
-                </h3>
-                <br/>
-                {showGroupesTable && (  
-                <TableContainer component={Paper} style={{ width: "70rem", margin: "auto", marginBottom: "1.5rem" }}>
-                    <Table aria-label="customized table">
-                        <TableHead>
-                            <TableRow>
-                                {HeadersGroupe.map((th, index) => (
-                                    <StyledTableCell key={index}>{th}</StyledTableCell>
-                                ))}
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {groupes.length > 0 && groupes.map(groupe => (
-                                <StyledTableRow key={groupe.idGroupe}>
-                                    <StyledTableCell component="th" scope="row">
-                                        {groupe.idGroupe}
-                                    </StyledTableCell>
-                                    <StyledTableCell align="left">{groupe.libelleGroupe}</StyledTableCell>
-                                    <StyledTableCell align="left">{groupe.numeroGroupe}</StyledTableCell>
-                                    <StyledTableCell align="left">{groupe.effectifGroupe}</StyledTableCell>
-                                </StyledTableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-                )}
-
-                <h3 id='title'>
-                    <span id='separator1'></span>
-                    &nbsp;
                     <Button onClick={toggleEnseignementTable}>
-                        {ShowEnseignementTable ? 'Cacher la liste des Enseignements' : 'Afficher la liste des Enseignements'}
+                        {ShowEnseignementTable ? 'Cacher la liste des Seances' : 'Afficher la liste des Seances'}
                     </Button>
                 </h3>
                 <br/>
                 {ShowEnseignementTable && ( 
-                <TableContainer component={Paper} style={{ width: "70rem", margin: "auto" }}>
-                    <Table aria-label="customized table">
-                        <TableHead>
-                            <TableRow>
-                                {HeadersEnseignement.map((th, index) => (
-                                    <StyledTableCell key={index}>{th}</StyledTableCell>
+                    <TableContainer component={Paper} style={{ width: "70rem", margin: "auto" }}>
+                        <Table aria-label="customized table">
+                            <TableHead>
+                                <TableRow>
+                                    {HeadersSeance.map((th, index) => (
+                                        <StyledTableCell key={index}>{th}</StyledTableCell>
+                                    ))}
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {enseignements.length > 0 && enseignements.map(enseignement => (
+                                    <StyledTableRow key={enseignement.idEnseignement}>
+                                        <StyledTableCell component="th" scope="row">
+                                            {enseignement.idEnseignement}
+                                        </StyledTableCell>
+                                        <StyledTableCell align="left">{enseignement.libelleEnseignement}</StyledTableCell>
+                                        <StyledTableCell align="left">{enseignement.objectifsEnseignement}</StyledTableCell>
+                                    </StyledTableRow>
                                 ))}
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {enseignements.length > 0 && enseignements.map(enseignement => (
-                                <StyledTableRow key={enseignement.idEnseignement}>
-                                    <StyledTableCell component="th" scope="row">
-                                        {enseignement.idEnseignement}
-                                    </StyledTableCell>
-                                    <StyledTableCell align="left">{enseignement.libelleEnseignement}</StyledTableCell>
-                                    <StyledTableCell align="left">{enseignement.objectifsEnseignement}</StyledTableCell>
-                                </StyledTableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
                 )}
             </div>
         </div>

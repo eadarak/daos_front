@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Button, Typography, Grid, Box, Modal, Stack, Divider, Radio } from '@mui/material';
 import { MAQUETTE_URL, REPARTITION_URL } from '../../../../Server_URL/Urls';
 
-export default function Ajouter_Enseignement_Repartition({ enseignement }) {
+export default function Ajouter_Enseignement_Repartition({ repartition }) {
     const [open, setOpen] = useState(false);
     const [enseignements, setEnseignements] = useState([]);
     const [selectedEnseignements, setSelectedEnseignements] = useState(null);
 
     useEffect(() => {
-        fetch(`${REPARTITION_URL}/enseignement`)
+        fetch(`${MAQUETTE_URL}enseignement`)
             .then(response => response.json())
             .then(data => {
                 setEnseignements(data);
@@ -23,7 +23,7 @@ export default function Ajouter_Enseignement_Repartition({ enseignement }) {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (selectedEnseignements !== null) {
-            fetch(`${MAQUETTE_URL}module/${module.idModule}/enseignements/${selectedEnseignements.idEnseignement}`, {
+            fetch(`${REPARTITION_URL}/repartition/${repartition.idRepartition}/enseignements/${selectedEnseignements.idEnseignement}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -32,16 +32,16 @@ export default function Ajouter_Enseignement_Repartition({ enseignement }) {
             })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error("Erreur lors de l'ajout du enseignement à l'Module");
+                    throw new Error("Erreur lors de l'ajout du enseignement à l'Repartition");
                 }
                 return response.json();
             })
             .then(data => {
-                console.log('Enseignement ajouté avec succès à l\'Module:', data);
+                console.log('Enseignement ajouté avec succès à l\'Repartition:', data);
                 setOpen(false);
             })
             .catch(error => {
-                console.error("Une erreur s'est produite lors de l'ajout du enseignement à l'Module:", error);
+                console.error("Une erreur s'est produite lors de l'ajout du enseignement à l'Repartition:", error);
             });
             
         } else {
@@ -126,3 +126,4 @@ export default function Ajouter_Enseignement_Repartition({ enseignement }) {
         </React.Fragment>
     );
 }
+

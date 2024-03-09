@@ -80,9 +80,9 @@
   background-color: white;
   color: var(--bg-color3);
   width: 23rem;
-  height: 10rem;
+  height: 11rem;
   border-radius:0px ;
-  padding: 12px ;
+  padding: 4px ;
   box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2); 
 }
 

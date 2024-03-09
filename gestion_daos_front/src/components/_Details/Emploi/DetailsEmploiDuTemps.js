@@ -54,6 +54,13 @@ function DetailsEmploiDuTemps({ emploi }) {
 
     return (
         <div>
+            &nbsp;
+            &nbsp;
+            <Button
+                    href="/listes-emploi-du-temps"
+                    style={{ color: "white", borderRadius: "5px", background: "rgb(9, 44, 38)" }}
+                > ⬅
+            </Button>            
             <h2 id='title'>{`Emploi du Temps du ${emploi.dateDebutEmploi}`}</h2>
             <div id='BlockBtn'>
                 <Ajouter_Seance_Emploi emploi={emploi} />
