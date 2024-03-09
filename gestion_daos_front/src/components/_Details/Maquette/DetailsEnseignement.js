@@ -58,9 +58,7 @@ function DetailsEnseignement ({ enseignement }) {
         <div>
             <h2 id='title'>{enseignement.libelleEnseignement}</h2>
             <div id='BlockBtn'>
-                {/* <Ajouter_EC_UE enseignement={enseignement}/>
-                <Ajouter_Module_UE enseignement={enseignement}/> */}
-                {/* <Ajouter_Enseignement_Classe enseignement={enseignement}/> */}
+                
             </div>
             
             <div id='Block2'>
