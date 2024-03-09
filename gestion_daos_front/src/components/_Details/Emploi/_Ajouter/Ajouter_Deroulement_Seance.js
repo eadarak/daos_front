@@ -5,17 +5,15 @@ import { Box, Divider, Stack, TextField, Grid, Button } from '@mui/material';
 import '../../../../styles/general.css';
 import { EMPLOI_URL } from '../../../../Server_URL/Urls';
 
-function Ajouter_Seance_Salle({ batiment }) {
+function Ajouter_Deroulement_Seance({ seance }) {
     const [open, setOpen] = React.useState(false);
 
-    const initialSalle = {
-        libelleSalle: '',
-        codeSalle: '',
-        capaciteSalle: 0,
-        descriptionSalle : ''
+    const modelDeroulement = {
+        objectifsDeroulement: '',
+        descriptionDeroulement: '',
     };
 
-    const [data, setFormData] = React.useState(initialSalle);
+    const [data, setFormData] = React.useState(modelDeroulement);
 
     const handleChange = (e) => {
         const { id, value } = e.target;
@@ -24,8 +22,8 @@ function Ajouter_Seance_Salle({ batiment }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(`${EMPLOI_URL}/batiment/${batiment.idBatiment}/salles`);
-        fetch(`${EMPLOI_URL}/batiment/${batiment.idBatiment}/salles`, {
+        console.log(`${EMPLOI_URL}/seance/${seance.idSeance}/deroulement`);
+        fetch(`${EMPLOI_URL}/seance/${seance.idSeance}/deroulement`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
@@ -37,8 +35,8 @@ function Ajouter_Seance_Salle({ batiment }) {
                 return response.json();
             })
             .then(data => {
-                console.log('Une nouvelle salle a été ajoutée avec succès', data);
-                setFormData(initialSalle);
+                console.log('Un nouveau deroulement a été ajoutée avec succès', data);
+                setFormData(modelDeroulement);
                 setOpen(false);
             })
             .catch(err => {
@@ -65,7 +63,7 @@ function Ajouter_Seance_Salle({ batiment }) {
                 }}
                 onClick={() => setOpen(true)}
             >
-                Ajouter Salle
+                Ajouter Un Deroulement
             </Button>
 
             <Modal
@@ -84,7 +82,7 @@ function Ajouter_Seance_Salle({ batiment }) {
             >
                 <Box sx={{ backgroundColor: 'white', p: 2, width: 800, borderRadius: '10px' }}>
                     <Typography variant="h5" align="center" fontWeight='bold' fontSize='2rem' >
-                        Ajouter une Salle au Bâtiment
+                        Ajouter le deroulement à la séance
                     </Typography>
                     <Typography variant='body1' align='center' fontSize='1.2rem'> Veuillez remplir les champs ci-dessous...</Typography>
                     <Divider />
@@ -92,43 +90,21 @@ function Ajouter_Seance_Salle({ batiment }) {
                         <Grid container spacing={2}>
                             <Grid item xs={6}>
                                 <TextField
-                                    id="libelleSalle"
-                                    label="Libellé de la Salle"
+                                    id="objectifsDeroulement"
+                                    label="Objectif Deroulement"
                                     required
                                     fullWidth
-                                    value={data.libelleSalle}
+                                    value={data.objectifsDeroulement}
                                     onChange={handleChange}
                                 />
                             </Grid>
                             <Grid item xs={6}>
                                 <TextField
-                                    id="codeSalle"
-                                    label="Code de la Salle"
+                                    id="descriptionDeroulement"
+                                    label="Description Deroulement"
                                     fullWidth
                                     required
-                                    value={data.codeSalle}
-                                    onChange={handleChange}
-                                />
-                            </Grid>
-                            <Grid item xs={6}>
-                                <TextField
-                                    id="capaciteSalle"
-                                    label="Capacité de la Salle"
-                                    fullWidth
-                                    required
-                                    value={data.capaciteSalle}
-                                    onChange={handleChange}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    id="descriptionSalle"
-                                    label="Description de la Salle"
-                                    variant="filled"
-                                    fullWidth
-                                    multiline
-                                    rows={3}
-                                    value={data.descriptionSalle}
+                                    value={data.descriptionDeroulement}
                                     onChange={handleChange}
                                 />
                             </Grid>
@@ -168,4 +144,4 @@ function Ajouter_Seance_Salle({ batiment }) {
     );
 }
 
-export default Ajouter_Seance_Salle;
+export default Ajouter_Deroulement_Seance;

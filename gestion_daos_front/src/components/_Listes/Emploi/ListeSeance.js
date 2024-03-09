@@ -267,6 +267,8 @@ export default function ListeSeance() {
 
   return (
     <div>
+      &nbsp;
+      &nbsp;
       <Button
         href="/emploi"
         style={{ color: "white", borderRadius: "5px", background: "rgb(9, 44, 38)" }}
