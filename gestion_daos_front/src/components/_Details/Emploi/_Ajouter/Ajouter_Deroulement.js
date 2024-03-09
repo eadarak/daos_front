@@ -3,20 +3,22 @@ import Modal from '@mui/joy/Modal';
 import Typography from '@mui/material/Typography';
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import { Box, Divider, Stack, TextField, Grid, Button} from '@mui/material';
-import { MAQUETTE_URL } from '../../../Server_URL/Urls';
+import { EMPLOI_URL } from '../../../Server_URL/Urls';
 import {useNavigate } from 'react-router-dom';
 
-function Ajouter_Enseignement () {
+
+function Ajouter_Deroulement () {
     const [open, setOpen] = React.useState(false);
     const navigate = useNavigate()
 
-    const initialEnseignement = {
-        libelleEnseignement: '',
-        objectifsEnseignement: '',
-        descriptionEnseignement: ''
+    const modelDeroulement = {
+        idDeroulement : 0,
+        objectifsDeroulement: '',
+        descriptionDeroulement : '',
+
     };
 
-    const [data, setFormData] = React.useState(initialEnseignement);
+    const [data, setFormData] = React.useState(modelDeroulement);
 
     const handleChange = (e) =>{
         const { id, value } = e.target;
@@ -27,7 +29,7 @@ function Ajouter_Enseignement () {
     const handleSubmit = (e) =>{
         e.preventDefault();
 
-        fetch(`${MAQUETTE_URL}enseignement`, {
+        fetch(`${EMPLOI_URL}/deroulement`, {
             method : 'POST',
             headers : {'Content-Type' : 'application/json'},
             body : JSON.stringify(data)
@@ -40,16 +42,19 @@ function Ajouter_Enseignement () {
         })
         .then(
             data => {
-                console.log('Une nouvelle enseignement a été ajoutée avec succès' ,data);
-                setFormData(initialEnseignement);
+                console.log('Un nouveau deroulement a été ajouté avec succès' ,data);
+                setFormData(modelDeroulement);
                 setOpen(false);
-                navigate('/listes-enseignement');
+                navigate('/listeDeroulement');
                 window.location.reload();
             })
         .catch( err => {
-            console.error("Une erreur s'est produite lors de l'opération d'ajout :", err);
+            throw new Error("Une erreur s'est produite lors de l'operation d'ajout")
         })
     }
+
+    
+
 
     return (
         <React.Fragment>
@@ -69,7 +74,7 @@ function Ajouter_Enseignement () {
             >
                 <Box sx={{ backgroundColor: 'white', p: 2, width: 800 , borderRadius:"10px"}}>
                     <Typography variant="h5" align="center" fontWeight='bold' fontSize='2rem' >
-                        Ajouter un Enseignement
+                        Ajouter un nouveau Deroulement
                     </Typography>
                     <Typography variant='body1' align='center' fontSize='1.2rem'> Veuillez remplir les champs ci-dessous...</Typography>
                     <Divider />
@@ -77,38 +82,27 @@ function Ajouter_Enseignement () {
                         <Grid container spacing={2}>
                             <Grid item xs={6}>
                                 <TextField
-                                    id="libelleEnseignement"
-                                    label="Libelle de l'enseignement"
+                                    id="objectifsDeroulement"
+                                    label="Objectifs Deroulement"
                                     required
                                     fullWidth
-                                    value={data.libelleEnseignement}
+                                    value={data.objectifsDeroulement}
                                     onChange={handleChange}
                                 />
                             </Grid>
                             <Grid item xs={6}>
                                 <TextField
-                                    id="objectifsEnseignement"
-                                    label="Objectifs de l'enseignement"
+                                    id="descriptionDeroulement"
+                                    label="Description Deroulement"
                                     fullWidth
-                                    multiline
-                                    rows={3}
-                                    value={data.objectifsEnseignement}
+                                    required
+                                    value={data.descriptionDeroulement}
                                     onChange={handleChange}
                                 />
                             </Grid>
-
-                            <Grid item xs={12}>
-                                <TextField
-                                    id="descriptionEnseignement"
-                                    label="description de l'enseignement"
-                                    variant="filled"
-                                    fullWidth
-                                    multiline
-                                    rows={3}
-                                    value={data.descriptionEnseignement}
-                                    onChange={handleChange}
-                                />
-                            </Grid>
+                           
+                           
+                           
                         </Grid>
                     </Stack>
                     <Box sx={{ mt: 2, display: 'flex', justifyContent: 'space-around' }}>
@@ -144,4 +138,4 @@ function Ajouter_Enseignement () {
     );
 }
 
-export default Ajouter_Enseignement;
+export default Ajouter_Deroulement;

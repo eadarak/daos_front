@@ -145,7 +145,7 @@ function EnhancedTableToolbar(props) {
       )}
         
           {/* <IconButton>
-            <Ajouter_Salle/>
+            <Ajouter_Salle_Batiment/>
           </IconButton> */}
         
      
@@ -300,13 +300,13 @@ export default function ListeSalle() {
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => {
                     const isItemSelected = isSelected(row.idSalle);
-                    const labelId = `enhanced-table-checkbox-${index}`;
+                   
 
                     return (
                       <TableRow
                         hover
                         onClick={(event) => handleClick(event, row.idSalle)}
-                        role="checkbox"
+                        
                         aria-checked={isItemSelected}
                         tabIndex={-1}
                         key={row.idSalle}
@@ -315,7 +315,7 @@ export default function ListeSalle() {
                       >
                         <TableCell
                           component="th"
-                          id={labelId}
+                          
                           scope="row"
                           padding="normal"
                         >
