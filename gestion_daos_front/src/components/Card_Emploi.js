@@ -6,7 +6,7 @@ import Deroulement from './_Emploi/Deroulement';
 import Salle from './_Emploi/Salle';
 import Seance from './_Emploi/Seance';
 import { Grid } from '@mui/material';
-import Emploi from '../pages/Emploi';
+import EmploiDuTemps from './_Emploi/EmploiDuTemps';
 
 function Card_Emploi(props) {
     const [modalOpen, setModalOpen] = useState(false);
@@ -28,6 +28,9 @@ function Card_Emploi(props) {
             <Grid item  md={5.5} >
                 <Seance/>
             </Grid>
+            <Grid item xs={12} md={10}>
+                <EmploiDuTemps/> 
+          </Grid>
         </Grid>
 
     );
