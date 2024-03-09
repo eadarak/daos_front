@@ -11,7 +11,6 @@ import Paper from '@mui/material/Paper';
 import axios from 'axios';
 import '../../../styles/general.css';
 import { REPARTITION_URL } from '../../../Server_URL/Urls';
-import Ajouter_Rep_Ens from './_Ajouter/Ajouter_Rep_Ens';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -66,7 +65,7 @@ function DetailsEnseignant ({ ens }) {
             <span id='separator'></span>
         </h2>
         <div id='BlockBtn'>
-            <Ajouter_Rep_Ens ens={ens}/>   
+            {/* <Ajouter_Rep_Ens ens={ens}/>    */}
         </div>
         
         <div id='Block2'>

@@ -24,6 +24,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { EMPLOI_URL } from '../../../Server_URL/Urls';
 import Modifier_Seance from '../../_Modifier/Emploi/Modifier_Seance';
 import Details_Seance from '../../_Details/Emploi/DetailsSeance';
+import Ajouter_Seance from '../../_Ajouter/Aj-Emploi/Ajouter_Seance';
 
 const rows = []
 
@@ -144,7 +145,11 @@ function EnhancedTableToolbar(props) {
         >
           Liste des Séances
         </Typography>
-      )}
+       )}
+
+       <IconButton>
+            <Ajouter_Seance/>
+          </IconButton>
     </Toolbar>
   );
 }
@@ -214,14 +219,14 @@ export default function ListeSeance() {
     setOrderBy(property);
   };
 
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelected = data.map((n) => n.id);
-      setSelected(newSelected);
-      return;
-    }
-    setSelected([]);
-  };
+  // const handleSelectAllClick = (event) => {
+  //   if (event.target.checked) {
+  //     const newSelected = data.map((n) => n.id);
+  //     setSelected(newSelected);
+  //     return;
+  //   }
+  //   setSelected([]);
+  // };
 
   const handleClick = (event, id) => {
     const selectedIndex = selected.indexOf(id);
@@ -281,7 +286,7 @@ export default function ListeSeance() {
                 numSelected={selected.length}
                 order={order}
                 orderBy={orderBy}
-                onSelectAllClick={handleSelectAllClick}
+                //onSelectAllClick={handleSelectAllClick}
                 onRequestSort={handleRequestSort}
                 rowCount={data.length}
               />
@@ -289,7 +294,7 @@ export default function ListeSeance() {
                 {stableSort(data, getComparator(order, orderBy))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => {
-                    const isItemSelected = isSelected(row.idSeance);
+                    //const isItemSelected = isSelected(row.idSeance);
                     const labelId = `enhanced-table-checkbox-${index}`;
 
                     return (
@@ -297,15 +302,15 @@ export default function ListeSeance() {
                         hover
                         onClick={(event) => handleClick(event, row.idSeance)}
                         role="checkbox"
-                        aria-checked={isItemSelected}
+                        //aria-checked={isItemSelected}
                         tabIndex={-1}
                         key={row.idSeance}
-                        selected={isItemSelected}
+                        //selected={isItemSelected}
                         sx={{ cursor: 'pointer' }}
                       >
                         <TableCell
                           component="th"
-                          id={labelId}
+                          //id={labelId}
                           scope="row"
                           padding="normal"
                         >
