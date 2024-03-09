@@ -11,6 +11,7 @@ import Paper from '@mui/material/Paper';
 import axios from 'axios';
 import '../../../styles/general.css';
 import { MAQUETTE_URL } from '../../../Server_URL/Urls';
+import Ajouter_Formation_Niveau from './_Ajouter/Ajouter_Formation_Niveau';
 ;
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -33,34 +34,50 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-const HeadersNiveau = ['Identifiant', 'Libelle'];
+const HeadersFormation = ['Identifiant', 'Libelle','Date de Creation'];
 
 function DetailsNiveau ({ niveau }) {
-    const [repartitions, setRepartitions] = useState([]);
-    // const [ShowRepartitionTable, setShowRepartitionTable] = useState(false);
+    const [formations, setFormations] = useState([]);
+    const [cycle, setCycle] = useState({})
+    const [ShowFormationTable, setShowFormationTable] = useState(false);
 
-    // useEffect(() => {
-    //     axios.get(`${MAQUETTE_URL}niveau/${niveau.idNiveau}/repartitions`)
-    //       .then(res => {
-    //         console.log("les données récupérées depuis la base de données : \n ",res.data);
-    //         setRepartitions(res.data);
-    //       })
-    //       .catch(err => console.log(err));
-    // }, []);
+    useEffect(() => {
+        axios.get(`${MAQUETTE_URL}niveau/${niveau.idNiveau}/formations`)
+          .then(res => {
+            console.log("les données récupérées depuis la base de données : \n ",res.data);
+            setFormations(res.data);
+          })
+          .catch(err => console.log(err));
+
+          axios.get(`${MAQUETTE_URL}niveau/${niveau.idNiveau}/cycle`)
+          .then(res => {
+            console.log("les données récupérées depuis la base de données : \n ",res.data);
+            setCycle(res.data);
+          })
+          .catch(err => console.log(err));
+    }, [niveau.idNiveau]);
 
   
 
-    // const toggleModuleTable = () => {
-    //     setShowRepartitionTable(!ShowRepartitionTable);
-    // };
+    const toggleModuleTable = () => {
+        setShowFormationTable(!ShowFormationTable);
+    };
 
     return (
         <div>
-            <h2 id='title'>{niveau.libelleNiveau}</h2>
+            <br/> &nbsp;
+            <Button 
+                href="/listes-niveau" 
+                style={{ color: "white", borderRadius: "5px", background: "rgb(9, 44, 38)" }}
+            > ⬅
+            </Button>
+            <h2 id='title'>{niveau.libelleNiveau}
+            <br></br>
+            <span id='separator'></span>
+            </h2>
+            
             <div id='BlockBtn'>
-                {/* <Ajouter_EC_UE niveau={niveau}/>
-                <Ajouter_Module_UE niveau={niveau}/> */}
-                {/* <Ajouter_Niveau_Classe niveau={niveau}/> */}
+                <Ajouter_Formation_Niveau niveau={niveau}/>
             </div>
             
             <div id='Block2'>
@@ -70,42 +87,46 @@ function DetailsNiveau ({ niveau }) {
                     </p>
                 </Card>
                 <Card id='MyCard2'>
-            
+                    <p><b>Cycle : </b>{cycle.libelleCycle}</p>
+                    <p><b>Description : </b>{cycle.descriptionCycle}</p>
+                    <p><b>Date Creation : </b>{cycle.dateCreationCycle}</p>
+
                 </Card>
             </div>
-            {/* <div id='Block3'>
+            <div id='Block3'>
                 <h3 id='title'>
                     <span id='separator1'></span>
                     &nbsp;
                     <Button onClick={toggleModuleTable}>
-                        {ShowRepartitionTable ? 'Cacher la liste des Repartitions' : 'Afficher la liste des Repartitions'}
+                        {ShowFormationTable ? 'Cacher la liste des Formations' : 'Afficher la liste des Formations'}
                     </Button>
                 </h3>
                 <br/>
-                {ShowRepartitionTable && ( 
+                {ShowFormationTable && ( 
                 <TableContainer component={Paper} style={{ width: "70rem", margin: "auto" }}>
                     <Table aria-label="customized table">
                         <TableHead>
                             <TableRow>
-                                {HeadersRepartition.map((th, index) => (
+                                {HeadersFormation.map((th, index) => (
                                     <StyledTableCell key={index}>{th}</StyledTableCell>
                                 ))}
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {repartitions.length > 0 && repartitions.map(repartition => (
-                                <StyledTableRow key={repartition.idRepartition}>
+                            {formations.length > 0 && formations.map(formation => (
+                                <StyledTableRow key={formation.idFormation}>
                                     <StyledTableCell component="th" scope="row">
-                                        {repartition.idRepartition}
+                                        {formation.idFormation}
                                     </StyledTableCell>
-                                    <StyledTableCell align="left">{repartition.descriptionRepartition}</StyledTableCell>
+                                    <StyledTableCell align="left">{formation.libelleFormation}</StyledTableCell>
+                                    <StyledTableCell align="left">{formation.dateCreationFormation}</StyledTableCell>
                                 </StyledTableRow>
                             ))}
                         </TableBody>
                     </Table>
                 </TableContainer>
                 )}
-            </div> */}
+            </div>
         </div>
     );
 }

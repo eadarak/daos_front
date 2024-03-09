@@ -11,6 +11,7 @@ import Paper from '@mui/material/Paper';
 import axios from 'axios';
 import '../../../styles/general.css';
 import { MAQUETTE_URL } from '../../../Server_URL/Urls';
+import Ajouter_Classe_Formation from './_Ajouter/Ajouter_Classe_Formation';
 ;
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -33,7 +34,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-const HeadersClasse = ['Identifiant', 'Libelle', 'Effectif' , 'Nombre de Groupe(s)'];
+const HeadersClasse = ['Identifiant', 'Libelle', 'Effectif' , 'Nombre de Groupe(s)', 'Date Creation', ''];
 
 function DetailsFormation ({ formation }) {
     const [classes, setClasses] = useState([]);
@@ -65,7 +66,7 @@ function DetailsFormation ({ formation }) {
         </Button>
             <h2 id='title'>{formation.libelleFormation}</h2>
             <div id='BlockBtn'>
-                
+                <Ajouter_Classe_Formation formation={formation}/>
             </div>
             
             <div id='Block2'>
@@ -106,6 +107,10 @@ function DetailsFormation ({ formation }) {
                                     <StyledTableCell align="left">{classe.libelleClasse}</StyledTableCell>
                                     <StyledTableCell align="left">{classe.effectifClasse}</StyledTableCell>
                                     <StyledTableCell align="left">{classe.nbreGroupeClasse}</StyledTableCell>
+                                    <StyledTableCell align="left">{classe.dateCreationClasse}</StyledTableCell>
+                                    <StyledTableCell align="left"> <Button href='/listes-classe' variant='outlined'>Voir Liste </Button> </StyledTableCell>
+
+
 
                                 </StyledTableRow>
                             ))}
