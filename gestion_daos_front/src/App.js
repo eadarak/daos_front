@@ -28,6 +28,7 @@ import ListeCycle from './components/_Listes/Maquette/ListeCycle';
 import ListeNiveau from './components/_Listes/Maquette/ListeNiveau';
 import ListeEmploiDuTemps from './components/_Listes/Emploi/ListeEmploiDuTemps';
 import ListeFormation from './components/_Listes/Maquette/ListeFormation';
+import ListeFiliere from './components/_Listes/Maquette/ListeFiliere';
 
 
 const router = createBrowserRouter([
@@ -135,6 +136,10 @@ const router = createBrowserRouter([
   {
     path : '/listes-formation',
     element: <Layout><ListeFormation/> </Layout>
+  },
+  {
+    path : '/listes-filiere',
+    element: <Layout><ListeFiliere/> </Layout>
   },
 
 ]);
