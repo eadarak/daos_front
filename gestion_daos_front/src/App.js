@@ -27,6 +27,7 @@ import ListeEnseignement from './components/_Listes/Maquette/ListeEnseignement';
 import ListeCycle from './components/_Listes/Maquette/ListeCycle';
 import ListeNiveau from './components/_Listes/Maquette/ListeNiveau';
 import ListeEmploiDuTemps from './components/_Listes/Emploi/ListeEmploiDuTemps';
+import ListeFormation from './components/_Listes/Maquette/ListeFormation';
 
 
 const router = createBrowserRouter([
@@ -130,6 +131,10 @@ const router = createBrowserRouter([
   {
     path : '/listes-emploi-du-temps',
     element: <Layout><ListeEmploiDuTemps/> </Layout>
+  },
+  {
+    path : '/listes-formation',
+    element: <Layout><ListeFormation/> </Layout>
   },
 
 ]);
