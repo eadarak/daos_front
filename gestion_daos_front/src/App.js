@@ -71,16 +71,16 @@ const router = createBrowserRouter([
     element : <Layout> <ListeBatiment/> </Layout>
   },
   {
+    path : '/listeSalle',
+    element : <Layout> <ListeSalle/> </Layout>
+  },
+  {
     path : '/listeDeroulement',
     element : <Layout> <ListeDeroulement/> </Layout>
   },
   {
     path : '/listeEmploiDuTemps',
     element : <Layout> <ListeAllEnseignant/> </Layout>
-  },
-  {
-      path : '/listeSalle',
-     element : <Layout> <ListeSalle/> </Layout>
   },
   {
     path : '/listeSeance',

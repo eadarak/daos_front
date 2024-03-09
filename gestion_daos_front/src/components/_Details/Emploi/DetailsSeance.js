@@ -12,6 +12,7 @@ import axios from 'axios';
 import '../../../styles/general.css';
 import { EMPLOI_URL } from '../../../Server_URL/Urls';
 import Ajouter_Salle_Seance from './_Ajouter/Ajouter_Salle_Seance';
+import Ajouter_Deroulement_Seance from './_Ajouter/Ajouter_Deroulement_Seance';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -35,8 +36,11 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 const HeadersSalle = ['Identifiant', 'Libelle', 'Code', 'Capacite'];
 
+
 function DetailsSeance ({ seance }) {
     const [salles, setSalles] = useState([]);
+    const [deroulement, setDeroulement] = useState([]);
+
     const [showSallesTable, setShowSallesTable] = useState(false);
 
     useEffect(() => {
@@ -46,9 +50,15 @@ function DetailsSeance ({ seance }) {
             console.log("Les données récupérées depuis la base de données : \n ", res.data);
           })
           .catch(err => console.log(err));
+
+          axios.get(`${EMPLOI_URL}/seance/${seance.idSeance}/deroulement`)
+          .then(res => {
+            setDeroulement(res.data);
+            console.log("Le déroulement récupéré depuis la base de données : \n ", res.data);
+          })
+          .catch(err => console.log(err));
     }, [seance.idSeance]);
 
-    console.log('les donnees dans salle', salles);
 
     const toggleSallesTable = () => {
         setShowSallesTable(!showSallesTable);
@@ -56,6 +66,14 @@ function DetailsSeance ({ seance }) {
 
     return (
         <div>
+            &nbsp;
+            &nbsp;
+            <Button
+                    href="/listeSeance"
+                    style={{ color: "white", borderRadius: "5px", background: "rgb(9, 44, 38)" }}
+                > ⬅
+            </Button>
+
             <h2 id='title'>
             {`La seance numéro : ${seance.numeroSeance}`} {` du ${seance.jourSeance}`}  
                   <br/>
@@ -64,6 +82,8 @@ function DetailsSeance ({ seance }) {
                 </h2>
             <div id='BlockBtn'>
                 <Ajouter_Salle_Seance seance={seance} />
+                <Ajouter_Deroulement_Seance seance={seance} />
+
             </div>
             
             <div id='Block2'>
@@ -76,6 +96,16 @@ function DetailsSeance ({ seance }) {
                     <p><b>Durée :</b> {`${seance.dureeSeance} heures`} </p>
                    
                     <p><b>Numéro de la Séance :</b> {seance.numeroSeance} </p>
+                </Card>
+                <Card id='MyCard2'>
+                    <h5> Deroulement</h5>
+                    {deroulement && (
+                        <>
+                            <p><b>Objectifs :</b> {deroulement.objectifsDeroulement} </p>
+                            <p><b>Description :</b> {deroulement.descriptionDeroulement} </p>
+                        </>
+                     )}
+                    {!deroulement && <p>Pas de déroulement pour cette séance.</p>}                    
                 </Card>
             </div>
             <div id='Block3'>
