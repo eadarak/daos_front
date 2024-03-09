@@ -3,20 +3,21 @@ import Modal from '@mui/joy/Modal';
 import Typography from '@mui/material/Typography';
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import { Box, Divider, Stack, TextField, Grid, Button} from '@mui/material';
-import { MAQUETTE_URL } from '../../../Server_URL/Urls';
+import { REPARTITION_URL } from '../../../Server_URL/Urls';
 import {useNavigate } from 'react-router-dom';
 
-function Ajouter_Enseignement () {
+function Ajouter_Repartition () {
     const [open, setOpen] = React.useState(false);
     const navigate = useNavigate()
 
-    const initialEnseignement = {
-        libelleEnseignement: '',
-        objectifsEnseignement: '',
-        descriptionEnseignement: ''
+    const modelRepartition  = {
+        idRepartition : 0,
+        descriptionRepartition: '',
+        
+       
     };
 
-    const [data, setFormData] = React.useState(initialEnseignement);
+    const [data, setFormData] = React.useState(modelRepartition );
 
     const handleChange = (e) =>{
         const { id, value } = e.target;
@@ -27,7 +28,7 @@ function Ajouter_Enseignement () {
     const handleSubmit = (e) =>{
         e.preventDefault();
 
-        fetch(`${MAQUETTE_URL}enseignement`, {
+        fetch(`${REPARTITION_URL}/repartition`, {
             method : 'POST',
             headers : {'Content-Type' : 'application/json'},
             body : JSON.stringify(data)
@@ -40,14 +41,14 @@ function Ajouter_Enseignement () {
         })
         .then(
             data => {
-                console.log('Une nouvelle enseignement a été ajoutée avec succès' ,data);
-                setFormData(initialEnseignement);
+                console.log('Une nouvelle repartition a ete ajoute avec succes' ,data);
+                setFormData(modelRepartition );
                 setOpen(false);
-                navigate('/listes-enseignement');
+                navigate('/listeRepartition');
                 window.location.reload();
             })
         .catch( err => {
-            console.error("Une erreur s'est produite lors de l'opération d'ajout :", err);
+            throw new Error("Une erreur s'est produite lors de l'operation d'ajout")
         })
     }
 
@@ -69,46 +70,24 @@ function Ajouter_Enseignement () {
             >
                 <Box sx={{ backgroundColor: 'white', p: 2, width: 800 , borderRadius:"10px"}}>
                     <Typography variant="h5" align="center" fontWeight='bold' fontSize='2rem' >
-                        Ajouter un Enseignement
+                       Ajouter une Repartition
                     </Typography>
                     <Typography variant='body1' align='center' fontSize='1.2rem'> Veuillez remplir les champs ci-dessous...</Typography>
                     <Divider />
-                    <Stack spacing={2} direction="column" sx={{ width: '95%' }}>
+                    <Stack spacing={2} direction="center" sx={{ width: '95%' }}>
                         <Grid container spacing={2}>
-                            <Grid item xs={6}>
+                            <Grid item xs={6} >
                                 <TextField
-                                    id="libelleEnseignement"
-                                    label="Libelle de l'enseignement"
+                                    id="descriptionRepartition"
+                                    label="Description Repartition"
                                     required
                                     fullWidth
-                                    value={data.libelleEnseignement}
+                                    value={data.descriptionRepartition}
                                     onChange={handleChange}
                                 />
                             </Grid>
-                            <Grid item xs={6}>
-                                <TextField
-                                    id="objectifsEnseignement"
-                                    label="Objectifs de l'enseignement"
-                                    fullWidth
-                                    multiline
-                                    rows={3}
-                                    value={data.objectifsEnseignement}
-                                    onChange={handleChange}
-                                />
-                            </Grid>
-
-                            <Grid item xs={12}>
-                                <TextField
-                                    id="descriptionEnseignement"
-                                    label="description de l'enseignement"
-                                    variant="filled"
-                                    fullWidth
-                                    multiline
-                                    rows={3}
-                                    value={data.descriptionEnseignement}
-                                    onChange={handleChange}
-                                />
-                            </Grid>
+                            
+                           
                         </Grid>
                     </Stack>
                     <Box sx={{ mt: 2, display: 'flex', justifyContent: 'space-around' }}>
@@ -144,4 +123,4 @@ function Ajouter_Enseignement () {
     );
 }
 
-export default Ajouter_Enseignement;
+export default Ajouter_Repartition;

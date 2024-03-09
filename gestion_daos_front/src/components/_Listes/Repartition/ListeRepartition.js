@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-pascal-case */
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { alpha } from '@mui/material/styles';
@@ -13,16 +14,18 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
 import { visuallyHidden } from '@mui/utils';
 import { Button } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 import axios from 'axios';
+import EditIcon from '@mui/icons-material/Edit';
+import { REPARTITION_URL } from '../../../Server_URL/Urls';
+import Ajouter_Repartition from '../../_Ajouter/Aj-Repartition/Ajouter_Repartition';
+import Modifier_Repartition from '../../_Modifier/Emploi/Modifier_Repartition';
+import DetailsRepartition from '../../_Details/Repartition/DetailsRepartition';
 
 const rows = [];
 
@@ -54,21 +57,16 @@ function stableSort(array, comparator) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-
 const headCells = [
-  { id: 'idEns', numeric: false, disablePadding: false, label: 'Identifiant'},
-  { id: 'descriptionRepartition', numeric: false, disablePadding: false, label: 'Description' },
-  { id: 'dateCreationRepartition', numeric: false, disablePadding: false, label: 'Date Creation ' },
-  // { id: 'prenomEns', numeric: false, disablePadding: false, label: 'Prenom' },
-  // { id: 'nomEns', numeric: false, disablePadding: false, label: 'Nom'},
-  // { id: 'gradeEns', numeric: false, disablePadding: false, label: 'Grade' },
+  { id: 'idRepartiton', numeric: false, disablePadding: false, label: 'Identifiant'},
+  { id: 'descriptionRepartition', numeric: false, disablePadding: false, label: 'Description ' },
+  { id: 'dateCreationRepartition', numeric: false, disablePadding: false, label: 'Date Creation' },
   { id: 'Operations', numeric: false, disablePadding: false, label: 'Operations' },
   { id: 'Details', numeric: false, disablePadding: false, label: 'Details' },
-
 ];
 
 function EnhancedTableHead(props) {
-  const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
+  const {  order, orderBy, onRequestSort } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
@@ -76,17 +74,6 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{
-              'aria-label': 'select all desserts',
-            }}
-          />
-        </TableCell>
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
@@ -156,20 +143,12 @@ function EnhancedTableToolbar(props) {
           Liste des Repartitions
         </Typography>
       )}
-
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
+        
           <IconButton>
-            <DeleteIcon />
+            <Ajouter_Repartition/>
           </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <Button id='mybtnStyle'> + </Button>
-          </IconButton>
-        </Tooltip>
-      )}
+        
+     
     </Toolbar>
   );
 }
@@ -180,51 +159,68 @@ EnhancedTableToolbar.propTypes = {
 
 export default function ListeRepartition() {
   const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('idEns');
+  const [orderBy, setOrderBy] = React.useState('idRepartition');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [data, setData] = React.useState([]);
+  const [selectedRepartition, setSelectedRepartition] = React.useState(null);
+
 
   React.useEffect(() => {
-    axios.get('http://localhost:8084/repartition/repartition')
-      .then(res => setData(res.data))
+    axios.get(`${REPARTITION_URL}/repartition`)
+      .then(res => {
+        console.log("les données recupérées depuis la db : \n ",res.data)
+        setData(res.data)
+      })
       .catch(err => console.log(err));
-  }, []);
+  },[]);
+
+  const handleRepartitionClick = (repartition) => {
+    setSelectedRepartition(repartition);
+  };
+
+
+  const handleRepartitionDelete  = (e, id) => { 
+    
+    e.stopPropagation();
+    const confirmation = window.confirm(`Êtes-vous sûr de vouloir supprimer cette repartition ${id} ?`);
+
+    if(confirmation){
+
+      axios.delete(`${REPARTITION_URL}/repartition/${id}`)
+      .then( response => {
+        console.log("Repartition supprimé avec succès :", id);
+        setData(data.filter(repartition => repartition.idRepartition !== id));
+        window.location.reload();
+      })
+      .catch( err => {
+        throw new Error("Erreur lors de la suppression de repartition :", err)
+      });
+    }
+    else{
+      window.alert(`Suppression Repartition ${id} annulée`);
+    }
+
+  }
+
+  if (selectedRepartition) {
+   return <DetailsRepartition repartition={selectedRepartition}/>
+  }
+
+  if(selectedRepartition){
+    return <Modifier_Repartition repartition={selectedRepartition} 
+                              open={true} 
+                              onClose={() => setSelectedRepartition(null)} 
+            />;
+  }
+
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
-  };
-
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelected = data.map((n) => n.id);
-      setSelected(newSelected);
-      return;
-    }
-    setSelected([]);
-  };
-
-  const handleClick = (event, id) => {
-    const selectedIndex = selected.indexOf(id);
-    let newSelected = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
-      );
-    }
-    setSelected(newSelected);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -240,19 +236,15 @@ export default function ListeRepartition() {
     setDense(event.target.checked);
   };
 
-  const isSelected = (id) => selected.indexOf(id) !== -1;
+  //const isSelected = (id) => selected.indexOf(id) !== -1;
 
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
 
+    
+
   return (
     <div>
-      <Button 
-        href="/repartition" 
-        style={{ color: "white", borderRadius: "5px", background: "rgb(9, 44, 38)" }}
-      > ⬅
-      </Button>
-
       <Box sx={{ width: '100%', paddingTop: "10px" }}>
         <Paper sx={{ width: '100%', mb: 2 }}>
           <EnhancedTableToolbar numSelected={selected.length} />
@@ -266,7 +258,6 @@ export default function ListeRepartition() {
                 numSelected={selected.length}
                 order={order}
                 orderBy={orderBy}
-                onSelectAllClick={handleSelectAllClick}
                 onRequestSort={handleRequestSort}
                 rowCount={data.length}
               />
@@ -274,32 +265,18 @@ export default function ListeRepartition() {
                 {stableSort(data, getComparator(order, orderBy))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => {
-                    const isItemSelected = isSelected(row.id);
-                    const labelId = `enhanced-table-checkbox-${index}`;
+                    
 
                     return (
                       <TableRow
                         hover
-                        onClick={(event) => handleClick(event, row.id)}
-                        role="checkbox"
-                        aria-checked={isItemSelected}
+                        
                         tabIndex={-1}
-                        key={row.id}
-                        selected={isItemSelected}
+                        key={row.idRepartition}
                         sx={{ cursor: 'pointer' }}
                       >
-                        <TableCell padding="checkbox">
-                          <Checkbox
-                            color="primary"
-                            checked={isItemSelected}
-                            inputProps={{
-                              'aria-labelledby': labelId,
-                            }}
-                          />
-                        </TableCell>
                         <TableCell
                           component="th"
-                          id={labelId}
                           scope="row"
                           padding="normal"
                         >
@@ -307,29 +284,30 @@ export default function ListeRepartition() {
                         </TableCell>
                         <TableCell align="left">{row.descriptionRepartition}</TableCell>
                         <TableCell align="left">{row.dateCreationRepartition}</TableCell>
-                        {/* <TableCell align="left">{row.nomEns}</TableCell>
-                        <TableCell align="left">{row.gradeEns}</TableCell>
-                        <TableCell align="left">{row.dateCreationEns}</TableCell> */}
                         <TableCell > 
-                            <IconButton aria-label="edit" >
-                                <EditIcon color='success' />
-                            </IconButton> 
+                        <IconButton aria-label="edit" onClick={() => handleRepartitionClick(row)}>
+                          <EditIcon  color='success'/>
+                        </IconButton>
                             &nbsp; &nbsp;
 
-                            <IconButton aria-label="delete">
+                            <IconButton aria-label="delete" onClick={(event) => handleRepartitionDelete (event, row.idRepartition)}>
                                 <DeleteIcon sx={{color:"#cd0000"}}/>
                             </IconButton>
                          </TableCell>
                          <TableCell> 
-                            <Button sx={{
-                            borderRadius:"30px solid",
-                            color:"white",
-                            fontWeight:"600",
-                            background:"rgb(9, 44, 38)",
-                            textTransform:"capitalize"
-
-                            }}>Détails
-                            </Button>
+                          
+                            <Button 
+                              sx={{
+                                borderRadius: "30px solid",
+                                color: "white",
+                                fontWeight: "600",
+                                background: "rgb(9, 44, 38)",
+                                textTransform: "capitalize"
+                              }}
+                              onClick={() => handleRepartitionClick(row)}
+                            >
+                              Détails
+                            </Button> 
                         </TableCell>
                       </TableRow>
                     );

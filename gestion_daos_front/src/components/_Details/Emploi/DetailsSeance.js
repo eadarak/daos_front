@@ -56,22 +56,25 @@ function DetailsSeance ({ seance }) {
 
     return (
         <div>
-            <h2 id='title'>{seance.idSeance}</h2>
+            <h2 id='title'>
+            {`La seance numéro : ${seance.numeroSeance}`} {` du ${seance.jourSeance}`}  
+                  <br/>
+                <span id='separator'></span>
+
+                </h2>
             <div id='BlockBtn'>
                 <Ajouter_Salle_Seance seance={seance} />
             </div>
             
             <div id='Block2'>
                 <Card id='MyCard1'>
-                    <p><b>Description :</b> <br/>
-                        {seance.descriptionSeance}
-                    </p>
+                     <p><b>Heure de Début :</b> &nbsp;{` ${seance.debutSeance}H:00`}  </p>
+                    <p><b>Heure de Fin :</b> &nbsp;{`${seance.finSeance}H:00`} </p>
                 </Card>
                 <Card id='MyCard2'>
                     <p><b>Jour :</b> {seance.jourSeance} </p>
-                    <p><b>Durée :</b> {seance.dureeSeance} </p>
-                    <p><b>Heure de Début :</b> {seance.debutSeance} </p>
-                    <p><b>Heure de Fin :</b> {seance.finSeance} </p>
+                    <p><b>Durée :</b> {`${seance.dureeSeance} heures`} </p>
+                   
                     <p><b>Numéro de la Séance :</b> {seance.numeroSeance} </p>
                 </Card>
             </div>

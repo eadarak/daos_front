@@ -24,11 +24,10 @@ import ListeModules from './components/_Listes/Maquette/ListeModule';
 import ListeClasse from './components/_Listes/Maquette/ListeClasse';
 import ListeGroupe from './components/_Listes/Maquette/ListeGroupe';
 import ListeEnseignement from './components/_Listes/Maquette/ListeEnseignement';
+import ListeSalle from './components/_Listes/Emploi/ListeSalle';
 import ListeCycle from './components/_Listes/Maquette/ListeCycle';
 import ListeNiveau from './components/_Listes/Maquette/ListeNiveau';
 import ListeEmploiDuTemps from './components/_Listes/Emploi/ListeEmploiDuTemps';
-
-
 
 
 const router = createBrowserRouter([
