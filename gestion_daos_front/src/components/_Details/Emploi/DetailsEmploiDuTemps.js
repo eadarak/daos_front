@@ -40,7 +40,7 @@ function DetailsEmploiDuTemps({ emploi }) {
     const [showSeanceTable, setShowSeanceTable] = useState(false);
 
     useEffect(() => {
-        axios.get(`${EMPLOI_URL}/emploi-du-temps/${emploi.idEmploi}/seance`)
+        axios.get(`${EMPLOI_URL}/emploi-du-temps/${emploi.idEmploi}/seances`)
             .then(res => {
                 console.log("Les données récupérées depuis la base de données :\n", res.data);
                 setSeances(res.data);

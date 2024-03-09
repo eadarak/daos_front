@@ -23,7 +23,7 @@ export default function Ajouter_Seance_Emploi({ emploi }) {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (selectedSeance !== null) {
-            fetch(`${EMPLOI_URL}emploi-du-temps/${emploi.idEmploi}/seance/${selectedSeance.idSeance}`, {
+            fetch(`${EMPLOI_URL}/emploi-du-temps/${emploi.idEmploi}/seances/${selectedSeance.idSeance}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -99,7 +99,7 @@ export default function Ajouter_Seance_Emploi({ emploi }) {
                                                 onChange={() => handleToggle(seance)}
                                             />
                                             <Typography variant="body1">
-                                                {`${seance.idSeance} - ${seance.numeroSeance} - ${seance.jourSeance}`}
+                                                {`[ ${seance.idSeance} ] Seance : ${seance.numeroSeance} du ${seance.jourSeance}`}
                                             </Typography>
                                         </Box>
                                     </Grid>
