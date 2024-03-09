@@ -66,8 +66,8 @@ function DetailsEmploiDuTemps({ emploi }) {
                     </p>
                 </Card>
                 <Card id='MyCard2'>
-                    <p><b>Code :</b> {emploi.codeEmploi} </p>
-                    <p><b>Position :</b> {emploi.positionEmploi} </p>
+                    <p><b>Duree :</b> {emploi.dureeEmploi} </p>
+                    <p><b>Date Fin :</b> {emploi.dateFinEmploi} </p>
                 </Card>
             </div>
             <div id='Block3'>
