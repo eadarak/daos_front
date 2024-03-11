@@ -1,52 +1,52 @@
+/* eslint-disable react/jsx-pascal-case */
 import React, { useState, useEffect } from 'react';
-import { Button, Typography, Grid, Box, Modal, Stack, Divider, Radio } from '@mui/material';
-import { EMPLOI_URL} from '../../../../Server_URL/Urls';
+import { Button, Card, Typography, Grid, Box, Modal, Stack, Divider, Radio } from '@mui/material';
+import { MAQUETTE_URL } from '../../../../Server_URL/Urls';
 
-function Ajouter_Salle_Seance({ seance }) {
+function Ajouter_Formation_Maquette({ maquette }) {
     const [open, setOpen] = useState(false);
-    const [salles, setSalles] = useState([]);
-    const [selectedSalle, setSelectedSalle] = useState(null);
+    const [formations, setFormations] = useState([]);
+    const [selectedFormation, setSelectedFormation] = useState(null);
 
     useEffect(() => {
-        fetch(`${EMPLOI_URL}/salle`)
+        fetch(`${MAQUETTE_URL}formation`)
             .then(response => response.json())
             .then(data => {
-                setSalles(data);
+                setFormations(data);
             })
-            .catch(error => console.error("Erreur lors de la récupération des salles:", error));
-    }, []);
+            .catch(error => console.error("Erreur lors de la récupération des formations:", error));
+    }, []); 
 
-    const handleToggle = (salle) => {
-        setSelectedSalle(salle);
+    const handleToggle = (formation) => {
+        setSelectedFormation(formation);
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (selectedSalle !== null) {
-            fetch(`${EMPLOI_URL}/seance/${seance.idSeance}/salles/${selectedSalle.idSalle}`, {
+        if (selectedFormation !== null) {
+            fetch(`${MAQUETTE_URL}maquette/${maquette.idMaquette}/formation/${selectedFormation.idFormation}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(selectedSalle)
+                body: JSON.stringify(selectedFormation)
             })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error(`Erreur lors de l'assignation de la Salle ${selectedSalle.idSalle} a la Seance `);
+                    throw new Error("Erreur lors de l'ajout de la formation a la maq");
                 }
                 return response.json();
-                window.location.reload();
             })
             .then(data => {
-                console.log('Salle ajouté avec succès à la Seance:', data);
+                console.log('Module ajouté avec succès à l\'EC:', data);
                 setOpen(false);
             })
             .catch(error => {
-                console.error("Une erreur s'est produite lors de l'assignation de la salle:", error);
+                console.error("Une erreur s'est produite lors de l'ajout du module à l'EC:", error);
             });
             
         } else {
-            console.error("Veuillez sélectionner une salle.");
+            console.error("Veuillez sélectionner une formation.");
         }
     };
 
@@ -69,7 +69,7 @@ function Ajouter_Salle_Seance({ seance }) {
                 }}
                 onClick={() => setOpen(true)}
             >
-                Assigner une Salle
+                Ajouter Une Formation
             </Button>
 
             <Modal
@@ -85,22 +85,22 @@ function Ajouter_Salle_Seance({ seance }) {
             >
                 <Box sx={{ backgroundColor: 'white', p: 2, width: 800, borderRadius: '10px' }}>
                     <Typography variant="h5" align="center" fontWeight="bold" fontSize="2rem">
-                        Assignation d'une salle
+                        Ajouter Formation à la Maquette
                     </Typography>
                     <Divider />
                     <Stack spacing={2} direction="column" sx={{ width: '95%' }}>
                         <form onSubmit={handleSubmit}>
                             <Grid container spacing={2}>
-                                {salles.map(salle => (
-                                    <Grid item xs={12} key={salle.idSalle}>
+                                {formations.map(formation => (
+                                    <Grid item xs={12} key={formation.idFormation}>
                                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                             <Radio
                                                 color="primary"
-                                                checked={selectedSalle && selectedSalle.idSalle === salle.idSalle}
-                                                onChange={() => handleToggle(salle)}
+                                                checked={selectedFormation && selectedFormation.idFormation === formation.idFormation}
+                                                onChange={() => handleToggle(formation)}
                                             />
                                             <Typography variant="body1">
-                                                {`${salle.idSalle} - ${salle.libelleSalle} - ${salle.codeSalle}`} 
+                                                {`[ ${formation.idFormation} ] - ${formation.libelleFormation} `}
                                             </Typography>
                                         </Box>
                                     </Grid>
@@ -128,4 +128,4 @@ function Ajouter_Salle_Seance({ seance }) {
     );
 }
 
-export default Ajouter_Salle_Seance;
+export default Ajouter_Formation_Maquette;

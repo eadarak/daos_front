@@ -24,7 +24,7 @@ import DetailsModule from '../../_Details/Maquette/DetailsModule';
 import { MAQUETTE_URL } from '../../../Server_URL/Urls';
 import ModifierModule from '../../_Modifier/Maquette/Modifier_Module';
 import EditIcon from '@mui/icons-material/Edit';
-import { Link } from 'react-router-dom';
+import Ajouter_Module from '../../_Ajouter/Aj-Maquette/Ajouter_Module';
 
 const rows = [];
 
@@ -147,7 +147,7 @@ function EnhancedTableToolbar(props) {
       )}
         
           <IconButton>
-            {/* <AjouterModule/> */}
+            <Ajouter_Module/>
           </IconButton>
         
      

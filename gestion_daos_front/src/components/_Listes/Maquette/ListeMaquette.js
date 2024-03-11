@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-pascal-case */
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { alpha } from '@mui/material/styles';
@@ -21,13 +20,11 @@ import { visuallyHidden } from '@mui/utils';
 import { Button } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import axios from 'axios';
+import { MAQUETTE_URL } from '../../../Server_URL/Urls';
 import EditIcon from '@mui/icons-material/Edit';
-import { REPARTITION_URL } from '../../../Server_URL/Urls';
-import Ajouter_Repartition from '../../_Ajouter/Aj-Repartition/Ajouter_Repartition';
-import Modifier_Repartition from '../../_Modifier/Emploi/Modifier_Repartition';
-import DetailsRepartition from '../../_Details/Repartition/DetailsRepartition';
-
-const rows = [];
+import Ajouter_Maquette from '../../_Ajouter/Aj-Maquette/Ajouter_Maquette';
+import DetailsMaquette from '../../_Details/Maquette/DetailsMaquette';
+import Modifier_Maquette from '../../_Modifier/Maquette/Modifier_Maquette';
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -58,15 +55,16 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-  { id: 'idRepartiton', numeric: false, disablePadding: false, label: 'Identifiant'},
-  { id: 'descriptionRepartition', numeric: false, disablePadding: false, label: 'Description ' },
-  { id: 'dateCreationRepartition', numeric: false, disablePadding: false, label: 'Date Creation' },
+  { id: 'idMaquette', numeric: false, disablePadding: false, label: 'Identifiant' },
+  { id: 'libelleMaquette', numeric: false, disablePadding: false, label: 'Libelle' },
+  { id: 'codeMaquette', numeric: false, disablePadding: false, label: 'Code' },
+  { id: 'dateCreationMaquette', numeric: false, disablePadding: false, label: 'Date de Création' },
   { id: 'Operations', numeric: false, disablePadding: false, label: 'Operations' },
   { id: 'Details', numeric: false, disablePadding: false, label: 'Details' },
 ];
 
 function EnhancedTableHead(props) {
-  const {  order, orderBy, onRequestSort } = props;
+  const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
@@ -140,15 +138,13 @@ function EnhancedTableToolbar(props) {
           id="tableTitle"
           component="div"
         >
-          Liste des Repartitions
+          Liste des Maquettes
         </Typography>
       )}
         
-          <IconButton>
-            <Ajouter_Repartition/>
-          </IconButton>
-        
-     
+      <IconButton>
+        <Ajouter_Maquette/>
+      </IconButton>
     </Toolbar>
   );
 }
@@ -157,70 +153,87 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function ListeRepartition() {
+export default function ListeMaquette() {
   const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('idRepartition');
+  const [orderBy, setOrderBy] = React.useState('idMaquette');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [data, setData] = React.useState([]);
-  const [selectedRepartition, setSelectedRepartition] = React.useState(null);
+  const [selectedMaquette, setSelectedMaquette] = React.useState(null);
+  const [selectedModifMaq, setSelectedModifMaq] = React.useState(null);
+
 
 
   React.useEffect(() => {
-    axios.get(`${REPARTITION_URL}/repartition`)
+    axios.get('http://localhost:8084/maquette/maquette')
       .then(res => {
-        console.log("les données recupérées depuis la db : \n ",res.data)
+        console.log("les donnes recuperees depuis la db : \n ",res.data)
         setData(res.data)
       })
       .catch(err => console.log(err));
   },[]);
 
-  const handleRepartitionClick = (repartition) => {
-    setSelectedRepartition(repartition);
+  const handleEditClick = (maquette) => {
+    setSelectedMaquette(maquette);
+  };
+
+  const handleModifClick = (maquette) => {
+    setSelectedModifMaq(maquette);
   };
 
 
-  const handleRepartitionDelete  = (e, id) => { 
-    
+  const handleMaquetteDelete = (e, id) => { 
     e.stopPropagation();
-    const confirmation = window.confirm(`Êtes-vous sûr de vouloir supprimer cette repartition ${id} ?`);
+    const confirmation = window.confirm(`Êtes-vous sûr de vouloir supprimer cette Maquette ${id} ?`);
 
     if(confirmation){
-
-      axios.delete(`${REPARTITION_URL}/repartition/${id}`)
+      axios.delete(`${MAQUETTE_URL}/maquette/${id}`)
       .then( response => {
-        console.log("Repartition supprimé avec succès :", id);
-        setData(data.filter(repartition => repartition.idRepartition !== id));
-        window.location.reload();
+        console.log("Maquette supprimée avec succès :", id);
+        setData(data.filter(maquette => maquette.idMaquette !== id))
       })
       .catch( err => {
-        throw new Error("Erreur lors de la suppression de repartition :", err)
+        throw new Error("Erreur lors de la suppression de Maquette :", err)
       });
     }
     else{
-      window.alert(`Suppression Repartition ${id} annulée`);
+      window.alert(`Suppression de la Maquette ${id} annulée`);
     }
-
   }
 
-  if (selectedRepartition) {
-   return <DetailsRepartition repartition={selectedRepartition}/>
+  if (selectedMaquette) {
+    return <DetailsMaquette maquette={selectedMaquette} />;
   }
 
-  if(selectedRepartition){
-    return <Modifier_Repartition repartition={selectedRepartition} 
-                              open={true} 
-                              onClose={() => setSelectedRepartition(null)} 
-            />;
+  if(selectedModifMaq){
+    return <Modifier_Maquette  maquette={selectedModifMaq} open={true} onClose={() => setSelectedModifMaq(null)} />;
   }
-
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
+  };
+
+  const handleClick = (event, id) => {
+    const selectedIndex = selected.indexOf(id);
+    let newSelected = [];
+
+    if (selectedIndex === -1) {
+      newSelected = newSelected.concat(selected, id);
+    } else if (selectedIndex === 0) {
+      newSelected = newSelected.concat(selected.slice(1));
+    } else if (selectedIndex === selected.length - 1) {
+      newSelected = newSelected.concat(selected.slice(0, -1));
+    } else if (selectedIndex > 0) {
+      newSelected = newSelected.concat(
+        selected.slice(0, selectedIndex),
+        selected.slice(selectedIndex + 1),
+      );
+    }
+    setSelected(newSelected);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -236,22 +249,20 @@ export default function ListeRepartition() {
     setDense(event.target.checked);
   };
 
-  //const isSelected = (id) => selected.indexOf(id) !== -1;
+  const isSelected = (id) => selected.indexOf(id) !== -1;
 
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
 
-    
-
   return (
     <div>
-      &nbsp;
-      &nbsp;
+      <br/> &nbsp;
       <Button 
-        href="/repartition" 
+        href="/maquette" 
         style={{ color: "white", borderRadius: "5px", background: "rgb(9, 44, 38)" }}
       > ⬅
-      </Button>      
+      </Button>
+
       <Box sx={{ width: '100%', paddingTop: "10px" }}>
         <Paper sx={{ width: '100%', mb: 2 }}>
           <EnhancedTableToolbar numSelected={selected.length} />
@@ -272,49 +283,47 @@ export default function ListeRepartition() {
                 {stableSort(data, getComparator(order, orderBy))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => {
-                    
+                    const isItemSelected = isSelected(row.id);
 
                     return (
                       <TableRow
                         hover
-                        
                         tabIndex={-1}
-                        key={row.idRepartition}
+                        key={row.id}
                         sx={{ cursor: 'pointer' }}
                       >
                         <TableCell
-                          component="th"
+                          component="th"             
                           scope="row"
                           padding="normal"
                         >
-                          {row.idRepartition}
+                          {row.idMaquette}
                         </TableCell>
-                        <TableCell align="left">{row.descriptionRepartition}</TableCell>
-                        <TableCell align="left">{row.dateCreationRepartition}</TableCell>
+                        <TableCell align="left">{row.libelleMaquette}</TableCell>
+                        <TableCell align="left">{row.codeMaquette}</TableCell>
+                        <TableCell align="left">{row.dateCreationMaquette}</TableCell>
                         <TableCell > 
-                        <IconButton aria-label="edit" onClick={() => handleRepartitionClick(row)}>
-                          <EditIcon  color='success'/>
-                        </IconButton>
-                            &nbsp; &nbsp;
-
-                            <IconButton aria-label="delete" onClick={(event) => handleRepartitionDelete (event, row.idRepartition)}>
-                                <DeleteIcon sx={{color:"#cd0000"}}/>
-                            </IconButton>
-                         </TableCell>
-                         <TableCell> 
-                          
-                            <Button 
-                              sx={{
-                                borderRadius: "30px solid",
-                                color: "white",
-                                fontWeight: "600",
-                                background: "rgb(9, 44, 38)",
-                                textTransform: "capitalize"
-                              }}
-                              onClick={() => handleRepartitionClick(row)}
-                            >
-                              Détails
-                            </Button> 
+                          <IconButton aria-label="edit" onClick={() => handleModifClick(row)}>
+                            <EditIcon  color='success'/>
+                          </IconButton>
+                          &nbsp; &nbsp;
+                          <IconButton aria-label="delete" onClick={(event) => handleMaquetteDelete(event, row.idMaquette)}>
+                            <DeleteIcon sx={{color:"#cd0000"}}/>
+                          </IconButton>
+                        </TableCell>
+                        <TableCell> 
+                          <Button 
+                            sx={{
+                              borderRadius: "30px solid",
+                              color: "white",
+                              fontWeight: "600",
+                              background: "rgb(9, 44, 38)",
+                              textTransform: "capitalize"
+                            }}
+                            onClick={() => handleEditClick(row)}
+                          >
+                            Détails
+                          </Button> 
                         </TableCell>
                       </TableRow>
                     );

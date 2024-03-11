@@ -24,8 +24,8 @@ function AllEnseignant() {
 
     return (
         <div>
-            <Card id="card">
-                <CardContent style={{ position: 'relative' }} id="content-card">
+           <Card id="card" style={{ display: 'flex', flexDirection: 'column', height: '12rem' }}>
+                <CardContent style={{ flex: '1 0 auto', position: 'relative' }} id="content-card">
                     <IconButton
                         aria-controls="simple-menu"
                         aria-haspopup="true"

@@ -11,10 +11,9 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import axios from 'axios';
 import '../../../styles/general.css';
-import {  REPARTITION_URL } from '../../../Server_URL/Urls';
-import Ajouter_Enseignement_Repartition from './_Ajouter/Ajouter_Enseignement_Repartition';
-import Ajouter_Enseignant_Repartition from './_Ajouter/Ajouter_Enseignant_Repartition';
-import Ajouter_Seance_Repartition from './_Ajouter/Ajouter_Seance_Repartition';
+import {  MAQUETTE_URL } from '../../../Server_URL/Urls';
+import Ajouter_Module_Maquette from './_Ajouter/Ajouter_Module_Maquette';
+import Ajouter_Formation_Maquette from './_Ajouter/Ajouter_Formation_Maquette ';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -36,45 +35,35 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-const HeadersSeance = [
-      'Identifiant', 'Jour','Durée' , 'Heure de Début' ,'Heure de Fin','Numéro de Séance' 
-];
+const HeadersModule = ['Identifiant', 'Libelle', 'Cours', 'Durée', 'Coefficient', 'Objectifs', 'Descriptions'];
 
-function DetailsRepartition ({ repartition }) {
-    const [enseignement, setEnseignement] = useState({});
-    const [enseignant, setEnseignant] = useState({});
-    const [seance, setSeance] = useState({});
+
+function DetailsMaquette ({ maquette }) {
+    const [formation, setFormation] = useState({});
+    const [module, setModule] = useState({});
 
 
     const [ShowEnseignementTable, setShowEnseignementTable] = useState(false);
 
-    useEffect(() => {
-        axios.get(`${REPARTITION_URL}/repartition/${repartition.idRepartition}/seances`)
-          .then(res => {
-            console.log("les données récupérées depuis la base de données : \n ",res.data);
-            setSeance(res.data);
-          })
-          .catch(err => console.log(err));
-    }, []);
 
     const toggleEnseignementTable = () => {
         setShowEnseignementTable(!ShowEnseignementTable);
     };
 
     useEffect(() => {
-        axios.get(`${REPARTITION_URL}/repartition/${repartition.idRepartition}/enseignement`)
+        axios.get(`${MAQUETTE_URL}maquette/${maquette.idMaquette}/formation`)
             .then(response => {
-                setEnseignement(response.data);
-            console.log("Enseignement data:", enseignement);    
+                setFormation(response.data);
+            console.log("Enseignement data:", formation);    
             })
             .catch(error => console.error("Erreur lors de la récupération des enseignements:", error));
     }, []);
     
     useEffect(() => {
-        axios.get(`${REPARTITION_URL}/repartition/${repartition.idRepartition}/enseignant`)
+        axios.get(`${MAQUETTE_URL}maquette/${maquette.idMaquette}/modules`)
             .then(response => {
-                setEnseignant(response.data);
-            console.log("Enseignant.type:", enseignant.typEns);    
+                setModule(response.data);
+            console.log("Enseignant.type:", module);    
             })
             .catch(error => console.error("Erreur lors de la récupération des enseignements:", error));
     }, []);
@@ -84,56 +73,57 @@ function DetailsRepartition ({ repartition }) {
             &nbsp;
             &nbsp;
             <Button 
-                href="/listeRepartition" 
+                href="/listeMaquette" 
                 style={{ color: "white", borderRadius: "5px", background: "rgb(9, 44, 38)" }}
             > ⬅
             </Button>            
-            <h2 id='title'>{repartition.descriptionRepartition}
+            <h2 id='title'>{maquette.libelleMaquette}
                 <br/>
                 <span id='separator'></span>
             </h2>
             <div id='BlockBtn'>
-                <Ajouter_Enseignement_Repartition repartition={repartition}/>
-                <Ajouter_Enseignant_Repartition repartition={repartition}/>
-                <Ajouter_Seance_Repartition repartition={repartition}/>
+                {/* <Ajouter_Enseignement_Repartition maquette={maquette}/> */}
+                <Ajouter_Module_Maquette maquette={maquette}/>
+                <Ajouter_Formation_Maquette maquette={maquette}/>
             </div>
             <div id='Block2'>
                 <Card id='MyCard1'>
-                    <h6 id ='sous-titre'> Enseignement </h6>
-                    {enseignement && (
+                    <h6 id ='sous-titre'> Formation </h6>
+                    {formation && (
                         <>
                         <p> 
-                            <b>Libelle :</b>  {enseignement.libelleEnseignement}                        
+                            <b>Libelle :</b>  {formation.libelleFormation}                        
                             <p> 
-                            <b>Objectif :</b> {enseignement.objectifsEnseignement}               
+                            <b>Description :</b> {formation.descriptionFormation}               
                         
                             <p> 
-                                <b>Description :</b>   {enseignement.descriptionEnseignement}                   
+                                <b>Date de Creation :</b>   {formation.dateCreationFormation}                   
                             </p>
                             </p>
                         </p>
                         </>
                     )}
-                    {!enseignement && <p>Pas d'enseignement à cette repartition</p>}
+                    {!formation && <p>Pas de Formation à cette maquette</p>}
                 </Card>
-                <Card id='MyCard2'>
-                <h6 id ='sous-titre'> Enseignant </h6>
-                    {enseignant && (
+
+                {/* <Card id='MyCard1'>
+                    <h6 id ='sous-titre'> Module </h6>
+                    {module && (
                         <>
+                        <p> 
+                            <b>Libelle :</b>  {module.libelleModule}                        
                             <p> 
-                                <b>Prenom :</b> {enseignant.prenomEns}   
-                            </p>
-                                                
+                            <b>Description :</b> {module.descriptionModule}               
+                        
                             <p> 
-                                <b>Nom :</b> {enseignant.nomEns}                                               
-                            </p> 
-                            <p>
-                                <b>Grade :</b> {enseignant.gradeEns}                      
+                                <b>Date de Creation :</b>   {module.dateCreationModule}                   
                             </p>
+                            </p>
+                        </p>
                         </>
                     )}
-                    {!enseignant && <p>Pas d'enseignant à cette repartition</p>}
-                </Card>
+                    {!module && <p>Pas de module à cette maquette</p>}
+                </Card> */}
             </div>
             <div id='Block3'>
                 <h3 id='title'>
@@ -141,7 +131,7 @@ function DetailsRepartition ({ repartition }) {
                     <Button onClick={toggleEnseignementTable}>
                     <span id='separator1'></span>
                     &nbsp;
-                        {ShowEnseignementTable ? 'Cacher la liste des Seances' : 'Afficher la liste des Seances'}
+                        {ShowEnseignementTable ? 'Cacher la liste des Modules' : 'Afficher la liste des Modules'}
                     </Button>
                 </h3>
                 <br/>
@@ -150,22 +140,23 @@ function DetailsRepartition ({ repartition }) {
                         <Table aria-label="customized table">
                             <TableHead>
                                 <TableRow>
-                                    {HeadersSeance.map((th, index) => (
+                                    {HeadersModule.map((th, index) => (
                                         <StyledTableCell key={index}>{th}</StyledTableCell>
                                     ))}
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {seance.length > 0 && seance.map(seance => (
-                                    <StyledTableRow key={seance.idSeance}>
+                                {module.length > 0 && module.map(module => (
+                                    <StyledTableRow key={module.idModule}>
                                         <StyledTableCell component="th" scope="row">
-                                            {seance.idSeance}
+                                            {module.idModule}
                                         </StyledTableCell>
-                                        <StyledTableCell align="left">{seance.jourSeance}</StyledTableCell>
-                                        <StyledTableCell align="left">{seance.dureeSeance}</StyledTableCell>
-                                        <StyledTableCell align="left">{seance.debutSeance}</StyledTableCell>
-                                        <StyledTableCell align="left">{seance.finSeance}</StyledTableCell>
-                                        <StyledTableCell align="left">{seance.numeroSeance}</StyledTableCell>
+                                        <StyledTableCell align="left">{module.libelleModule}</StyledTableCell>
+                                        <StyledTableCell align="left">{module.coursModule}</StyledTableCell>
+                                        <StyledTableCell align="left">{module.dureeModule }</StyledTableCell>
+                                        <StyledTableCell align="left">{module.coefficientModule}</StyledTableCell>
+                                        <StyledTableCell align="left">{module.objectifsModule}</StyledTableCell>
+                                        <StyledTableCell align="left">{module.descriptionModule}</StyledTableCell>
 
                                    </StyledTableRow>
                                 ))}
@@ -178,4 +169,4 @@ function DetailsRepartition ({ repartition }) {
     );
 }
 
-export default DetailsRepartition;
+export default DetailsMaquette;

@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Typography, Grid, Box, Modal, Stack, Divider, Radio } from '@mui/material';
-import {  REPARTITION_URL } from '../../../../Server_URL/Urls';
+import { REPARTITION_URL } from '../../../../Server_URL/Urls';
 
-export default function Ajouter_Enseignant_Repartition( {enseignant }) {
+export default function Ajouter_Enseignant_Repartition( {repartition }) {
     const [open, setOpen] = useState(false);
-    const [ens, setEns] = useState([]);
+    const [enseignant, setEnseignant] = useState([]);
     const [selectedEnseignants, setSelectedEnseignants] = useState(null);
 
     useEffect(() => {
-        fetch(`${REPARTITION_URL}/repartition/enseignant`)
+        fetch(`${REPARTITION_URL}/enseignant`)
             .then(response => response.json())
             .then(data => {
-                setEns(data);
+                setEnseignant(data);
             })
-            .catch(error => console.error("Erreur lors de la récupération des enseignants:", error));
+            .catch(error => console.error("Erreur lors de la récupération des repartitions:", error));
     }, []);
 
     const handleToggle = (enseignant) => {
@@ -23,8 +23,8 @@ export default function Ajouter_Enseignant_Repartition( {enseignant }) {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (selectedEnseignants !== null) {
-            //http://localhost:8084/repartition/{id}/enseignants/{idEnseignant}
-            fetch(`${REPARTITION_URL}/repartition/${enseignant.idRepartition}//enseignants/${selectedEnseignants.idEns}`, {
+        //@PutMapping(path = "{id}/enseignants/{idEnseignant}")            
+        fetch(`${REPARTITION_URL}/repartition/${repartition.idRepartition}/enseignants/${selectedEnseignants.idEns}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -33,20 +33,20 @@ export default function Ajouter_Enseignant_Repartition( {enseignant }) {
             })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error("Erreur lors de l'ajout du enseignement à l'Module");
+                    throw new Error("Erreur lors de l'ajout de l'enseignant à la repartition");
                 }
                 return response.json();
             })
             .then(data => {
-                console.log('Enseignement ajouté avec succès à l\'Module:', data);
+                console.log('Enseignant ajouté avec succès à la repartition:', data);
                 setOpen(false);
             })
             .catch(error => {
-                console.error("Une erreur s'est produite lors de l'ajout du enseignement à l'Module:", error);
+                console.error("Une erreur s'est produite lors de l'ajout du enseignant à la repartition:", error);
             });
             
         } else {
-            console.error("Veuillez sélectionner un enseignement.");
+            console.error("Veuillez sélectionner un enseignant.");
         }
     };
 
@@ -69,7 +69,7 @@ export default function Ajouter_Enseignant_Repartition( {enseignant }) {
                 }}
                 onClick={() => setOpen(true)}
             >
-                Ajouter Enseignant
+                Ajouter Un Enseignant
             </Button>
 
             <Modal
@@ -91,16 +91,16 @@ export default function Ajouter_Enseignant_Repartition( {enseignant }) {
                     <Stack spacing={2} direction="column" sx={{ width: '95%' }}>
                         <form onSubmit={handleSubmit}>
                             <Grid container spacing={2}>
-                                {enseignant.map(enseignant => (
-                                    <Grid item xs={12} key={enseignant.idEns}>
+                                {enseignant.map(k => (
+                                    <Grid item xs={12} key={k.idEns}>
                                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                             <Radio
                                                 color="primary"
-                                                checked={selectedEnseignants && selectedEnseignants.idEns === enseignant.idEns}
-                                                onChange={() => handleToggle(enseignant)}
+                                                checked={selectedEnseignants && selectedEnseignants.idEns === k.idEns}
+                                                onChange={() => handleToggle(k)}
                                             />
                                             <Typography variant="body1">
-                                                {`${enseignant.idEns} - ${enseignant.prenomEns} - ${enseignant.nomEns} `}
+                                                {`${k.idEns} - ${k.prenomEns} - ${k.nomEns} `}
                                             </Typography>
                                         </Box>
                                     </Grid>

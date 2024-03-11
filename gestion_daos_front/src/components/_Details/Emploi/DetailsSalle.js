@@ -73,9 +73,10 @@ function DetailsSalle ({ salle }) {
             </div>
             <div id='Block3'>
                 <h3 id='title'>
-                    <span id='separator1'></span>
-                    &nbsp;
+                    
                     <Button onClick={toggleSeanceTable}>
+                    <span id='separator1'></span>
+                        &nbsp;
                         {showSeanceTable ? 'Cacher la liste des Seances' : 'Afficher la liste des Seances'}
                     </Button>
                 </h3>

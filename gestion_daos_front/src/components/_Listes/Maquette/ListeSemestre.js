@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-pascal-case */
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { alpha } from '@mui/material/styles';
@@ -21,11 +20,13 @@ import { visuallyHidden } from '@mui/utils';
 import { Button } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import axios from 'axios';
+import { MAQUETTE_URL } from '../../../Server_URL/Urls';
 import EditIcon from '@mui/icons-material/Edit';
-import { REPARTITION_URL } from '../../../Server_URL/Urls';
-import Ajouter_Repartition from '../../_Ajouter/Aj-Repartition/Ajouter_Repartition';
-import Modifier_Repartition from '../../_Modifier/Emploi/Modifier_Repartition';
-import DetailsRepartition from '../../_Details/Repartition/DetailsRepartition';
+import Ajouter_Semestre from '../../_Ajouter/Aj-Maquette/Ajouter_Semestre';
+import Modifier_Semestre from '../../_Modifier/Maquette/Modifier_Semestre';
+import DetailsSemestre from '../../_Details/Maquette/DetailsSemestre';
+
+
 
 const rows = [];
 
@@ -58,15 +59,16 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-  { id: 'idRepartiton', numeric: false, disablePadding: false, label: 'Identifiant'},
-  { id: 'descriptionRepartition', numeric: false, disablePadding: false, label: 'Description ' },
-  { id: 'dateCreationRepartition', numeric: false, disablePadding: false, label: 'Date Creation' },
+  { id: 'idSemestre', numeric: false, disablePadding: false, label: 'Identifiant'},
+  { id: 'libelleSemestre', numeric: false, disablePadding: false, label: 'Libelle' },
+  { id: 'descriptionSemestre', numeric: false, disablePadding: false, label: 'Description'},
+  { id: 'dateCreationSemestre', numeric: false, disablePadding: false, label: 'Date de Creation' },
   { id: 'Operations', numeric: false, disablePadding: false, label: 'Operations' },
   { id: 'Details', numeric: false, disablePadding: false, label: 'Details' },
 ];
 
 function EnhancedTableHead(props) {
-  const {  order, orderBy, onRequestSort } = props;
+  const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
@@ -140,12 +142,12 @@ function EnhancedTableToolbar(props) {
           id="tableTitle"
           component="div"
         >
-          Liste des Repartitions
-        </Typography>
+          Liste des Semestres
+          </Typography>
       )}
         
           <IconButton>
-            <Ajouter_Repartition/>
+            <Ajouter_Semestre/>
           </IconButton>
         
      
@@ -157,63 +159,66 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function ListeRepartition() {
+export default function ListeSemestre() {
   const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('idRepartition');
+  const [orderBy, setOrderBy] = React.useState('idEns');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [data, setData] = React.useState([]);
-  const [selectedRepartition, setSelectedRepartition] = React.useState(null);
+  const [selectedSemestre, setSelectedSemestre] = React.useState(null);
+  const [selectedDetails, setSelectedDetails] = React.useState(null)
 
 
   React.useEffect(() => {
-    axios.get(`${REPARTITION_URL}/repartition`)
+    axios.get('http://localhost:8084/maquette/semestre')
       .then(res => {
-        console.log("les données recupérées depuis la db : \n ",res.data)
+        console.log("les donnes recuperees depuis la db : \n ",res.data)
         setData(res.data)
       })
       .catch(err => console.log(err));
   },[]);
 
-  const handleRepartitionClick = (repartition) => {
-    setSelectedRepartition(repartition);
+  // const handleUEClickDelete = (semestre) => {
+  //   setSelectedSemstre(semestre);
+  // };
+
+  const handleEditClick = (semestre) => {
+    setSelectedSemestre(semestre); // Mettez à jour selectedUpdateUE avec l'UE à modifier
   };
 
-
-  const handleRepartitionDelete  = (e, id) => { 
+  const handleClickDetails  = (semestre) => {
+    setSelectedDetails(semestre);
+  }
+  const handleSemetreDelete = (e, id) => { 
     
     e.stopPropagation();
-    const confirmation = window.confirm(`Êtes-vous sûr de vouloir supprimer cette repartition ${id} ?`);
+    const confirmation = window.confirm(`Êtes-vous sûr de vouloir supprimer ce Semestre ${id} ?`);
 
     if(confirmation){
 
-      axios.delete(`${REPARTITION_URL}/repartition/${id}`)
+      axios.delete(`${MAQUETTE_URL}semestre/${id}`)
       .then( response => {
-        console.log("Repartition supprimé avec succès :", id);
-        setData(data.filter(repartition => repartition.idRepartition !== id));
-        window.location.reload();
+        console.log("Semestre supprimée avec succès :", id);
+        setData(data.filter(semestre => semestre.idSemestre !== id))
       })
       .catch( err => {
-        throw new Error("Erreur lors de la suppression de repartition :", err)
+        throw new Error("Erreur lors de la suppression de Semestre :", err)
       });
     }
     else{
-      window.alert(`Suppression Repartition ${id} annulée`);
+      window.alert(`Suppression  du Semestre ${id} annulée`);
     }
 
   }
 
-  if (selectedRepartition) {
-   return <DetailsRepartition repartition={selectedRepartition}/>
+  if (selectedDetails) {
+    return <DetailsSemestre semestre={selectedDetails} />;
   }
 
-  if(selectedRepartition){
-    return <Modifier_Repartition repartition={selectedRepartition} 
-                              open={true} 
-                              onClose={() => setSelectedRepartition(null)} 
-            />;
+  if(selectedSemestre){
+    return <Modifier_Semestre semestre={selectedSemestre} open={true} onClose={() => setSelectedSemestre(null)} />;
   }
 
 
@@ -221,6 +226,34 @@ export default function ListeRepartition() {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
+  };
+
+  // const handleSelectAllClick = (event) => {
+  //   if (event.target.checked) {
+  //     const newSelected = data.map((n) => n.id);
+  //     setSelected(newSelected);
+  //     return;
+  //   }
+  //   setSelected([]);
+  // };
+
+  const handleClick = (event, id) => {
+    const selectedIndex = selected.indexOf(id);
+    let newSelected = [];
+
+    if (selectedIndex === -1) {
+      newSelected = newSelected.concat(selected, id);
+    } else if (selectedIndex === 0) {
+      newSelected = newSelected.concat(selected.slice(1));
+    } else if (selectedIndex === selected.length - 1) {
+      newSelected = newSelected.concat(selected.slice(0, -1));
+    } else if (selectedIndex > 0) {
+      newSelected = newSelected.concat(
+        selected.slice(0, selectedIndex),
+        selected.slice(selectedIndex + 1),
+      );
+    }
+    setSelected(newSelected);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -236,7 +269,7 @@ export default function ListeRepartition() {
     setDense(event.target.checked);
   };
 
-  //const isSelected = (id) => selected.indexOf(id) !== -1;
+  const isSelected = (id) => selected.indexOf(id) !== -1;
 
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
@@ -245,13 +278,13 @@ export default function ListeRepartition() {
 
   return (
     <div>
-      &nbsp;
-      &nbsp;
+      <br/> &nbsp;
       <Button 
-        href="/repartition" 
+        href="/maquette" 
         style={{ color: "white", borderRadius: "5px", background: "rgb(9, 44, 38)" }}
       > ⬅
-      </Button>      
+      </Button>
+
       <Box sx={{ width: '100%', paddingTop: "10px" }}>
         <Paper sx={{ width: '100%', mb: 2 }}>
           <EnhancedTableToolbar numSelected={selected.length} />
@@ -265,6 +298,7 @@ export default function ListeRepartition() {
                 numSelected={selected.length}
                 order={order}
                 orderBy={orderBy}
+                
                 onRequestSort={handleRequestSort}
                 rowCount={data.length}
               />
@@ -272,32 +306,34 @@ export default function ListeRepartition() {
                 {stableSort(data, getComparator(order, orderBy))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => {
+                    const isItemSelected = isSelected(row.id);
                     
 
                     return (
                       <TableRow
                         hover
-                        
+                        //onClick={(event) => handleClick(event, row.id)}
                         tabIndex={-1}
-                        key={row.idRepartition}
+                        key={row.id}
                         sx={{ cursor: 'pointer' }}
                       >
                         <TableCell
-                          component="th"
+                          component="th"             
                           scope="row"
                           padding="normal"
                         >
-                          {row.idRepartition}
+                          {row.idSemestre}
                         </TableCell>
-                        <TableCell align="left">{row.descriptionRepartition}</TableCell>
-                        <TableCell align="left">{row.dateCreationRepartition}</TableCell>
+                        <TableCell align="left">{row.libelleSemestre}</TableCell>
+                        <TableCell align="left">{row.descriptionSemestre}</TableCell>
+                        <TableCell align="left">{row.dateCreationSemestre}</TableCell>
                         <TableCell > 
-                        <IconButton aria-label="edit" onClick={() => handleRepartitionClick(row)}>
+                        <IconButton aria-label="edit" onClick={() => handleEditClick(row)}>
                           <EditIcon  color='success'/>
                         </IconButton>
                             &nbsp; &nbsp;
 
-                            <IconButton aria-label="delete" onClick={(event) => handleRepartitionDelete (event, row.idRepartition)}>
+                            <IconButton aria-label="delete" onClick={(event) => handleSemetreDelete(event, row.idSemestre)}>
                                 <DeleteIcon sx={{color:"#cd0000"}}/>
                             </IconButton>
                          </TableCell>
@@ -311,7 +347,7 @@ export default function ListeRepartition() {
                                 background: "rgb(9, 44, 38)",
                                 textTransform: "capitalize"
                               }}
-                              onClick={() => handleRepartitionClick(row)}
+                              onClick={() => handleClickDetails(row)}
                             >
                               Détails
                             </Button> 
@@ -349,3 +385,4 @@ export default function ListeRepartition() {
     </div>
   );
 }
+

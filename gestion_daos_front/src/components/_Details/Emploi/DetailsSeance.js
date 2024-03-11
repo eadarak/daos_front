@@ -88,17 +88,19 @@ function DetailsSeance ({ seance }) {
             
             <div id='Block2'>
                 <Card id='MyCard1'>
+                <h5 id='sous-titre'> Séance </h5>
                      <p><b>Heure de Début :</b> &nbsp;{` ${seance.debutSeance}H:00`}  </p>
                     <p><b>Heure de Fin :</b> &nbsp;{`${seance.finSeance}H:00`} </p>
                 </Card>
                 <Card id='MyCard2'>
+                <h5 id='sous-titre'> Séance </h5>
                     <p><b>Jour :</b> {seance.jourSeance} </p>
                     <p><b>Durée :</b> {`${seance.dureeSeance} heures`} </p>
                    
                     <p><b>Numéro de la Séance :</b> {seance.numeroSeance} </p>
                 </Card>
                 <Card id='MyCard2'>
-                    <h5> Deroulement</h5>
+                    <h5 id='sous-titre'> Deroulement</h5>
                     {deroulement && (
                         <>
                             <p><b>Objectifs :</b> {deroulement.objectifsDeroulement} </p>

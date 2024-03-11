@@ -11,7 +11,6 @@ import Paper from '@mui/material/Paper';
 import axios from 'axios';
 import '../../../styles/general.css';
 import { MAQUETTE_URL } from '../../../Server_URL/Urls';
-import Ajouter_Groupe_Classe from './_Ajouter/Ajouter_Groupe_Classe';
 import Ajouter_Enseignement_Groupe from './_Ajouter/Ajouter_Enseignement_Groupe';
 ;
 

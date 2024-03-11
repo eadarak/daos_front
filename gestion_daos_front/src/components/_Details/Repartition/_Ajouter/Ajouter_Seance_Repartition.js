@@ -1,51 +1,51 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Typography, Grid, Box, Modal, Stack, Divider, Radio } from '@mui/material';
-import { MAQUETTE_URL } from '../../../../Server_URL/Urls';
+import { EMPLOI_URL, REPARTITION_URL } from '../../../../Server_URL/Urls';
 
-export default function Ajouter_Enseignement_Module({ module }) {
+export default function Ajouter_Seance_Repartition({ repartition }) {
     const [open, setOpen] = useState(false);
-    const [enseignements, setEnseignements] = useState([]);
-    const [selectedEnseignements, setSelectedEnseignements] = useState(null);
+    const [seances, setSeances] = useState([]);
+    const [selectedSeance, setSelectedSeance] = useState(null);
 
     useEffect(() => {
-        fetch(`${MAQUETTE_URL}enseignement`)
+        fetch(`${EMPLOI_URL}/seance`)
             .then(response => response.json())
             .then(data => {
-                setEnseignements(data);
+                setSeances(data);
             })
-            .catch(error => console.error("Erreur lors de la récupération des enseignements:", error));
+            .catch(error => console.error("Erreur lors de la récupération des séances:", error));
     }, []);
 
-    const handleToggle = (enseignement) => {
-        setSelectedEnseignements(enseignement);
+    const handleToggle = (seance) => {
+        setSelectedSeance(seance);
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (selectedEnseignements !== null) {
-            fetch(`${MAQUETTE_URL}module/${module.idModule}/enseignements/${selectedEnseignements.idEnseignement}`, {
+        if (selectedSeance !== null) {
+            fetch(`${REPARTITION_URL}/repartition/${repartition.idRepartition}/seances/${selectedSeance.idSeance}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(selectedEnseignements)
+                body: JSON.stringify(selectedSeance)
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("Erreur lors de l'ajout du enseignement à l'Module");
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log('Enseignement ajouté avec succès à l\'Module:', data);
-                setOpen(false);
-            })
-            .catch(error => {
-                console.error("Une erreur s'est produite lors de l'ajout du enseignement à l'Module:", error);
-            });
-            
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Erreur lors de l'ajout de la séance à la repartition.");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Séance ajoutée avec succès à la repartition:', data);
+                    setOpen(false);
+                })
+                .catch(error => {
+                    console.error("Une erreur s'est produite lors de l'ajout de la séance à l'repartition:", error);
+                });
+
         } else {
-            console.error("Veuillez sélectionner un enseignement.");
+            console.error("Veuillez sélectionner une séance.");
         }
     };
 
@@ -68,7 +68,7 @@ export default function Ajouter_Enseignement_Module({ module }) {
                 }}
                 onClick={() => setOpen(true)}
             >
-                Ajouter Enseignement
+                Ajouter Une Séance
             </Button>
 
             <Modal
@@ -84,22 +84,22 @@ export default function Ajouter_Enseignement_Module({ module }) {
             >
                 <Box sx={{ backgroundColor: 'white', p: 2, width: 800, borderRadius: '10px' }}>
                     <Typography variant="h5" align="center" fontWeight="bold" fontSize="2rem">
-                        Ajouter Enseignement
+                        Ajouter Une Séance à la repartition
                     </Typography>
                     <Divider />
                     <Stack spacing={2} direction="column" sx={{ width: '95%' }}>
                         <form onSubmit={handleSubmit}>
                             <Grid container spacing={2}>
-                                {enseignements.map(enseignement => (
-                                    <Grid item xs={12} key={enseignement.idEnseignement}>
+                                {seances.map(seance => (
+                                    <Grid item xs={12} key={seance.idSeance}>
                                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                             <Radio
                                                 color="primary"
-                                                checked={selectedEnseignements && selectedEnseignements.idEnseignement === enseignement.idEnseignement}
-                                                onChange={() => handleToggle(enseignement)}
+                                                checked={selectedSeance && selectedSeance.idSeance === seance.idSeance}
+                                                onChange={() => handleToggle(seance)}
                                             />
                                             <Typography variant="body1">
-                                                {`${enseignement.idEnseignement} - ${enseignement.libelleEnseignement} `}
+                                                {`[ ${seance.idSeance} ] Seance : ${seance.numeroSeance} du ${seance.jourSeance}`}
                                             </Typography>
                                         </Box>
                                     </Grid>
