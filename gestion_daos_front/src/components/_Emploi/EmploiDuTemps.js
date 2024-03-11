@@ -24,7 +24,7 @@ function EmploiDuTemps() {
 
     return (
         <div>
-           <Card id="card" style={{ display: 'flex', flexDirection: 'column', height: '12rem' }}>
+           <Card id="card-special" style={{ display: 'flex', flexDirection: 'column', height: '12rem' }}>
                 <CardContent style={{ flex: '1 0 auto', position: 'relative' }} id="content-card">
                     <IconButton
                         aria-controls="simple-menu"
@@ -40,9 +40,10 @@ function EmploiDuTemps() {
                     </Typography>
                 </CardContent>             
                 <CardActions>
-                    <Button href="/listes-emploi-du-temps" id='mybtnStyle'>Voir liste des EmploiDuTempss</Button>
+                    <Button href="/listes-emploi-du-temps" id='mybtnStyle'>Voir liste Emploi-Du-Temps</Button>
                 </CardActions>
             </Card>
+
             <Menu
                 id="simple-menu"
                 anchorEl={anchorEl}

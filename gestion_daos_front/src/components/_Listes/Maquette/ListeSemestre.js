@@ -20,11 +20,13 @@ import { visuallyHidden } from '@mui/utils';
 import { Button } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import axios from 'axios';
-import DetailsModule from '../../_Details/Maquette/DetailsModule';
 import { MAQUETTE_URL } from '../../../Server_URL/Urls';
-import ModifierModule from '../../_Modifier/Maquette/Modifier_Module';
 import EditIcon from '@mui/icons-material/Edit';
-import Ajouter_Module from '../../_Ajouter/Aj-Maquette/Ajouter_Module';
+import Ajouter_Semestre from '../../_Ajouter/Aj-Maquette/Ajouter_Semestre';
+import Modifier_Semestre from '../../_Modifier/Maquette/Modifier_Semestre';
+import DetailsSemestre from '../../_Details/Maquette/DetailsSemestre';
+
+
 
 const rows = [];
 
@@ -57,12 +59,10 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-  { id: 'idModule', numeric: false, disablePadding: false, label: 'Identifiant'},
-  { id: 'libelleModule', numeric: false, disablePadding: false, label: 'Libelle' },
-  { id: 'coursModule', numeric: false, disablePadding: false, label: 'Cours'},
-  { id: 'dureeModule', numeric: false, disablePadding: false, label: 'Duree' },
-  { id: 'coefficientModule', numeric: false, disablePadding: false, label: 'Coefficient' },
-  { id: 'dateCreationModule', numeric: false, disablePadding: false, label: 'Date Creation' },
+  { id: 'idSemestre', numeric: false, disablePadding: false, label: 'Identifiant'},
+  { id: 'libelleSemestre', numeric: false, disablePadding: false, label: 'Libelle' },
+  { id: 'descriptionSemestre', numeric: false, disablePadding: false, label: 'Description'},
+  { id: 'dateCreationSemestre', numeric: false, disablePadding: false, label: 'Date de Creation' },
   { id: 'Operations', numeric: false, disablePadding: false, label: 'Operations' },
   { id: 'Details', numeric: false, disablePadding: false, label: 'Details' },
 ];
@@ -142,12 +142,12 @@ function EnhancedTableToolbar(props) {
           id="tableTitle"
           component="div"
         >
-          Liste des Modules
-        </Typography>
+          Liste des Semestres
+          </Typography>
       )}
         
           <IconButton>
-            <Ajouter_Module/>
+            <Ajouter_Semestre/>
           </IconButton>
         
      
@@ -159,20 +159,20 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function ListeModules() {
+export default function ListeSemestre() {
   const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('idModule');
+  const [orderBy, setOrderBy] = React.useState('idEns');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [data, setData] = React.useState([]);
-  const [selectedModule, setSelectedModuleDelete] = React.useState(null);
-  const [selectedUpdateModule, setSelectedUpdateModule] = React.useState(null);
+  const [selectedSemestre, setSelectedSemestre] = React.useState(null);
+  const [selectedDetails, setSelectedDetails] = React.useState(null)
 
 
   React.useEffect(() => {
-    axios.get(`${MAQUETTE_URL}module`)
+    axios.get('http://localhost:8084/maquette/semestre')
       .then(res => {
         console.log("les donnes recuperees depuis la db : \n ",res.data)
         setData(res.data)
@@ -180,42 +180,45 @@ export default function ListeModules() {
       .catch(err => console.log(err));
   },[]);
 
-  const handleModuleClickDelete = (module) => {
-    setSelectedModuleDelete(module);
+  // const handleUEClickDelete = (semestre) => {
+  //   setSelectedSemstre(semestre);
+  // };
+
+  const handleEditClick = (semestre) => {
+    setSelectedSemestre(semestre); // Mettez à jour selectedUpdateUE avec l'UE à modifier
   };
 
-  const handleEditClick = (module) => {
-    setSelectedUpdateModule(module); // Mettez à jour selectedUpdateModule avec le module à modifier
-  };
-
-  const handleModuleDelete = (e, id) => { 
+  const handleClickDetails  = (semestre) => {
+    setSelectedDetails(semestre);
+  }
+  const handleSemetreDelete = (e, id) => { 
     
     e.stopPropagation();
-    const confirmation = window.confirm(`Êtes-vous sûr de vouloir supprimer ce Module ${id} ?`);
+    const confirmation = window.confirm(`Êtes-vous sûr de vouloir supprimer ce Semestre ${id} ?`);
 
     if(confirmation){
 
-      axios.delete(`${MAQUETTE_URL}module/${id}`)
+      axios.delete(`${MAQUETTE_URL}semestre/${id}`)
       .then( response => {
-        console.log("Module supprimé avec succès :", id);
-        setData(data.filter(module => module.idModule !== id))
+        console.log("Semestre supprimée avec succès :", id);
+        setData(data.filter(semestre => semestre.idSemestre !== id))
       })
       .catch( err => {
-        throw new Error("Erreur lors de la suppression du Module :", err)
+        throw new Error("Erreur lors de la suppression de Semestre :", err)
       });
     }
     else{
-      window.alert(`Suppression  du Module ${id} annulée`);
+      window.alert(`Suppression  du Semestre ${id} annulée`);
     }
 
   }
 
-  if (selectedModule) {
-    return <DetailsModule module={selectedModule} />;
+  if (selectedDetails) {
+    return <DetailsSemestre semestre={selectedDetails} />;
   }
 
-  if(selectedUpdateModule){
-    return <ModifierModule module={selectedUpdateModule} open={true} onClose={() => setSelectedUpdateModule(null)} />;
+  if(selectedSemestre){
+    return <Modifier_Semestre semestre={selectedSemestre} open={true} onClose={() => setSelectedSemestre(null)} />;
   }
 
 
@@ -225,14 +228,14 @@ export default function ListeModules() {
     setOrderBy(property);
   };
 
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelected = data.map((n) => n.id);
-      setSelected(newSelected);
-      return;
-    }
-    setSelected([]);
-  };
+  // const handleSelectAllClick = (event) => {
+  //   if (event.target.checked) {
+  //     const newSelected = data.map((n) => n.id);
+  //     setSelected(newSelected);
+  //     return;
+  //   }
+  //   setSelected([]);
+  // };
 
   const handleClick = (event, id) => {
     const selectedIndex = selected.indexOf(id);
@@ -275,6 +278,7 @@ export default function ListeModules() {
 
   return (
     <div>
+      <br/> &nbsp;
       <Button 
         href="/maquette" 
         style={{ color: "white", borderRadius: "5px", background: "rgb(9, 44, 38)" }}
@@ -294,7 +298,7 @@ export default function ListeModules() {
                 numSelected={selected.length}
                 order={order}
                 orderBy={orderBy}
-                onSelectAllClick={handleSelectAllClick}
+                
                 onRequestSort={handleRequestSort}
                 rowCount={data.length}
               />
@@ -303,39 +307,33 @@ export default function ListeModules() {
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => {
                     const isItemSelected = isSelected(row.id);
-                    const labelId = `enhanced-table-checkbox-${index}`;
+                    
 
                     return (
                       <TableRow
                         hover
-                        onClick={(event) => handleClick(event, row.id)}
-                        role="checkbox"
-                        aria-checked={isItemSelected}
+                        //onClick={(event) => handleClick(event, row.id)}
                         tabIndex={-1}
                         key={row.id}
-                        selected={isItemSelected}
                         sx={{ cursor: 'pointer' }}
                       >
                         <TableCell
-                          component="th"
-                          id={labelId}
+                          component="th"             
                           scope="row"
                           padding="normal"
                         >
-                          {row.idModule}
+                          {row.idSemestre}
                         </TableCell>
-                        <TableCell align="left">{row.libelleModule}</TableCell>
-                        <TableCell align="left">{row.coursModule}</TableCell>
-                        <TableCell align="left">{row.dureeModule}</TableCell>
-                        <TableCell align="left">{row.coefficientModule}</TableCell>
-                        <TableCell align="left">{row.dateCreationModule}</TableCell>
+                        <TableCell align="left">{row.libelleSemestre}</TableCell>
+                        <TableCell align="left">{row.descriptionSemestre}</TableCell>
+                        <TableCell align="left">{row.dateCreationSemestre}</TableCell>
                         <TableCell > 
                         <IconButton aria-label="edit" onClick={() => handleEditClick(row)}>
                           <EditIcon  color='success'/>
                         </IconButton>
                             &nbsp; &nbsp;
 
-                            <IconButton aria-label="delete" onClick={(event) => handleModuleDelete(event, row.idModule)}>
+                            <IconButton aria-label="delete" onClick={(event) => handleSemetreDelete(event, row.idSemestre)}>
                                 <DeleteIcon sx={{color:"#cd0000"}}/>
                             </IconButton>
                          </TableCell>
@@ -349,7 +347,7 @@ export default function ListeModules() {
                                 background: "rgb(9, 44, 38)",
                                 textTransform: "capitalize"
                               }}
-                              onClick={() => handleModuleClickDelete(row)}
+                              onClick={() => handleClickDetails(row)}
                             >
                               Détails
                             </Button> 
@@ -387,3 +385,4 @@ export default function ListeModules() {
     </div>
   );
 }
+

@@ -68,7 +68,7 @@ export default function Ajouter_Enseignement_Repartition({ repartition }) {
                 }}
                 onClick={() => setOpen(true)}
             >
-                Ajouter Enseignement
+                Ajouter Un Enseignement
             </Button>
 
             <Modal

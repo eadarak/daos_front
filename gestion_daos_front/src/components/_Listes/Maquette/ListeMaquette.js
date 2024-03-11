@@ -20,13 +20,11 @@ import { visuallyHidden } from '@mui/utils';
 import { Button } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import axios from 'axios';
-import DetailsModule from '../../_Details/Maquette/DetailsModule';
 import { MAQUETTE_URL } from '../../../Server_URL/Urls';
-import ModifierModule from '../../_Modifier/Maquette/Modifier_Module';
 import EditIcon from '@mui/icons-material/Edit';
-import Ajouter_Module from '../../_Ajouter/Aj-Maquette/Ajouter_Module';
-
-const rows = [];
+import Ajouter_Maquette from '../../_Ajouter/Aj-Maquette/Ajouter_Maquette';
+import DetailsMaquette from '../../_Details/Maquette/DetailsMaquette';
+import Modifier_Maquette from '../../_Modifier/Maquette/Modifier_Maquette';
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -57,12 +55,10 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-  { id: 'idModule', numeric: false, disablePadding: false, label: 'Identifiant'},
-  { id: 'libelleModule', numeric: false, disablePadding: false, label: 'Libelle' },
-  { id: 'coursModule', numeric: false, disablePadding: false, label: 'Cours'},
-  { id: 'dureeModule', numeric: false, disablePadding: false, label: 'Duree' },
-  { id: 'coefficientModule', numeric: false, disablePadding: false, label: 'Coefficient' },
-  { id: 'dateCreationModule', numeric: false, disablePadding: false, label: 'Date Creation' },
+  { id: 'idMaquette', numeric: false, disablePadding: false, label: 'Identifiant' },
+  { id: 'libelleMaquette', numeric: false, disablePadding: false, label: 'Libelle' },
+  { id: 'codeMaquette', numeric: false, disablePadding: false, label: 'Code' },
+  { id: 'dateCreationMaquette', numeric: false, disablePadding: false, label: 'Date de Création' },
   { id: 'Operations', numeric: false, disablePadding: false, label: 'Operations' },
   { id: 'Details', numeric: false, disablePadding: false, label: 'Details' },
 ];
@@ -142,15 +138,13 @@ function EnhancedTableToolbar(props) {
           id="tableTitle"
           component="div"
         >
-          Liste des Modules
+          Liste des Maquettes
         </Typography>
       )}
         
-          <IconButton>
-            <Ajouter_Module/>
-          </IconButton>
-        
-     
+      <IconButton>
+        <Ajouter_Maquette/>
+      </IconButton>
     </Toolbar>
   );
 }
@@ -159,20 +153,21 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function ListeModules() {
+export default function ListeMaquette() {
   const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('idModule');
+  const [orderBy, setOrderBy] = React.useState('idMaquette');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [data, setData] = React.useState([]);
-  const [selectedModule, setSelectedModuleDelete] = React.useState(null);
-  const [selectedUpdateModule, setSelectedUpdateModule] = React.useState(null);
+  const [selectedMaquette, setSelectedMaquette] = React.useState(null);
+  const [selectedModifMaq, setSelectedModifMaq] = React.useState(null);
+
 
 
   React.useEffect(() => {
-    axios.get(`${MAQUETTE_URL}module`)
+    axios.get('http://localhost:8084/maquette/maquette')
       .then(res => {
         console.log("les donnes recuperees depuis la db : \n ",res.data)
         setData(res.data)
@@ -180,58 +175,46 @@ export default function ListeModules() {
       .catch(err => console.log(err));
   },[]);
 
-  const handleModuleClickDelete = (module) => {
-    setSelectedModuleDelete(module);
+  const handleEditClick = (maquette) => {
+    setSelectedMaquette(maquette);
   };
 
-  const handleEditClick = (module) => {
-    setSelectedUpdateModule(module); // Mettez à jour selectedUpdateModule avec le module à modifier
+  const handleModifClick = (maquette) => {
+    setSelectedModifMaq(maquette);
   };
 
-  const handleModuleDelete = (e, id) => { 
-    
+
+  const handleMaquetteDelete = (e, id) => { 
     e.stopPropagation();
-    const confirmation = window.confirm(`Êtes-vous sûr de vouloir supprimer ce Module ${id} ?`);
+    const confirmation = window.confirm(`Êtes-vous sûr de vouloir supprimer cette Maquette ${id} ?`);
 
     if(confirmation){
-
-      axios.delete(`${MAQUETTE_URL}module/${id}`)
+      axios.delete(`${MAQUETTE_URL}/maquette/${id}`)
       .then( response => {
-        console.log("Module supprimé avec succès :", id);
-        setData(data.filter(module => module.idModule !== id))
+        console.log("Maquette supprimée avec succès :", id);
+        setData(data.filter(maquette => maquette.idMaquette !== id))
       })
       .catch( err => {
-        throw new Error("Erreur lors de la suppression du Module :", err)
+        throw new Error("Erreur lors de la suppression de Maquette :", err)
       });
     }
     else{
-      window.alert(`Suppression  du Module ${id} annulée`);
+      window.alert(`Suppression de la Maquette ${id} annulée`);
     }
-
   }
 
-  if (selectedModule) {
-    return <DetailsModule module={selectedModule} />;
+  if (selectedMaquette) {
+    return <DetailsMaquette maquette={selectedMaquette} />;
   }
 
-  if(selectedUpdateModule){
-    return <ModifierModule module={selectedUpdateModule} open={true} onClose={() => setSelectedUpdateModule(null)} />;
+  if(selectedModifMaq){
+    return <Modifier_Maquette  maquette={selectedModifMaq} open={true} onClose={() => setSelectedModifMaq(null)} />;
   }
-
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
-  };
-
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelected = data.map((n) => n.id);
-      setSelected(newSelected);
-      return;
-    }
-    setSelected([]);
   };
 
   const handleClick = (event, id) => {
@@ -271,10 +254,9 @@ export default function ListeModules() {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
 
-    
-
   return (
     <div>
+      <br/> &nbsp;
       <Button 
         href="/maquette" 
         style={{ color: "white", borderRadius: "5px", background: "rgb(9, 44, 38)" }}
@@ -294,7 +276,6 @@ export default function ListeModules() {
                 numSelected={selected.length}
                 order={order}
                 orderBy={orderBy}
-                onSelectAllClick={handleSelectAllClick}
                 onRequestSort={handleRequestSort}
                 rowCount={data.length}
               />
@@ -303,56 +284,46 @@ export default function ListeModules() {
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => {
                     const isItemSelected = isSelected(row.id);
-                    const labelId = `enhanced-table-checkbox-${index}`;
 
                     return (
                       <TableRow
                         hover
-                        onClick={(event) => handleClick(event, row.id)}
-                        role="checkbox"
-                        aria-checked={isItemSelected}
                         tabIndex={-1}
                         key={row.id}
-                        selected={isItemSelected}
                         sx={{ cursor: 'pointer' }}
                       >
                         <TableCell
-                          component="th"
-                          id={labelId}
+                          component="th"             
                           scope="row"
                           padding="normal"
                         >
-                          {row.idModule}
+                          {row.idMaquette}
                         </TableCell>
-                        <TableCell align="left">{row.libelleModule}</TableCell>
-                        <TableCell align="left">{row.coursModule}</TableCell>
-                        <TableCell align="left">{row.dureeModule}</TableCell>
-                        <TableCell align="left">{row.coefficientModule}</TableCell>
-                        <TableCell align="left">{row.dateCreationModule}</TableCell>
+                        <TableCell align="left">{row.libelleMaquette}</TableCell>
+                        <TableCell align="left">{row.codeMaquette}</TableCell>
+                        <TableCell align="left">{row.dateCreationMaquette}</TableCell>
                         <TableCell > 
-                        <IconButton aria-label="edit" onClick={() => handleEditClick(row)}>
-                          <EditIcon  color='success'/>
-                        </IconButton>
-                            &nbsp; &nbsp;
-
-                            <IconButton aria-label="delete" onClick={(event) => handleModuleDelete(event, row.idModule)}>
-                                <DeleteIcon sx={{color:"#cd0000"}}/>
-                            </IconButton>
-                         </TableCell>
-                         <TableCell> 
-                          
-                            <Button 
-                              sx={{
-                                borderRadius: "30px solid",
-                                color: "white",
-                                fontWeight: "600",
-                                background: "rgb(9, 44, 38)",
-                                textTransform: "capitalize"
-                              }}
-                              onClick={() => handleModuleClickDelete(row)}
-                            >
-                              Détails
-                            </Button> 
+                          <IconButton aria-label="edit" onClick={() => handleModifClick(row)}>
+                            <EditIcon  color='success'/>
+                          </IconButton>
+                          &nbsp; &nbsp;
+                          <IconButton aria-label="delete" onClick={(event) => handleMaquetteDelete(event, row.idMaquette)}>
+                            <DeleteIcon sx={{color:"#cd0000"}}/>
+                          </IconButton>
+                        </TableCell>
+                        <TableCell> 
+                          <Button 
+                            sx={{
+                              borderRadius: "30px solid",
+                              color: "white",
+                              fontWeight: "600",
+                              background: "rgb(9, 44, 38)",
+                              textTransform: "capitalize"
+                            }}
+                            onClick={() => handleEditClick(row)}
+                          >
+                            Détails
+                          </Button> 
                         </TableCell>
                       </TableRow>
                     );
