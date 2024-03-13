@@ -36,7 +36,7 @@ import ListeMaquette from './components/_Listes/Maquette/ListeMaquette';
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Layout><Home /></Layout>
+    element: <Layout><Repartition /></Layout>
   },
   {
     path: '/repartition',

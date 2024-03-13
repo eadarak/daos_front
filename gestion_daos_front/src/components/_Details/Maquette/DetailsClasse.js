@@ -70,7 +70,16 @@ function DetailsClasse ({ classe }) {
 
     return (
         <div>
-            <h2 id='title'>{classe.libelleClasse}</h2>
+     &nbsp;
+      <Button 
+        href="/listes-classe" 
+        style={{ color: "white", borderRadius: "5px", background: "rgb(9, 44, 38)" }}
+      > ⬅
+      </Button>
+            <h2 id='title'>{classe.libelleClasse}
+            <br/>
+            <span id='separator'></span>
+            </h2>
             <div id='BlockBtn'>
                 <Ajouter_Groupe_Classe classe={classe}/>
                 <Ajouter_Enseignement_Classe classe={classe}/>
@@ -78,6 +87,9 @@ function DetailsClasse ({ classe }) {
             
             <div id='Block2'>
                 <Card id='MyCard1'>
+                    <p><b>Libellé : &nbsp;</b>
+                        {classe.libelleClasse}
+                    </p>
                     <p><b>Description :</b> <br/>
                         {classe.descriptionClasse}
                     </p>

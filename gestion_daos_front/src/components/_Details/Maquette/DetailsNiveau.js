@@ -65,13 +65,13 @@ function DetailsNiveau ({ niveau }) {
 
     return (
         <div>
-            <br/> &nbsp;
+             &nbsp;
             <Button 
                 href="/listes-niveau" 
                 style={{ color: "white", borderRadius: "5px", background: "rgb(9, 44, 38)" }}
             > ⬅
             </Button>
-            <h2 id='title'>{niveau.libelleNiveau}
+            <h2 id='title'>{niveau.descriptionNiveau}
             <br></br>
             <span id='separator'></span>
             </h2>
@@ -82,16 +82,25 @@ function DetailsNiveau ({ niveau }) {
             
             <div id='Block2'>
                 <Card id='MyCard1'>
-                    <p><b>Description :</b> <br/>
+                <p><b>Identifiant : </b>  &nbsp;
+                        {niveau.idNiveau}
+                    </p>
+                    <p><b>Description : </b> 
                         {niveau.descriptionNiveau}
                     </p>
+                    <p><b>Libelle : </b>  
+                        {niveau.libelleNiveau}
+                    </p>
+                    <p><b>Date de Creation : </b>  
+                        {niveau.dateCreationNiveau}
+                    </p>
                 </Card>
-                <Card id='MyCard2'>
+                {/* <Card id='MyCard2'>
                     <p><b>Cycle : </b>{cycle.libelleCycle}</p>
                     <p><b>Description : </b>{cycle.descriptionCycle}</p>
                     <p><b>Date Creation : </b>{cycle.dateCreationCycle}</p>
 
-                </Card>
+                </Card> */}
             </div>
             <div id='Block3'>
                 <h3 id='title'>

@@ -166,6 +166,7 @@ export default function ListeRepartition() {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [data, setData] = React.useState([]);
   const [selectedRepartition, setSelectedRepartition] = React.useState(null);
+  const [selectedDetailRepartition, setSelectedDetailRepartition] = React.useState(null);
 
 
   React.useEffect(() => {
@@ -177,6 +178,9 @@ export default function ListeRepartition() {
       .catch(err => console.log(err));
   },[]);
 
+  const handleDetail = (repartition) => {
+    setSelectedDetailRepartition(repartition);
+  };
   const handleRepartitionClick = (repartition) => {
     setSelectedRepartition(repartition);
   };
@@ -205,8 +209,8 @@ export default function ListeRepartition() {
 
   }
 
-  if (selectedRepartition) {
-   return <DetailsRepartition repartition={selectedRepartition}/>
+  if (selectedDetailRepartition) {
+   return <DetailsRepartition repartition={selectedDetailRepartition}/>
   }
 
   if(selectedRepartition){
@@ -311,7 +315,7 @@ export default function ListeRepartition() {
                                 background: "rgb(9, 44, 38)",
                                 textTransform: "capitalize"
                               }}
-                              onClick={() => handleRepartitionClick(row)}
+                              onClick={() => handleDetail(row)}
                             >
                               Détails
                             </Button> 

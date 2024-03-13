@@ -61,11 +61,11 @@ const headCells = [
   { id: 'idEC', numeric: false, disablePadding: false, label: 'Identifiant' },
   { id: 'libelleEC', numeric: false, disablePadding: false, label: 'Libellé' },
   { id: 'codeEC', numeric: false, disablePadding: false, label: 'Code' },
-  { id: 'cm', numeric: true, disablePadding: false, label: 'CM' },
-  { id: 'td', numeric: true, disablePadding: false, label: 'TD' },
-  { id: 'tp', numeric: true, disablePadding: false, label: 'TP' },
-  { id: 'tpe', numeric: true, disablePadding: false, label: 'TPE' },
-  { id: 'coefficientEC', numeric: true, disablePadding: false, label: 'Coefficient' },
+  { id: 'cm', numeric: false, disablePadding: false, label: 'CM' },
+  { id: 'td', numeric: false, disablePadding: false, label: 'TD' },
+  { id: 'tp', numeric: false, disablePadding: false, label: 'TP' },
+  { id: 'tpe', numeric: false, disablePadding: false, label: 'TPE' },
+  { id: 'coefficientEC', numeric: false, disablePadding: false, label: 'Coefficient' },
   { id: 'descriptionEC', numeric: false, disablePadding: false, label: 'Description' },
   { id: 'operations', numeric: false, disablePadding: false, label: 'Opérations' },
   { id: 'details', numeric: false, disablePadding: false, label: 'Détails' },
@@ -221,33 +221,33 @@ export default function ListeEC() {
     setOrderBy(property);
   };
 
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelected = data.map((n) => n.id);
-      setSelected(newSelected);
-      return;
-    }
-    setSelected([]);
-  };
+  // const handleSelectAllClick = (event) => {
+  //   if (event.target.checked) {
+  //     const newSelected = data.map((n) => n.id);
+  //     setSelected(newSelected);
+  //     return;
+  //   }
+  //   setSelected([]);
+  // };
 
-  const handleClick = (event, id) => {
-    const selectedIndex = selected.indexOf(id);
-    let newSelected = [];
+  // const handleClick = (event, id) => {
+  //   const selectedIndex = selected.indexOf(id);
+  //   let newSelected = [];
 
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
-      );
-    }
-    setSelected(newSelected);
-  };
+  //   if (selectedIndex === -1) {
+  //     newSelected = newSelected.concat(selected, id);
+  //   } else if (selectedIndex === 0) {
+  //     newSelected = newSelected.concat(selected.slice(1));
+  //   } else if (selectedIndex === selected.length - 1) {
+  //     newSelected = newSelected.concat(selected.slice(0, -1));
+  //   } else if (selectedIndex > 0) {
+  //     newSelected = newSelected.concat(
+  //       selected.slice(0, selectedIndex),
+  //       selected.slice(selectedIndex + 1),
+  //     );
+  //   }
+  //   setSelected(newSelected);
+  // };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -289,7 +289,7 @@ export default function ListeEC() {
                 numSelected={selected.length}
                 order={order}
                 orderBy={orderBy}
-                onSelectAllClick={handleSelectAllClick}
+                //onSelectAllClick={handleSelectAllClick}
                 onRequestSort={handleRequestSort}
                 rowCount={data.length}
               />
@@ -303,7 +303,7 @@ export default function ListeEC() {
                     return (
                       <TableRow
                         hover
-                        onClick={(event) => handleClick(event, row.id)}
+                        //leftonClick={(event) => handleClick(event, row.id)}
                         role="checkbox"
                         aria-checked={isItemSelected}
                         tabIndex={-1}

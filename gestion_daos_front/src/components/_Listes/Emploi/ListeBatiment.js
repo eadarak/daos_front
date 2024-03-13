@@ -219,20 +219,20 @@ export default function ListeBatiment() {
   }
 
 
-  const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
-  };
+  // const handleRequestSort = (event, property) => {
+  //   const isAsc = orderBy === property && order === 'asc';
+  //   setOrder(isAsc ? 'desc' : 'asc');
+  //   setOrderBy(property);
+  // };
 
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelected = data.map((n) => n.id);
-      setSelected(newSelected);
-      return;
-    }
-    setSelected([]);
-  };
+  // const handleSelectAllClick = (event) => {
+  //   if (event.target.checked) {
+  //     const newSelected = data.map((n) => n.id);
+  //     setSelected(newSelected);
+  //     return;
+  //   }
+  //   setSelected([]);
+  // };
 
   // const handleClick = (event, id) => {
   //   const selectedIndex = selected.indexOf(id);
@@ -289,7 +289,7 @@ export default function ListeBatiment() {
                 order={order}
                 orderBy={orderBy}
                 //onSelectAllClick={handleSelectAllClick}
-                onRequestSort={handleRequestSort}
+                //onRequestSort={handleRequestSort}
                 rowCount={data.length}
               />
               <TableBody>

@@ -64,13 +64,19 @@ function DetailsEnseignement ({ enseignement }) {
       > ⬅
       </Button>
             
-            <h2 id='title'>{enseignement.libelleEnseignement}</h2>
+            <h2 id='title'>{enseignement.libelleEnseignement}
+            <br/>
+            <span id='separator'></span>
+            </h2>
             <div id='BlockBtn'>
                 
             </div>
             
             <div id='Block2'>
                 <Card id='MyCard1'>
+                <p><b>Identifiant :</b> &nbsp;
+                        {enseignement.idEnseignement}
+                    </p>
                     <p><b>Description :</b> <br/>
                         {enseignement.descriptionEnseignement}
                     </p>

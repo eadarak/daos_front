@@ -56,6 +56,12 @@ function DetailsCycle ({ cycle }) {
 
     return (
         <div>
+        &nbsp;
+        <Button 
+            href="/listes-cycle" 
+            style={{ color: "white", borderRadius: "5px", background: "rgb(9, 44, 38)" }}
+        > ⬅
+        </Button>
             <h2 id='title'>{cycle.libelleCycle}</h2>
             <div id='BlockBtn'>
               <Ajouter_Niveau_Cycle cycle={cycle}/>
@@ -67,9 +73,7 @@ function DetailsCycle ({ cycle }) {
                         {cycle.descriptionCycle}
                     </p>
                 </Card>
-                <Card id='MyCard2'>
-            
-                </Card>
+                
             </div>
             <div id='Block3'>
                 <h3 id='title'>
