@@ -56,6 +56,12 @@ function DetailsSalle ({ salle }) {
     };
     return (
         <div>
+        &nbsp;
+      <Button 
+        href="/listeSalle" 
+        style={{ color: "white", borderRadius: "5px", background: "rgb(9, 44, 38)" }}
+      > ⬅
+      </Button> 
             <h2 id='title'>{salle.libelleSalle}</h2>
             <div id='BlockBtn'>
             </div>

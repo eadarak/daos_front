@@ -64,20 +64,25 @@ function DetailsFormation ({ formation }) {
             style={{ color: "white", borderRadius: "5px", background: "rgb(9, 44, 38)" }}
         > ⬅
         </Button>
-            <h2 id='title'>{formation.libelleFormation}</h2>
+            <h2 id='title'>{formation.libelleFormation} <br/>
+                <span id='separator'></span>
+            </h2>
             <div id='BlockBtn'>
                 <Ajouter_Classe_Formation formation={formation}/>
             </div>
             
             <div id='Block2'>
                 <Card id='MyCard1'>
+                    <p><b>Identifiant : </b> &nbsp;
+                        {formation.idFormation}
+                    </p>
                     <p><b>Description :</b> <br/>
                         {formation.descriptionFormation}
+                    </p><p><b>Date de Creation :</b> <br/>
+                        {formation.dateCreationFormation}
                     </p>
                 </Card>
-                <Card id='MyCard2'>
-                  
-                </Card>
+                
             </div>
             <div id='Block3'>
                 <h3 id='title'>

@@ -111,7 +111,7 @@ export default function SidebarComp({ sidebarOpen, handleDrawerOpen, handleDrawe
         </DrawerHeader>
         <Divider />
         <List className='sidebar-container'> {/* Utilisez la classe spécifique ici */}
-            <ListItem disablePadding>
+            {/* <ListItem disablePadding>
               <NavLink to="/" className="sidebar-link">
                 <ListItemButton>
                   <ListItemIcon>
@@ -120,7 +120,7 @@ export default function SidebarComp({ sidebarOpen, handleDrawerOpen, handleDrawe
                   <ListItemText className='sidebar-link-item'>Home</ListItemText>
                 </ListItemButton>
               </NavLink>
-            </ListItem>
+            </ListItem> */}
            
             <ListItem disablePadding>
               <NavLink  to="/repartition" className="sidebar-link">

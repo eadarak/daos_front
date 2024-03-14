@@ -49,16 +49,25 @@ function DetailsEC ({ ec }) {
     
     return (
         <div>
-            <h2 id='title'>{ec.libelleEC}</h2>
+    &nbsp;
+      &nbsp;
+      <Button 
+        href="/listes-ec" 
+        style={{ color: "white", borderRadius: "5px", background: "rgb(9, 44, 38)" }}
+      > ⬅
+      </Button> 
+            <h2 id='title'>{ec.libelleEC}
+                <br/> <span id='separator'></span>
+            </h2>
             <div id='BlockBtn'>
                 <Ajouter_Module_EC ec={ec} />
             </div>
             <div id='Block2'>
-                <Card id='MyCard1'>
+                {/* <Card id='MyCard1'>
                     <p><b>Description :</b> <br/>
                         {ec.descriptionEC}
                     </p>
-                </Card>
+                </Card> */}
                 <Card id='MyCard2'>
                     <p><b>Code :</b> {ec.codeEC} </p>
                     <p><b>Cours Magistral :</b> {ec.cm} </p>

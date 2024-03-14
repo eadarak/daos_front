@@ -37,7 +37,7 @@ import Lister_salle from './components/_API/Lister_salle';
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Layout><Home /></Layout>
+    element: <Layout><Repartition /></Layout>
   },
   {
     path: '/repartition',
