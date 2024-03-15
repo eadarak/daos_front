@@ -64,7 +64,9 @@ const headCells = [
     { id: 'libelleClasse', numeric: false, disablePadding: false, label: 'Libellé' },
     { id: 'effectifClasse', numeric: false, disablePadding: false, label: 'Effectif' },
     { id: 'nbreGroupeClasse', numeric: false, disablePadding: false, label: 'Nombre de Groupes' },
-    { id: 'dateCreationClasse', numeric: false, disablePadding: false, label: 'Date Creation' },
+    { id: 'libelleFormation ', numeric: false, disablePadding: false, label: 'libelle Formation' },
+
+    // { id: 'dateCreationClasse', numeric: false, disablePadding: false, label: 'Date Creation' },
     { id: 'Operations', numeric: false, disablePadding: false, label: 'Opérations' },
     { id: 'Details', numeric: false, disablePadding: false, label: 'Détails' },
 ];
@@ -331,7 +333,7 @@ export default function ListeClasse() {
                         <TableCell align="left">{row.libelleClasse}</TableCell>
                         <TableCell align="left">{row.effectifClasse}</TableCell>
                         <TableCell align="left">{row.nbreGroupeClasse}</TableCell>
-                        <TableCell align="left">{row.dateCreationClasse}</TableCell>
+                        {/* <TableCell align="left">{row.formation.li}</TableCell> */}
                         <TableCell > 
                         <IconButton aria-label="edit" onClick={() => handleEditClick(row)}>
                           <EditIcon  color='success'/>

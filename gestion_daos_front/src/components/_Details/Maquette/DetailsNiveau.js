@@ -71,7 +71,7 @@ function DetailsNiveau ({ niveau }) {
                 style={{ color: "white", borderRadius: "5px", background: "rgb(9, 44, 38)" }}
             > ⬅
             </Button>
-            <h2 id='title'>{niveau.descriptionNiveau}
+            <h2 id='title'>{niveau.libelleNiveau}
             <br></br>
             <span id='separator'></span>
             </h2>

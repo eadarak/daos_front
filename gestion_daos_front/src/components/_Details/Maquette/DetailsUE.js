@@ -34,7 +34,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-const HeadersEC = ['Identifiant', 'Libelle', 'Code', 'CM', 'TD', 'TP', 'CM + TD/TP', 'TPE', 'VHT', 'coefficient' ];
+const HeadersEC = ['UE','Credits','Intitule', 'CM', 'TD', 'TP', 'CM + TD/TP', 'TPE', 'VHT', 'coefficient' ];
 const HeadersModule = ['Identifiant', 'Libelle', 'Cours', 'Durée', 'Coefficient'];
 
 function DetailsUE ({ ue }) {
@@ -116,14 +116,47 @@ function DetailsUE ({ ue }) {
                                 ))}
                             </TableRow>
                         </TableHead>
-                        <TableBody>
-                            {ecs.length > 0 && ecs.map(ec => (
+                        {/* <TableBody>
+                        <StyledTableRow> */}
+                        {/* {ecs.length > 0 && ecs.map(ec => (
                                 <StyledTableRow key={ec.idEC}>
-                                    <StyledTableCell component="th" scope="row">
-                                        {ec.idEC}
+                                    <StyledTableCell component="th" rowSpan={ecs.length}>
+                                        {`${ue.codeUE} - ${ue.libelleUE}`}
                                     </StyledTableCell>
+                                    </StyledTableRow>
+                           
+                                    {/* <StyledTableCell component="th" scope="row">
+                                        {ec.idEC}
+                                    </StyledTableCell> *
                                     <StyledTableCell align="left">{ec.libelleEC}</StyledTableCell>
                                     <StyledTableCell align="left">{ec.codeEC}</StyledTableCell>
+                                    <StyledTableCell align="left">{ec.cm}</StyledTableCell>
+                                    <StyledTableCell align="left">{ec.td}</StyledTableCell>
+                                    <StyledTableCell align="left">{ec.tp}</StyledTableCell>
+                                    <StyledTableCell align="left">{ec.cm + ec.td + ec.tp}</StyledTableCell>
+                                    <StyledTableCell align="left">{ec.tpe}</StyledTableCell>
+                                    <StyledTableCell align="left">{ec.cm + ec.td + ec.tp + ec.tpe}</StyledTableCell>
+                                    <StyledTableCell align="left">{ec.coefficientEC}</StyledTableCell>
+                                </StyledTableRow>
+                            ))}
+
+                        </TableBody> */}
+                        <TableBody>
+                            {/* Première ligne pour l'UE */}
+                            <StyledTableRow>
+                                <StyledTableCell component="th" rowSpan={ecs.length + 1}>
+                                    {`${ue.codeUE} - ${ue.libelleUE}`}
+                                </StyledTableCell>
+                                <StyledTableCell component="th" rowSpan={ecs.length + 1}>
+                                    {ue.creditUE}
+                                </StyledTableCell>
+                            </StyledTableRow>
+                            
+
+                            {/* Lignes pour les éléments constitutifs */}
+                            {ecs.map(ec => (
+                                <StyledTableRow key={ec.idEC}>
+                                   <StyledTableCell align="left">{`${ec.codeEC} - ${ec.libelleEC}`}</StyledTableCell>
                                     <StyledTableCell align="left">{ec.cm}</StyledTableCell>
                                     <StyledTableCell align="left">{ec.td}</StyledTableCell>
                                     <StyledTableCell align="left">{ec.tp}</StyledTableCell>

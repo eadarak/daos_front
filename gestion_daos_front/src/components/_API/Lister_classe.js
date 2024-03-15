@@ -54,12 +54,12 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-  { id: 'idSalle', numeric: false, disablePadding: false, label: 'Identifiant'},
-  { id: 'salle', numeric: false, disablePadding: false, label: 'Salle' },
-  { id: 'codeSalle', numeric: false, disablePadding: false, label: 'Code'},
-  { id: 'capacite', numeric: false, disablePadding: false, label: 'Capacite de la Salle' },
-  { id: 'batiment', numeric: false, disablePadding: false, label: 'le Batiment' },
-  { id: 'position', numeric: false, disablePadding: false, label: 'La position' },
+  { id: 'idClasse', numeric: false, disablePadding: false, label: 'Identifiant'},
+  { id: 'salle', numeric: false, disablePadding: false, label: 'Classe' },
+  { id: 'effectif', numeric: false, disablePadding: false, label: 'Effectif'},
+  { id: 'groupe', numeric: false, disablePadding: false, label: 'Nombre de groupe' },
+  { id: 'semestre', numeric: false, disablePadding: false, label: 'Le Semestre' },
+  { id: 'Formation', numeric: false, disablePadding: false, label: 'La formation' },
   // { id: 'Details', numeric: false, disablePadding: false, label: 'Details' },
 ];
 
@@ -138,7 +138,7 @@ function EnhancedTableToolbar(props) {
           id="tableTitle"
           component="div"
         >
-          Liste des SALLES
+          Liste des CLASSES
         </Typography>
       )}
         
@@ -155,7 +155,7 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function Lister_salle() {
+export default function Lister_classe() {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('idBatiment');
   const [selected, setSelected] = React.useState([]);
@@ -168,7 +168,7 @@ export default function Lister_salle() {
 
 
   React.useEffect(() => {
-    axios.get(`${URL_API}/salles`)
+    axios.get(`${URL_API}/classes`)
       .then(res => {
         console.log("les données recupérées depuis la db : \n ",res.data)
         setData(res.data)
@@ -264,7 +264,7 @@ export default function Lister_salle() {
                         hover
                         
                         tabIndex={-1}
-                        key={row.idSalle}
+                        key={row.idClasse}
                        
                         sx={{ cursor: 'pointer' }}
                       >
@@ -273,13 +273,13 @@ export default function Lister_salle() {
                           scope="row"
                           padding="normal"
                         >
-                          {row.idSalle}
+                          {row.idClasse}
                         </TableCell>
-                        <TableCell align="left">{row.salle}</TableCell>
-                        <TableCell align="left">{row.codeSalle}</TableCell>
-                        <TableCell align="left">{row.capacite}</TableCell>
-                        <TableCell align="left">{row.batiment}</TableCell>
-                        <TableCell align="left">{row.position}</TableCell>
+                        <TableCell align="left">{row.classe}</TableCell>
+                        <TableCell align="left">{row.effectif}</TableCell>
+                        <TableCell align="left">{row.groupe}</TableCell>
+                        <TableCell align="left">{row.semestre}</TableCell>
+                        <TableCell align="left">{row.formation}</TableCell>
                         {/* <TableCell > 
                         <IconButton aria-label="edit" onClick={() => handleEditClick(row)}> 
                           <EditIcon  color='success'/>

@@ -9,6 +9,7 @@ import { Grid } from '@mui/material';
 import EmploiDuTemps from './_Emploi/EmploiDuTemps';
 import { Pages } from '@mui/icons-material';
 import Pages_salle from './_Pages/Pages_salle';
+import Pages_classe from './_Pages/Pages_classe';
 
 export default function Card_Home(props) {
     const [modalOpen, setModalOpen] = useState(false);
@@ -20,6 +21,9 @@ export default function Card_Home(props) {
         <Grid container spacing={5}>
             <Grid item  md={5.5} >
               <Pages_salle/>
+            </Grid>
+            <Grid item  md={5.5} >
+              <Pages_classe/>
             </Grid>
            
         </Grid>
