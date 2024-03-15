@@ -31,12 +31,14 @@ import ListeFormation from './components/_Listes/Maquette/ListeFormation';
 import ListeFiliere from './components/_Listes/Maquette/ListeFiliere';
 import ListeSemestre from './components/_Listes/Maquette/ListeSemestre';
 import ListeMaquette from './components/_Listes/Maquette/ListeMaquette';
+import Lister_salle from './components/_API/Lister_salle';
+import Lister_classe from './components/_API/Lister_classe';
 
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Layout><Repartition /></Layout>
+    element: <Layout><Home /></Layout>
   },
   {
     path: '/repartition',
@@ -150,7 +152,17 @@ const router = createBrowserRouter([
   {
     path : '/listeMaquette',
     element : <Layout><ListeMaquette/></Layout>
-  }
+  },
+
+  {
+    path : '/salles',
+    element : <Layout><Lister_salle/></Layout>
+  },
+  {
+    path : '/classes',
+    element : <Layout><Lister_classe/></Layout>
+  },
+
 
 ]);
 

@@ -13,21 +13,15 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-import IconButton from '@mui/material/IconButton';
+// import IconButton from '@mui/material/IconButton';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import { visuallyHidden } from '@mui/utils';
-import { Button } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
+// import { Button } from '@mui/material';
+// import DeleteIcon from '@mui/icons-material/Delete';
 import axios from 'axios';
-import Ajouter_Classe from '../../_Ajouter/Aj-Maquette/Ajouter_Classe';
-import DetailsClasse from '../../_Details/Maquette/DetailsClasse';
-import { MAQUETTE_URL } from '../../../Server_URL/Urls';
-import Modifier_Classe from '../../_Modifier/Maquette/Modifier_Classe';
-import EditIcon from '@mui/icons-material/Edit';
-import { Link } from 'react-router-dom';
 
-
+import { URL_API } from '../../Server_URL/Urls';
 
 const rows = [];
 
@@ -60,15 +54,13 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-    { id: 'idClasse', numeric: false, disablePadding: false, label: 'Identifiant' },
-    { id: 'libelleClasse', numeric: false, disablePadding: false, label: 'Libellé' },
-    { id: 'effectifClasse', numeric: false, disablePadding: false, label: 'Effectif' },
-    { id: 'nbreGroupeClasse', numeric: false, disablePadding: false, label: 'Nombre de Groupes' },
-    { id: 'libelleFormation ', numeric: false, disablePadding: false, label: 'libelle Formation' },
-
-    // { id: 'dateCreationClasse', numeric: false, disablePadding: false, label: 'Date Creation' },
-    { id: 'Operations', numeric: false, disablePadding: false, label: 'Opérations' },
-    { id: 'Details', numeric: false, disablePadding: false, label: 'Détails' },
+  { id: 'idSalle', numeric: false, disablePadding: false, label: 'Identifiant'},
+  { id: 'salle', numeric: false, disablePadding: false, label: 'Salle' },
+  { id: 'codeSalle', numeric: false, disablePadding: false, label: 'Code'},
+  { id: 'capacite', numeric: false, disablePadding: false, label: 'Capacite de la Salle' },
+  { id: 'batiment', numeric: false, disablePadding: false, label: 'le Batiment' },
+  { id: 'position', numeric: false, disablePadding: false, label: 'La position' },
+  // { id: 'Details', numeric: false, disablePadding: false, label: 'Details' },
 ];
 
 function EnhancedTableHead(props) {
@@ -146,13 +138,13 @@ function EnhancedTableToolbar(props) {
           id="tableTitle"
           component="div"
         >
-          Liste des [ classes ]
+          Liste des SALLES
         </Typography>
       )}
         
-          <IconButton>
-            <Ajouter_Classe/>
-          </IconButton>
+          {/* <IconButton>
+            <Ajouter_Batiment/>
+          </IconButton> */}
         
      
     </Toolbar>
@@ -163,100 +155,65 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function ListeClasse() {
+export default function Lister_salle() {
   const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('idEns');
+  const [orderBy, setOrderBy] = React.useState('idBatiment');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [data, setData] = React.useState([]);
-  const [classes, setUEs] = React.useState([]) ;
-  const [selectedClasse, setSelectedClasse] = React.useState(null);
-  const [selectedUpdateClasse, setSelectedUpdateClasse] = React.useState(null);
+  // const [selectedBatiment, setSelectedBatimentDelete] = React.useState(null);
+  // const [selectedUpdateBatiment, setSelectedUpdateBatiment] = React.useState(null);
 
 
   React.useEffect(() => {
-    axios.get(`${MAQUETTE_URL}classe`)
+    axios.get(`${URL_API}/salles`)
       .then(res => {
-        console.log("les donnes recuperees depuis la db : \n ",res.data)
+        console.log("les données recupérées depuis la db : \n ",res.data)
         setData(res.data)
       })
       .catch(err => console.log(err));
   },[]);
 
-  const handleClasseClickDelete = (classe) => {
-    setSelectedClasse(classe);
-  };
+  // const handleBatimentClickDelete = (batiment) => {
+  //   setSelectedBatimentDelete(batiment);
+  // };
 
-  const handleEditClick = (classe) => {
-    setSelectedUpdateClasse(classe); // Mettez à jour selectedUpdateClasse avec l'UE à modifier
-  };
+  // const handleEditClick = (batiment) => {
+  //   setSelectedUpdateBatiment(batiment);
+  // };
 
-  const handleClasseDelete = (e, id) => { 
+  // const handleBatimentDelete = (e, id) => { 
     
-    e.stopPropagation();
-    const confirmation = window.confirm(`Êtes-vous sûr de vouloir supprimer cette classe ${id} ?`);
+  //   e.stopPropagation();
+  //   const confirmation = window.confirm(`Êtes-vous sûr de vouloir supprimer ce bâtiment ${id} ?`);
 
-    if(confirmation){
+  //   if(confirmation){
 
-      axios.delete(`${MAQUETTE_URL}classe/${id}`)
-      .then( response => {
-        console.log("UE supprimée avec succès :", id);
-        setData(data.filter(classe => classe.idClasse !== id))
-      })
-      .catch( err => {
-        throw new Error("Erreur lors de la suppression de l'UE :", err)
-      });
-    }
-    else{
-      window.alert(`Suppression  de l'UE ${id} annulée`);
-    }
-
-  }
-
-  if (selectedClasse) {
-    return <DetailsClasse classe={selectedClasse} />;
-  }
-
-  if(selectedUpdateClasse){
-    return <Modifier_Classe classe={selectedUpdateClasse} open={true} onClose={() => setSelectedUpdateClasse(null)} />;
-  }
-
-
-  const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
-  };
-
-  // const handleSelectAllClick = (event) => {
-  //   if (event.target.checked) {
-  //     const newSelected = data.map((n) => n.id);
-  //     setSelected(newSelected);
-  //     return;
+  //     axios.delete(`${EMPLOI_URL}/batiment/${id}`)
+  //     .then( response => {
+  //       console.log("Bâtiment supprimé avec succès :", id);
+  //       setData(data.filter(batiment => batiment.idBatiment !== id))
+  //     })
+  //     .catch( err => {
+  //       throw new Error("Erreur lors de la suppression du bâtiment :", err)
+  //     });
   //   }
-  //   setSelected([]);
-  // };
-
-  // const handleClick = (event, id) => {
-  //   const selectedIndex = selected.indexOf(id);
-  //   let newSelected = [];
-
-  //   if (selectedIndex === -1) {
-  //     newSelected = newSelected.concat(selected, id);
-  //   } else if (selectedIndex === 0) {
-  //     newSelected = newSelected.concat(selected.slice(1));
-  //   } else if (selectedIndex === selected.length - 1) {
-  //     newSelected = newSelected.concat(selected.slice(0, -1));
-  //   } else if (selectedIndex > 0) {
-  //     newSelected = newSelected.concat(
-  //       selected.slice(0, selectedIndex),
-  //       selected.slice(selectedIndex + 1),
-  //     );
+  //   else{
+  //     window.alert(`Suppression  du bâtiment ${id} annulée`);
   //   }
-  //   setSelected(newSelected);
-  // };
+
+  // }
+
+  // if (selectedBatiment) {
+  //  return <Details_Batiment batiment={selectedBatiment}/>
+  // }
+
+  // if(selectedUpdateBatiment){
+  //   return <Modifier_Batiment batiment={selectedUpdateBatiment} open={true} onClose={() => setSelectedUpdateBatiment(null)} />;
+  // }
+
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -271,7 +228,6 @@ export default function ListeClasse() {
     setDense(event.target.checked);
   };
 
-  const isSelected = (id) => selected.indexOf(id) !== -1;
 
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
@@ -280,13 +236,6 @@ export default function ListeClasse() {
 
   return (
     <div>
-      &nbsp;
-      <Button 
-        href="/maquette" 
-        style={{ color: "white", borderRadius: "5px", background: "rgb(9, 44, 38)" }}
-      > ⬅
-      </Button>
-
       <Box sx={{ width: '100%', paddingTop: "10px" }}>
         <Paper sx={{ width: '100%', mb: 2 }}>
           <EnhancedTableToolbar numSelected={selected.length} />
@@ -301,50 +250,47 @@ export default function ListeClasse() {
                 order={order}
                 orderBy={orderBy}
                 //onSelectAllClick={handleSelectAllClick}
-                onRequestSort={handleRequestSort}
+                //onRequestSort={handleRequestSort}
                 rowCount={data.length}
               />
               <TableBody>
                 {stableSort(data, getComparator(order, orderBy))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => {
-                    const isItemSelected = isSelected(row.id);
-                    const labelId = `enhanced-table-checkbox-${index}`;
+                   
 
                     return (
                       <TableRow
                         hover
-                        //onClick={(event) => handleClick(event, row.id)}
-                        role="checkbox"
-                        aria-checked={isItemSelected}
+                        
                         tabIndex={-1}
-                        key={row.id}
-                        selected={isItemSelected}
+                        key={row.idSalle}
+                       
                         sx={{ cursor: 'pointer' }}
                       >
                         <TableCell
                           component="th"
-                          id={labelId}
                           scope="row"
                           padding="normal"
                         >
-                          {row.idClasse}
+                          {row.idSalle}
                         </TableCell>
-                        <TableCell align="left">{row.libelleClasse}</TableCell>
-                        <TableCell align="left">{row.effectifClasse}</TableCell>
-                        <TableCell align="left">{row.nbreGroupeClasse}</TableCell>
-                        {/* <TableCell align="left">{row.formation.li}</TableCell> */}
-                        <TableCell > 
-                        <IconButton aria-label="edit" onClick={() => handleEditClick(row)}>
+                        <TableCell align="left">{row.salle}</TableCell>
+                        <TableCell align="left">{row.codeSalle}</TableCell>
+                        <TableCell align="left">{row.capacite}</TableCell>
+                        <TableCell align="left">{row.batiment}</TableCell>
+                        <TableCell align="left">{row.position}</TableCell>
+                        {/* <TableCell > 
+                        <IconButton aria-label="edit" onClick={() => handleEditClick(row)}> 
                           <EditIcon  color='success'/>
                         </IconButton>
                             &nbsp; &nbsp;
 
-                            <IconButton aria-label="delete" onClick={(event) => handleClasseDelete(event, row.idClasse)}>
+                            <IconButton aria-label="delete" onClick={(event) => handleBatimentDelete(event, row.idBatiment)}>
                                 <DeleteIcon sx={{color:"#cd0000"}}/>
                             </IconButton>
-                         </TableCell>
-                         <TableCell> 
+                         </TableCell> */}
+                         {/* <TableCell> 
                           
                             <Button 
                               sx={{
@@ -354,11 +300,11 @@ export default function ListeClasse() {
                                 background: "rgb(9, 44, 38)",
                                 textTransform: "capitalize"
                               }}
-                              onClick={() => handleClasseClickDelete(row)}
+                              onClick={() => handleBatimentClickDelete(row)}
                             >
                               Détails
                             </Button> 
-                        </TableCell>
+                        </TableCell> */}
                       </TableRow>
                     );
                   })}
@@ -392,4 +338,3 @@ export default function ListeClasse() {
     </div>
   );
 }
-
